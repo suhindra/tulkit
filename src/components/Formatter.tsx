@@ -20,6 +20,18 @@ hljs.registerLanguage('php', phpSyntax)
 const langs = ['html','css','js','json','sql','php'] as const
 type Lang = typeof langs[number]
 type ActiveTab = 'auto' | Lang
+type EditorPane = 'input' | 'output'
+
+type FormatterProps = {
+  onTabChange?: (tab: ActiveTab) => void
+}
+
+type LangInfo = {
+  title: string
+  description: string
+  tips?: string[]
+  link?: {href: string, label: string}
+}
 
 const langLabels: Record<Lang,string> = {
   html: 'HTML',
@@ -49,6 +61,65 @@ const slugToTab: Record<string,ActiveTab> = {
   json: 'json',
   sql: 'sql',
   php: 'php'
+}
+
+const langInfo: Record<ActiveTab,LangInfo> = {
+  auto: {
+    title: 'Autodetect Formatting',
+    description: 'Tulkit inspects your snippet for tags, braces, JSON structures, or SQL keywords and picks a formatter automatically. Use this when you often switch between languages and want a fast, no-click workflow.',
+    tips: [
+      'If detection misses, pick a language tab manually to override it.',
+      'Autodetect favors safe defaults, so ambiguous input falls back to HTML.'
+    ]
+  },
+  html: {
+    title: 'HTML Beautifier',
+    description: 'Clean up markup for landing pages, emails, or CMS snippets. Nested tags are indented using the tab size you choose so copied code stays readable in reviews.',
+    tips: [
+      'Great for tidying inline SVG and template partials.',
+      'Pair with Copy to move formatted markup directly into CMS editors.'
+    ]
+  },
+  css: {
+    title: 'CSS Formatter',
+    description: 'Normalize spacing between selectors and declarations for CSS, SCSS, or even Tailwind utility blocks. Helps spot duplicate rules before committing.',
+    tips: [
+      'Use smaller tab sizes for utility-first frameworks.',
+      'Drag a stylesheet into the editor to scan larger files quickly.'
+    ]
+  },
+  js: {
+    title: 'JavaScript Formatter',
+    description: 'Ideal for cleaning up quick experiments, codepen exports, or snippets pasted from logs. Handles ES modules, arrow functions, and async code.',
+    tips: [
+      'Set tab size to 2 spaces to match most React/Node conventions.',
+      'Works nicely for TypeScript transpiled output when you need to inspect it.'
+    ]
+  },
+  json: {
+    title: 'JSON Prettifier',
+    description: 'Validate and pretty-print API payloads, config files, or OpenAPI fragments. Tulkit parses the JSON to make sure the structure is valid before reformatting.',
+    tips: [
+      'Use Copy to send formatted payloads to your teammates.',
+      'If parsing fails, the error message points to the problematic character.'
+    ]
+  },
+  sql: {
+    title: 'SQL Formatter',
+    description: 'Makes long SELECT queries readable with consistent keyword casing and indentation. Handy for sharing Postgres/MySQL queries or debugging ORMs.',
+    tips: [
+      'Supports JOIN, CTE, INSERT, UPDATE, and DELETE statements.',
+      'Great companion when pasting queries into code reviews or documentation.'
+    ]
+  },
+  php: {
+    title: 'PHP Formatter',
+    description: 'Powered by Prettier PHP, perfect for Laravel, WordPress, or legacy snippets. Tulkit loads the formatter on demand so the UI stays fast.',
+    tips: [
+      'Tab width and print width map directly to Prettier options.',
+      'Formatting runs entirely in your browser to keep proprietary code private.'
+    ]
+  }
 }
 
 function escapeHtml(str:string){
@@ -87,7 +158,7 @@ function detectLang(text:string):Lang{
   return 'html'
 }
 
-export default function Formatter(){
+export default function Formatter({ onTabChange }: FormatterProps = {}){
   const [lang, setLang] = useState<Lang>('html')
   const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
   const [input, setInput] = useState('')
@@ -96,6 +167,7 @@ export default function Formatter(){
   const [printWidth, setPrintWidth] = useState<number>(80)
   const [loadingFormatter, setLoadingFormatter] = useState(false)
   const [renderedOutput, setRenderedOutput] = useState('')
+  const [activePane, setActivePane] = useState<EditorPane>('input')
 
   // Initialize tab from URL path or hash slug
   useEffect(()=>{
@@ -128,6 +200,10 @@ export default function Formatter(){
     const url = `${path}${window.location.search}`
     window.history.replaceState(null, '', url)
   }
+
+  useEffect(()=>{
+    onTabChange?.(activeTab)
+  },[activeTab, onTabChange])
 
   async function formatPhp(text:string):Promise<string>{
     setLoadingFormatter(true)
@@ -185,6 +261,7 @@ export default function Formatter(){
     }catch{
       setRenderedOutput(escapeHtml(res))
     }
+    setActivePane('output')
   }
 
   async function onCopy(){
@@ -260,19 +337,41 @@ export default function Formatter(){
 
       <div className="editor-frame">
         <div className="editor">
-          <textarea
-            value={input}
-            onChange={e=>setInput(e.target.value)}
-            onDragOver={e=>e.preventDefault()}
-            onDrop={onDropToInput}
-            placeholder="Paste your code or drag a file here"
-          />
-          <pre className="hljs">
-            <code
-              className="hljs"
-              dangerouslySetInnerHTML={{__html: renderedOutput || escapeHtml(output)}}
-            />
-          </pre>
+          <div className="editor-tabs">
+            <button
+              type="button"
+              className={`editor-tab ${activePane==='input' ? 'active' : ''}`}
+              onClick={()=>setActivePane('input')}
+            >
+              Input
+            </button>
+            <button
+              type="button"
+              className={`editor-tab ${activePane==='output' ? 'active' : ''}`}
+              onClick={()=>setActivePane('output')}
+              disabled={!output}
+            >
+              Output
+            </button>
+          </div>
+          <div className="editor-pane">
+            {activePane === 'input' ? (
+              <textarea
+                value={input}
+                onChange={e=>setInput(e.target.value)}
+                onDragOver={e=>e.preventDefault()}
+                onDrop={onDropToInput}
+                placeholder="Paste your code or drag a file here"
+              />
+            ) : (
+              <pre className="hljs editor-output">
+                <code
+                  className="hljs"
+                  dangerouslySetInnerHTML={{__html: renderedOutput || escapeHtml(output)}}
+                />
+              </pre>
+            )}
+          </div>
         </div>
       </div>
 
@@ -302,12 +401,31 @@ export default function Formatter(){
           <button
             type="button"
             className="toolbar-button"
-            onClick={()=>{setInput(''); setOutput(''); setRenderedOutput('')}}
+            onClick={()=>{
+              setInput('')
+              setOutput('')
+              setRenderedOutput('')
+              setActivePane('input')
+            }}
           >
             Clear
           </button>
         </div>
       </div>
+
+      <div className="lang-info">
+        <h3>{langInfo[activeTab].title}</h3>
+        <p>{langInfo[activeTab].description}</p>
+        {langInfo[activeTab].tips && (
+          <ul>
+            {langInfo[activeTab].tips!.map((tip)=>(
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }
+
+export type { ActiveTab }
