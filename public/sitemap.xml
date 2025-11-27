@@ -34,4 +34,17 @@
     <loc>https://tulkit.online/formatter/php</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://tulkit.online/generator/uuid</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/uuid/uuid-v1</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/uuid/uuid-v7</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

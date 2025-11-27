@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { v1 as uuidV1, v4 as uuidV4 } from 'uuid'
 
-type UuidVersion = 'v1' | 'v4' | 'v7'
+export type UuidVersion = 'v1' | 'v4' | 'v7'
 
 const uuidVersions: UuidVersion[] = ['v1','v4','v7']
 
@@ -44,6 +44,10 @@ const uuidVersionInfo: Record<UuidVersion,UuidVersionInfo> = {
   }
 }
 
+type UuidGeneratorProps = {
+  onVersionChange?: (version: UuidVersion) => void
+}
+
 function createUuidV7(): string {
   const bytes = new Uint8Array(16)
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
@@ -82,7 +86,7 @@ function createUuid(version: UuidVersion): string {
   }
 }
 
-export default function UuidGenerator(){
+export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = {}){
   const [count, setCount] = useState<number>(5)
   const [version, setVersion] = useState<UuidVersion>('v4')
   const [uppercase, setUppercase] = useState(false)
@@ -106,6 +110,10 @@ export default function UuidGenerator(){
     const suffix = version.toUpperCase()
     document.title = `${baseTitle} ${suffix}`
   },[version])
+
+  useEffect(()=>{
+    onVersionChange?.(version)
+  },[version, onVersionChange])
 
   function updateUrlForVersion(next:UuidVersion){
     const slug =

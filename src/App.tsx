@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Formatter, { type ActiveTab } from './components/Formatter'
-import UuidGenerator from './components/UuidGenerator'
+import UuidGenerator, { type UuidVersion } from './components/UuidGenerator'
 
 type View = 'formatter' | 'uuid'
 
@@ -13,9 +13,36 @@ const headingByTab: Record<Exclude<ActiveTab,'auto'>, string> = {
   php: 'PHP Formatter'
 }
 
+const descriptionByTab: Record<ActiveTab, string> = {
+  auto:
+    'Format HTML, CSS, JavaScript, JSON, SQL, or PHP in one place. Tulkit autodetects your language and cleans up snippets directly in your browser.',
+  html:
+    'Use Tulkit to beautify HTML for landing pages, emails, and CMS snippets so nested tags stay readable in editors and code reviews.',
+  css:
+    'Clean up CSS, SCSS, and utility classes with Tulkit so selectors and declarations are consistently indented for easier debugging.',
+  js:
+    'Format JavaScript snippets, ES modules, and async code with Tulkit to quickly tidy experiments, code samples, or log output.',
+  json:
+    'Pretty‑print and validate JSON payloads, configs, and API responses using Tulkit directly in your browser.',
+  sql:
+    'Reformat long SQL queries with Tulkit so SELECT, JOIN, and CTE statements are easier to read and share.',
+  php:
+    'Tidy up PHP snippets for Laravel, WordPress, and other projects using Tulkit’s in‑browser formatter.'
+}
+
+const uuidDescriptionByVersion: Record<UuidVersion, string> = {
+  v1:
+    'Generate time‑based UUID v1 values with Tulkit when you want identifiers that roughly follow creation order for logs, jobs, or import batches.',
+  v4:
+    'Generate random UUID v4 identifiers in bulk with Tulkit directly in your browser using the Web Crypto API for secure, high‑quality IDs.',
+  v7:
+    'Generate time‑ordered UUID v7 identifiers with Tulkit so your IDs stay sortable while still including strong randomness.'
+}
+
 export default function App(){
   const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
   const [view, setView] = useState<View>('formatter')
+  const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
 
   const seoHeading =
     view === 'uuid'
@@ -32,6 +59,19 @@ export default function App(){
       setView('formatter')
     }
   },[])
+
+  useEffect(()=>{
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    if(!meta) return
+
+    if(view === 'uuid'){
+      meta.content = uuidDescriptionByVersion[uuidVersion]
+      return
+    }
+
+    const key: ActiveTab = activeTab || 'auto'
+    meta.content = descriptionByTab[key]
+  },[view, activeTab, uuidVersion])
 
   function goToFormatter(){
     const url = `/formatter${window.location.search}`
@@ -112,7 +152,7 @@ export default function App(){
         {view === 'formatter' ? (
           <Formatter onTabChange={setActiveTab} />
         ) : (
-          <UuidGenerator />
+          <UuidGenerator onVersionChange={setUuidVersion} />
         )}
       </main>
       <footer>
