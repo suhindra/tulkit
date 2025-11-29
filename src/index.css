@@ -66,7 +66,7 @@ header{
 
 .brand-text p{
   margin:6px 0 0;
-  color:var(--muted);
+  color:#374151;
   font-size:13px;
 }
 
@@ -230,8 +230,24 @@ code{
 footer{
   padding:12px 16px 20px;
   text-align:center;
-  color:var(--muted);
+  color:#4b5563;
   font-size:12px;
+}
+
+.page-overview{
+  border-top:1px solid var(--border);
+  background:#fff;
+}
+
+.page-overview h2{
+  margin:0 0 10px;
+  font-size:18px;
+}
+
+.page-overview p{
+  margin:6px 0;
+  color:#374151;
+  line-height:1.6;
 }
 
 .uuid-card{
@@ -357,12 +373,147 @@ footer{
   line-height:1.5;
 }
 
-.uuid-info ul{
-  margin:0;
-  padding-left:18px;
-  color:#475467;
+  .uuid-info ul{
+    margin:0;
+    padding-left:18px;
+    color:#475467;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+.epoch-card{
+  margin-top:26px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:16px 18px 18px;
+}
+
+.epoch-current{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
   font-size:13px;
+  margin-bottom:12px;
+}
+
+.epoch-current-badge{
+  padding:4px 10px;
+  border-radius:999px;
+  background:#e5edff;
+  color:#111827;
+  font-weight:600;
+  font-size:14px;
+}
+
+.epoch-modes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+  align-items:center;
+}
+
+.epoch-mode{
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#ffffff;
+  color:#111827;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.epoch-mode.active{
+  background:#7c3aed;
+  border-color:#7c3aed;
+  color:#ffffff;
+  font-weight:600;
+}
+
+.epoch-now{
+  margin-left:auto;
+}
+
+.epoch-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+}
+
+.epoch-column{
+  flex:1 1 260px;
+}
+
+.epoch-column h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+
+.epoch-field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:13px;
+  color:#374151;
+  margin-bottom:10px;
+}
+
+.epoch-field input,
+.epoch-field select{
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-size:13px;
+}
+
+.epoch-output{
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  padding:8px 10px;
+  font-size:13px;
+  color:#111827;
+}
+
+.epoch-output-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin:4px 0 6px;
+}
+
+.epoch-output-line span{
+  flex:1;
+  word-break:break-word;
+}
+
+.epoch-tz-note{
+  margin-top:2px;
+  font-size:11px;
+  color:#6b7280;
+}
+
+.not-found-card{
+  margin-top:26px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff7ed;
+  padding:20px 22px 22px;
+}
+
+.not-found-card h2{
+  margin:0 0 8px;
+  font-size:20px;
+}
+
+.not-found-card p{
+  margin:0 0 14px;
+  color:#374151;
   line-height:1.5;
+  font-size:14px;
 }
 
 .toolbar{
@@ -407,7 +558,7 @@ footer{
   background:var(--accent);
   border:none;
   border-radius:6px;
-  color:#ffffff;
+  color:#111827;
   font-size:15px;
   font-weight:600;
   cursor:pointer;

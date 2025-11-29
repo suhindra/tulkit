@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import Formatter, { type ActiveTab } from './components/Formatter'
 import UuidGenerator, { type UuidVersion } from './components/UuidGenerator'
+import EpochConverter from './components/EpochConverter'
+import { formatterOverviewByTab, uuidOverviewByVersion, epochOverview } from './pageOverviewContent'
 
-type View = 'formatter' | 'uuid'
+declare global {
+  interface Window {
+    kofiWidgetOverlay?: {
+      draw: (...args: any[]) => void
+    }
+  }
+}
+
+type View = 'formatter' | 'uuid' | 'epoch' | 'notfound'
 
 const headingByTab: Record<Exclude<ActiveTab,'auto'>, string> = {
   html: 'HTML Formatter',
@@ -44,19 +54,36 @@ export default function App(){
   const [view, setView] = useState<View>('formatter')
   const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
 
+  const formatterOverview = formatterOverviewByTab[activeTab]
+  const uuidOverview = uuidOverviewByVersion[uuidVersion]
+
   const seoHeading =
     view === 'uuid'
-      ? 'Tulkit — UUID Generator'
-      : activeTab === 'auto'
-        ? 'Tulkit — Web Formatter'
-        : `Tulkit — ${headingByTab[activeTab]}`
+      ? 'UUID Generator — Tulkit'
+      : view === 'epoch'
+        ? 'Epoch Converter — Tulkit'
+        : view === 'notfound'
+          ? 'Page not found — Tulkit'
+          : activeTab === 'auto'
+            ? 'Web Formatter — Tulkit'
+            : `${headingByTab[activeTab]} — Tulkit`
+
+  useEffect(()=>{
+    document.title = seoHeading
+  },[seoHeading])
 
   useEffect(()=>{
     const path = window.location.pathname.toLowerCase()
-    if(path.startsWith('/generator/uuid') || path.startsWith('/uuid')){
+    if(path === '/' || path === ''){
+      setView('formatter')
+    }else if(path.startsWith('/converter/epoch')){
+      setView('epoch')
+    }else if(path.startsWith('/generator/uuid') || path.startsWith('/uuid')){
       setView('uuid')
     }else if(path.startsWith('/formatter')){
       setView('formatter')
+    }else{
+      setView('notfound')
     }
   },[])
 
@@ -69,9 +96,42 @@ export default function App(){
       return
     }
 
+    if(view === 'epoch'){
+      meta.content =
+        'Convert Unix epoch timestamps to readable dates and back again with Tulkit. Quickly switch between seconds, milliseconds, UTC, and local time directly in your browser.'
+      return
+    }
+
+    if(view === 'notfound'){
+      meta.content =
+        'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
+      return
+    }
+
     const key: ActiveTab = activeTab || 'auto'
     meta.content = descriptionByTab[key]
   },[view, activeTab, uuidVersion])
+
+  useEffect(()=>{
+    const existing = document.getElementById('kofi-overlay-widget')
+    if(existing) return
+
+    const script = document.createElement('script')
+    script.id = 'kofi-overlay-widget'
+    script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'
+    script.async = true
+    script.onload = ()=>{
+      if(window.kofiWidgetOverlay){
+        window.kofiWidgetOverlay.draw('tulkit', {
+          type: 'floating-chat',
+          'floating-chat.donateButton.text': 'Donate',
+          'floating-chat.donateButton.background-color': '#323842',
+          'floating-chat.donateButton.text-color': '#fff'
+        })
+      }
+    }
+    document.body.appendChild(script)
+  },[])
 
   function goToFormatter(){
     const url = `/formatter${window.location.search}`
@@ -85,6 +145,12 @@ export default function App(){
     setView('uuid')
   }
 
+  function goToEpoch(){
+    const url = `/converter/epoch${window.location.search}`
+    window.history.replaceState(null, '', url)
+    setView('epoch')
+  }
+
   return (
     <div className="app">
       <header>
@@ -94,7 +160,7 @@ export default function App(){
               <img src="/logo-tulkit.jpg" alt="Tulkit Online logo" loading="lazy" />
             </div>
             <div className="brand-text">
-              <h1>Tulkit — Web Tools</h1>
+              <h1>Web Tools — Tulkit</h1>
               <p>Quick tools for HTML / CSS / JS / JSON / SQL / UUIDs</p>
               <p className="brand-note">
                 All formatting and generation happens in your browser only; your code never leaves your device.
@@ -116,45 +182,107 @@ export default function App(){
             >
               UUID Generator
             </button>
+            <button
+              type="button"
+              className={`top-nav-item ${view === 'epoch' ? 'active' : ''}`}
+              onClick={goToEpoch}
+            >
+              Epoch Converter
+            </button>
           </nav>
         </div>
       </header>
-      <section className="seo-blurb">
-        <div className="container">
-          <h2>{seoHeading}</h2>
-          {view === 'formatter' ? (
-            <>
-              <p>
-                A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical
-                writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from
-                your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.
-              </p>
-              <p>
-                The formatter includes syntax highlighting, tab width controls, and automatic language detection, so it is a handy
-                companion whether you are polishing front-end assets or reviewing database queries. All formatting stays local in your
-                browser for maximum privacy.
-              </p>
-            </>
-          ) : (
-            <>
-              <p>
-                Generate one or many RFC‑4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match
-                how your application expects IDs.
-              </p>
-              <p>
-                UUIDs are generated using the Web Crypto API when available, so identifiers are high‑quality and never sent to a server.
-              </p>
-            </>
-          )}
-        </div>
-      </section>
+      {view !== 'notfound' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            {view === 'formatter' && (
+              <>
+                <p>
+                  A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical
+                  writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from
+                  your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.
+                </p>
+                <p>
+                  The formatter includes syntax highlighting, tab width controls, and automatic language detection, so it is a handy
+                  companion whether you are polishing front-end assets or reviewing database queries. All formatting stays local in your
+                  browser for maximum privacy.
+                </p>
+              </>
+            )}
+            {view === 'uuid' && (
+              <>
+                <p>
+                  Generate one or many RFC‑4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match
+                  how your application expects IDs.
+                </p>
+                <p>
+                  UUIDs are generated using the Web Crypto API when available, so identifiers are high‑quality and never sent to a server.
+                </p>
+              </>
+            )}
+            {view === 'epoch' && (
+              <>
+                <p>
+                  Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and
+                  see matching UTC, GMT, and time-zone aware local output.
+                </p>
+                <p>
+                  You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the
+                  time zone to see how the same instant appears around the world.
+                </p>
+              </>
+            )}
+          </div>
+        </section>
+      )}
       <main className="container">
-        {view === 'formatter' ? (
-          <Formatter onTabChange={setActiveTab} />
-        ) : (
-          <UuidGenerator onVersionChange={setUuidVersion} />
+        {view === 'formatter' && <Formatter onTabChange={setActiveTab} />}
+        {view === 'uuid' && <UuidGenerator onVersionChange={setUuidVersion} />}
+        {view === 'epoch' && <EpochConverter />}
+        {view === 'notfound' && (
+          <div className="not-found-card">
+            <h2>Page not found</h2>
+            <p>
+              The link you followed does not match any Tulkit tools. You can jump back to the formatter, UUID generator, or epoch
+              converter using the buttons above.
+            </p>
+            <button type="button" className="toolbar-button" onClick={goToFormatter}>
+              Go to Web Formatter
+            </button>
+          </div>
         )}
       </main>
+      {view !== 'notfound' && (
+        <section className="page-overview">
+          <div className="container">
+            {view === 'formatter' && (
+              <>
+                <h2>{formatterOverview.heading}</h2>
+                {formatterOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'uuid' && (
+              <>
+                <h2>{uuidOverview.heading}</h2>
+                {uuidOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'epoch' && (
+              <>
+                <h2>{epochOverview.heading}</h2>
+                {epochOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+          </div>
+        </section>
+      )}
       <footer>
         <div className="container"><small>Prototype — Tulkit Web Tools</small></div>
       </footer>
