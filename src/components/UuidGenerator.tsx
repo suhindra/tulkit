@@ -1,51 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { v1 as uuidV1, v4 as uuidV4 } from 'uuid'
-
-export type UuidVersion = 'v1' | 'v4' | 'v7'
+import type { LanguageCode, UuidVersion } from '../types'
+import { getTranslations } from '../i18n'
+import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
 
 const uuidVersions: UuidVersion[] = ['v1','v4','v7']
 
-const uuidVersionLabels: Record<UuidVersion,string> = {
-  v1: 'UUID v1',
-  v4: 'UUID v4',
-  v7: 'UUID v7'
-}
-
-type UuidVersionInfo = {
-  title: string
-  description: string
-  tips?: string[]
-}
-
-const uuidVersionInfo: Record<UuidVersion,UuidVersionInfo> = {
-  v1: {
-    title: 'UUID v1 — time‑based',
-    description: 'Includes a timestamp component so values roughly follow creation time. Useful when you want IDs that are unique and tend to sort by creation order.',
-    tips: [
-      'May leak timing patterns, so avoid for security‑sensitive identifiers.',
-      'Works well for logs, background jobs, or import batches.'
-    ]
-  },
-  v4: {
-    title: 'UUID v4 — random',
-    description: 'Purely random identifiers with 122 bits of entropy. A good default when you need unique IDs without any embedded meaning.',
-    tips: [
-      'Great for public IDs in URLs or database primary keys.',
-      'Best choice when you do not need ordering by creation time.'
-    ]
-  },
-  v7: {
-    title: 'UUID v7 — ordered by time',
-    description: 'Newer UUID version that combines a timestamp prefix with random bits. Designed to be sortable while avoiding v1’s MAC‑address style concerns.',
-    tips: [
-      'Ideal for databases that benefit from append‑friendly, monotonic IDs.',
-      'Useful for analytics, events, and write‑heavy tables.'
-    ]
-  }
-}
-
 type UuidGeneratorProps = {
   onVersionChange?: (version: UuidVersion) => void
+  language: LanguageCode
 }
 
 function createUuidV7(): string {
@@ -86,16 +49,17 @@ function createUuid(version: UuidVersion): string {
   }
 }
 
-export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = {}){
+export default function UuidGenerator({ onVersionChange, language }: UuidGeneratorProps){
   const [count, setCount] = useState<number>(5)
   const [version, setVersion] = useState<UuidVersion>('v4')
   const [uppercase, setUppercase] = useState(false)
   const [withHyphens, setWithHyphens] = useState(true)
   const [withBraces, setWithBraces] = useState(false)
   const [uuids, setUuids] = useState<string[]>([])
+  const uuidCopy = getTranslations(language).uuid
 
   useEffect(()=>{
-    const path = window.location.pathname.toLowerCase()
+    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
     const match = path.match(/^\/(?:generator\/)?uuid(?:\/([^/]+))?/)
     if(match){
       const slug = (match[1] || '').toLowerCase()
@@ -104,12 +68,6 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
       else setVersion('v4')
     }
   },[])
-
-  useEffect(()=>{
-    const baseTitle = 'Tulkit — UUID Generator'
-    const suffix = version.toUpperCase()
-    document.title = `${baseTitle} ${suffix}`
-  },[version])
 
   useEffect(()=>{
     onVersionChange?.(version)
@@ -122,7 +80,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
       : ''
     const base = '/generator/uuid'
     const path = slug ? `${base}/${slug}` : base
-    const url = `${path}${window.location.search}`
+    const url = `${buildPathWithLanguage(path, language)}${window.location.search}`
     window.history.replaceState(null, '', url)
   }
 
@@ -152,9 +110,9 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
   async function copyAll(){
     try{
       await navigator.clipboard.writeText(uuids.join('\n'))
-      alert('UUIDs copied to clipboard')
+      alert(uuidCopy.copySuccess)
     }catch(e){
-      alert('Clipboard failed: '+String(e))
+      alert(uuidCopy.copyErrorPrefix+String(e))
     }
   }
 
@@ -171,13 +129,13 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
               updateUrlForVersion(v)
             }}
           >
-            {uuidVersionLabels[v]}
+            {uuidCopy.tabLabels[v]}
           </button>
         ))}
       </div>
       <div className="uuid-controls">
         <div className="uuid-field">
-          <label htmlFor="uuid-count">How many UUIDs?</label>
+          <label htmlFor="uuid-count">{uuidCopy.countLabel}</label>
           <input
             id="uuid-count"
             type="number"
@@ -194,7 +152,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
               checked={uppercase}
               onChange={e=>setUppercase(e.target.checked)}
             />
-            Uppercase
+            {uuidCopy.uppercaseLabel}
           </label>
           <label>
             <input
@@ -202,7 +160,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
               checked={withHyphens}
               onChange={e=>setWithHyphens(e.target.checked)}
             />
-            Include hyphens
+            {uuidCopy.hyphenLabel}
           </label>
           <label>
             <input
@@ -210,7 +168,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
               checked={withBraces}
               onChange={e=>setWithBraces(e.target.checked)}
             />
-            Surround with braces
+            {uuidCopy.bracesLabel}
           </label>
         </div>
         <div className="uuid-actions">
@@ -219,7 +177,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
             className="toolbar-format uuid-generate-button"
             onClick={generate}
           >
-            Generate UUIDs
+            {uuidCopy.generateLabel}
           </button>
           <button
             type="button"
@@ -227,16 +185,16 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
             onClick={copyAll}
             disabled={!uuids.length}
           >
-            Copy all
+            {uuidCopy.copyAllLabel}
           </button>
         </div>
       </div>
       <div className="uuid-info">
-        <h3>{uuidVersionInfo[version].title}</h3>
-        <p>{uuidVersionInfo[version].description}</p>
-        {uuidVersionInfo[version].tips && (
+        <h3>{uuidCopy.info[version].title}</h3>
+        <p>{uuidCopy.info[version].description}</p>
+        {uuidCopy.info[version].tips && (
           <ul>
-            {uuidVersionInfo[version].tips!.map(tip=>(
+            {uuidCopy.info[version].tips!.map(tip=>(
               <li key={tip}>{tip}</li>
             ))}
           </ul>
@@ -244,7 +202,7 @@ export default function UuidGenerator({ onVersionChange }: UuidGeneratorProps = 
       </div>
       <div className="uuid-output">
         {uuids.length === 0 ? (
-          <p className="uuid-placeholder">Click “Generate UUIDs” to create identifiers.</p>
+          <p className="uuid-placeholder">{uuidCopy.placeholder}</p>
         ) : (
           <pre>
             {uuids.join('\n')}

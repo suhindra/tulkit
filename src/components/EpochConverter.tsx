@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import type { LanguageCode } from '../types'
+import { getTranslations } from '../i18n'
 
 type Mode = 'seconds' | 'milliseconds'
 type TimeZoneId = string
@@ -69,7 +71,11 @@ function formatGmtPretty(date: Date){
   return `${weekday}, ${month} ${day}, ${year} ${hours}:${pad2(minutes)}:${pad2(seconds)} ${ampm}`
 }
 
-export default function EpochConverter(){
+type EpochConverterProps = {
+  language: LanguageCode
+}
+
+export default function EpochConverter({ language }: EpochConverterProps){
   const [mode, setMode] = useState<Mode>('seconds')
   const [epochValue, setEpochValue] = useState<string>('')
   const [dateInput, setDateInput] = useState<string>('')
@@ -78,6 +84,7 @@ export default function EpochConverter(){
   const [gmtOutput, setGmtOutput] = useState<string>('')
   const [currentEpoch, setCurrentEpoch] = useState<number>(()=>Math.floor(Date.now()/1000))
   const [timeZone, setTimeZone] = useState<TimeZoneId>('')
+  const epochCopy = getTranslations(language).epoch
 
   useEffect(()=>{
     const now = new Date()
@@ -180,16 +187,16 @@ export default function EpochConverter(){
   async function copy(value:string){
     try{
       await navigator.clipboard.writeText(value)
-      alert('Copied to clipboard')
+      alert(epochCopy.copySuccess)
     }catch(e){
-      alert('Clipboard failed: '+String(e))
+      alert(epochCopy.copyErrorPrefix+String(e))
     }
   }
 
   return (
     <div className="epoch-card">
       <div className="epoch-current">
-        <span>The current Unix epoch time is</span>
+        <span>{epochCopy.currentPrefix}</span>
         <span className="epoch-current-badge">{currentEpoch}</span>
       </div>
 
@@ -207,7 +214,7 @@ export default function EpochConverter(){
             }
           }}
         >
-          Unix seconds
+          {epochCopy.modeSeconds}
         </button>
         <button
           type="button"
@@ -222,27 +229,27 @@ export default function EpochConverter(){
             }
           }}
         >
-          Unix milliseconds
+          {epochCopy.modeMilliseconds}
         </button>
         <button
           type="button"
           className="toolbar-button epoch-now"
           onClick={fillNow}
         >
-          Use current time
+          {epochCopy.useCurrentTime}
         </button>
       </div>
 
       <div className="epoch-grid">
         <div className="epoch-column">
-          <h3>Epoch to date</h3>
+          <h3>{epochCopy.epochToDateHeading}</h3>
           <label className="epoch-field">
-            <span>Time zone for date output</span>
+            <span>{epochCopy.timezoneLabel}</span>
             <input
               type="text"
               list="epoch-timezone-list"
               value={timeZone}
-              placeholder="Type or adjust your time zone, e.g. America/Edmonton"
+              placeholder={epochCopy.timezonePlaceholder}
               onChange={e=>{
                 const raw = e.target.value.trim()
                 const next: TimeZoneId = raw
@@ -260,17 +267,17 @@ export default function EpochConverter(){
             </datalist>
           </label>
           <label className="epoch-field">
-            <span>Epoch value (seconds or milliseconds)</span>
+            <span>{epochCopy.epochLabel}</span>
             <input
               type="number"
               value={epochValue}
               onChange={e=>onEpochChange(e.target.value)}
-              placeholder={mode === 'seconds' ? 'e.g. 1732665600' : 'e.g. 1732665600000'}
+              placeholder={mode === 'seconds' ? epochCopy.epochPlaceholderSeconds : epochCopy.epochPlaceholderMilliseconds}
             />
           </label>
           <div className="epoch-output">
             <div>
-              <strong>UTC</strong>
+              <strong>{epochCopy.utcLabel}</strong>
               <div className="epoch-output-line">
                 <span>{utcOutput || '—'}</span>
                 {utcOutput && (
@@ -279,13 +286,13 @@ export default function EpochConverter(){
                     className="toolbar-button"
                     onClick={()=>copy(utcOutput)}
                   >
-                    Copy
+                    {epochCopy.copyLabel}
                   </button>
                 )}
               </div>
             </div>
             <div>
-              <strong>Local time</strong>
+              <strong>{epochCopy.localLabel}</strong>
               <div className="epoch-output-line">
                 <span>{localOutput || '—'}</span>
                 {localOutput && (
@@ -294,13 +301,13 @@ export default function EpochConverter(){
                     className="toolbar-button"
                     onClick={()=>copy(localOutput)}
                   >
-                    Copy
+                    {epochCopy.copyLabel}
                   </button>
                 )}
               </div>
             </div>
             <div>
-              <strong>Date and time (GMT)</strong>
+              <strong>{epochCopy.gmtLabel}</strong>
               <div className="epoch-output-line">
                 <span>{gmtOutput || '—'}</span>
                 {gmtOutput && (
@@ -309,7 +316,7 @@ export default function EpochConverter(){
                     className="toolbar-button"
                     onClick={()=>copy(gmtOutput)}
                   >
-                    Copy
+                    {epochCopy.copyLabel}
                   </button>
                 )}
               </div>
@@ -318,9 +325,9 @@ export default function EpochConverter(){
         </div>
 
         <div className="epoch-column">
-          <h3>Date to epoch</h3>
+          <h3>{epochCopy.dateToEpochHeading}</h3>
           <label className="epoch-field">
-            <span>Date and time (selected time zone)</span>
+            <span>{epochCopy.dateInputLabel}</span>
             <input
               type="datetime-local"
               value={dateInput}
@@ -328,12 +335,12 @@ export default function EpochConverter(){
               onChange={e=>onDateChange(e.target.value)}
             />
             <span className="epoch-tz-note">
-              Time zone for this date: {timeZone || 'browser default'}
+              {epochCopy.dateInputNote} {timeZone || epochCopy.browserDefaultLabel}
             </span>
           </label>
           <div className="epoch-output">
             <div>
-              <strong>Unix seconds</strong>
+              <strong>{epochCopy.unixSecondsLabel}</strong>
               <div className="epoch-output-line">
                 <span>
                   {dateInput
@@ -349,13 +356,13 @@ export default function EpochConverter(){
                       copy(String(val))
                     }}
                   >
-                    Copy
+                    {epochCopy.copyLabel}
                   </button>
                 )}
               </div>
             </div>
             <div>
-              <strong>Unix milliseconds</strong>
+              <strong>{epochCopy.unixMillisecondsLabel}</strong>
               <div className="epoch-output-line">
                 <span>
                   {dateInput ? new Date(dateInput).getTime() : '—'}
@@ -369,7 +376,7 @@ export default function EpochConverter(){
                       copy(String(val))
                     }}
                   >
-                    Copy
+                    {epochCopy.copyLabel}
                   </button>
                 )}
               </div>

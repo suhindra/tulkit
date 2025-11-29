@@ -9,6 +9,9 @@ import json from 'highlight.js/lib/languages/json'
 import sql from 'highlight.js/lib/languages/sql'
 import phpSyntax from 'highlight.js/lib/languages/php'
 import 'highlight.js/styles/github.css'
+import { formatterLangs, type ActiveTab, type FormatterLang, type LanguageCode } from '../types'
+import { getTranslations } from '../i18n'
+import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
 
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('css', css)
@@ -17,29 +20,12 @@ hljs.registerLanguage('json', json)
 hljs.registerLanguage('sql', sql)
 hljs.registerLanguage('php', phpSyntax)
 
-const langs = ['html','css','js','json','sql','php'] as const
-type Lang = typeof langs[number]
-type ActiveTab = 'auto' | Lang
+type Lang = FormatterLang
 type EditorPane = 'input' | 'output'
 
 type FormatterProps = {
   onTabChange?: (tab: ActiveTab) => void
-}
-
-type LangInfo = {
-  title: string
-  description: string
-  tips?: string[]
-  link?: {href: string, label: string}
-}
-
-const langLabels: Record<Lang,string> = {
-  html: 'HTML',
-  css: 'CSS',
-  js: 'JavaScript',
-  json: 'JSON',
-  sql: 'SQL',
-  php: 'PHP'
+  language: LanguageCode
 }
 
 const tabSlugs: Record<ActiveTab,string> = {
@@ -61,65 +47,6 @@ const slugToTab: Record<string,ActiveTab> = {
   json: 'json',
   sql: 'sql',
   php: 'php'
-}
-
-const langInfo: Record<ActiveTab,LangInfo> = {
-  auto: {
-    title: 'Autodetect Formatting',
-    description: 'Tulkit inspects your snippet for tags, braces, JSON structures, or SQL keywords and picks a formatter automatically. Use this when you often switch between languages and want a fast, no-click workflow.',
-    tips: [
-      'If detection misses, pick a language tab manually to override it.',
-      'Autodetect favors safe defaults, so ambiguous input falls back to HTML.'
-    ]
-  },
-  html: {
-    title: 'HTML Beautifier',
-    description: 'Clean up markup for landing pages, emails, or CMS snippets. Nested tags are indented using the tab size you choose so copied code stays readable in reviews.',
-    tips: [
-      'Great for tidying inline SVG and template partials.',
-      'Pair with Copy to move formatted markup directly into CMS editors.'
-    ]
-  },
-  css: {
-    title: 'CSS Formatter',
-    description: 'Normalize spacing between selectors and declarations for CSS, SCSS, or even Tailwind utility blocks. Helps spot duplicate rules before committing.',
-    tips: [
-      'Use smaller tab sizes for utility-first frameworks.',
-      'Drag a stylesheet into the editor to scan larger files quickly.'
-    ]
-  },
-  js: {
-    title: 'JavaScript Formatter',
-    description: 'Ideal for cleaning up quick experiments, codepen exports, or snippets pasted from logs. Handles ES modules, arrow functions, and async code.',
-    tips: [
-      'Set tab size to 2 spaces to match most React/Node conventions.',
-      'Works nicely for TypeScript transpiled output when you need to inspect it.'
-    ]
-  },
-  json: {
-    title: 'JSON Prettifier',
-    description: 'Validate and pretty-print API payloads, config files, or OpenAPI fragments. Tulkit parses the JSON to make sure the structure is valid before reformatting.',
-    tips: [
-      'Use Copy to send formatted payloads to your teammates.',
-      'If parsing fails, the error message points to the problematic character.'
-    ]
-  },
-  sql: {
-    title: 'SQL Formatter',
-    description: 'Makes long SELECT queries readable with consistent keyword casing and indentation. Handy for sharing Postgres/MySQL queries or debugging ORMs.',
-    tips: [
-      'Supports JOIN, CTE, INSERT, UPDATE, and DELETE statements.',
-      'Great companion when pasting queries into code reviews or documentation.'
-    ]
-  },
-  php: {
-    title: 'PHP Formatter',
-    description: 'Powered by Prettier PHP, perfect for Laravel, WordPress, or legacy snippets. Tulkit loads the formatter on demand so the UI stays fast.',
-    tips: [
-      'Tab width and print width map directly to Prettier options.',
-      'Formatting runs entirely in your browser to keep proprietary code private.'
-    ]
-  }
 }
 
 function escapeHtml(str:string){
@@ -158,7 +85,7 @@ function detectLang(text:string):Lang{
   return 'html'
 }
 
-export default function Formatter({ onTabChange }: FormatterProps = {}){
+export default function Formatter({ onTabChange, language }: FormatterProps){
   const [lang, setLang] = useState<Lang>('html')
   const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
   const [input, setInput] = useState('')
@@ -168,12 +95,14 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
   const [loadingFormatter, setLoadingFormatter] = useState(false)
   const [renderedOutput, setRenderedOutput] = useState('')
   const [activePane, setActivePane] = useState<EditorPane>('input')
+  const formatterCopy = getTranslations(language).formatter
+  const activeInfo = formatterCopy.langInfo[activeTab]
 
   // Initialize tab from URL path or hash slug
   useEffect(()=>{
     let initial: ActiveTab | undefined
 
-    const path = window.location.pathname.toLowerCase()
+    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
     const match = path.match(/^\/formatter(?:\/([^/]+))?/)
     if(match){
       const slug = (match[1] || 'auto').toLowerCase()
@@ -197,7 +126,7 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
     const slug = tabSlugs[tab]
     const base = '/formatter'
     const path = tab === 'auto' ? base : `${base}/${slug}`
-    const url = `${path}${window.location.search}`
+    const url = `${buildPathWithLanguage(path, language)}${window.location.search}`
     window.history.replaceState(null, '', url)
   }
 
@@ -268,9 +197,9 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
     try{
       await navigator.clipboard.writeText(output)
       // small feedback
-      alert('Copied to clipboard')
+      alert(formatterCopy.copySuccess)
     }catch(e){
-      alert('Clipboard failed: '+String(e))
+      alert(formatterCopy.copyErrorPrefix+String(e))
     }
   }
 
@@ -317,9 +246,9 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
             updateUrlForTab('auto')
           }}
         >
-          Autodetect
+          {formatterCopy.autodetectLabel}
         </button>
-        {langs.map(l=>(
+        {formatterLangs.map(l=>(
           <button
             key={l}
             type="button"
@@ -330,7 +259,7 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
               updateUrlForTab(l)
             }}
           >
-            {langLabels[l]}
+            {formatterCopy.langLabels[l]}
           </button>
         ))}
       </div>
@@ -343,7 +272,7 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
               className={`editor-tab ${activePane==='input' ? 'active' : ''}`}
               onClick={()=>setActivePane('input')}
             >
-              Input
+              {formatterCopy.inputTab}
             </button>
             <button
               type="button"
@@ -351,7 +280,7 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
               onClick={()=>setActivePane('output')}
               disabled={!output}
             >
-              Output
+              {formatterCopy.outputTab}
             </button>
           </div>
           <div className="editor-pane">
@@ -361,7 +290,7 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
                 onChange={e=>setInput(e.target.value)}
                 onDragOver={e=>e.preventDefault()}
                 onDrop={onDropToInput}
-                placeholder="Paste your code or drag a file here"
+                placeholder={formatterCopy.placeholder}
               />
             ) : (
               <pre className="hljs editor-output">
@@ -381,12 +310,12 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
           onClick={onFormat}
           className="toolbar-format"
         >
-          {loadingFormatter ? 'Formatting…' : 'Format'}
+          {loadingFormatter ? formatterCopy.formattingLabel : formatterCopy.formatLabel}
         </button>
 
       <div className="toolbar-right">
           <label className="toolbar-field">
-            Tab size
+            {formatterCopy.tabSizeLabel}
             <input
               type="number"
               value={tabWidth}
@@ -396,8 +325,8 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
             />
           </label>
 
-          <button type="button" className="toolbar-button" onClick={onDownload}>Download</button>
-          <button type="button" className="toolbar-button" onClick={onCopy}>Copy</button>
+          <button type="button" className="toolbar-button" onClick={onDownload}>{formatterCopy.downloadLabel}</button>
+          <button type="button" className="toolbar-button" onClick={onCopy}>{formatterCopy.copyLabel}</button>
           <button
             type="button"
             className="toolbar-button"
@@ -408,17 +337,17 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
               setActivePane('input')
             }}
           >
-            Clear
+            {formatterCopy.clearLabel}
           </button>
         </div>
       </div>
 
       <div className="lang-info">
-        <h3>{langInfo[activeTab].title}</h3>
-        <p>{langInfo[activeTab].description}</p>
-        {langInfo[activeTab].tips && (
+        <h3>{activeInfo.title}</h3>
+        <p>{activeInfo.description}</p>
+        {activeInfo.tips && (
           <ul>
-            {langInfo[activeTab].tips!.map((tip)=>(
+            {activeInfo.tips!.map((tip)=>(
               <li key={tip}>{tip}</li>
             ))}
           </ul>
@@ -427,5 +356,3 @@ export default function Formatter({ onTabChange }: FormatterProps = {}){
     </div>
   )
 }
-
-export type { ActiveTab }
