@@ -104,6 +104,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/xml"/>
   </url>
   <url>
+    <loc>https://tulkit.online/formatter/yaml</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/yaml"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/formatter/yaml"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/yaml"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/formatter/yaml</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/yaml"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/formatter/yaml"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/yaml"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/formatter/sql</loc>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/sql"/>

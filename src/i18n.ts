@@ -115,6 +115,7 @@ type Translation = {
 const formatterLangLabelsBase: Record<FormatterLang,string> = {
   html: 'HTML',
   xml: 'XML',
+  yaml: 'YAML',
   css: 'CSS',
   js: 'JavaScript',
   json: 'JSON',
@@ -126,6 +127,7 @@ const en: Translation = {
   headingByTab: {
     html: 'HTML Formatter',
     xml: 'XML Formatter',
+    yaml: 'YAML Formatter',
     css: 'CSS Formatter',
     js: 'JavaScript Formatter',
     json: 'JSON Formatter',
@@ -134,11 +136,13 @@ const en: Translation = {
   },
   descriptionByTab: {
     auto:
-      'Format HTML, XML, CSS, JavaScript, JSON, SQL, or PHP in one place. Tulkit autodetects your language and cleans up snippets directly in your browser.',
+      'Format HTML, XML, YAML, CSS, JavaScript, JSON, SQL, or PHP in one place. Tulkit autodetects your language and cleans up snippets directly in your browser.',
     html:
       'Use Tulkit to beautify HTML for landing pages, emails, and CMS snippets so nested tags stay readable in editors and code reviews.',
     xml:
       'Format XML for sitemaps, feeds, configuration files, or API responses so nested tags and attributes remain easy to scan.',
+    yaml:
+      'Pretty-print YAML configuration files, CI pipelines, or infrastructure manifests so indentation stays consistent and safe to edit.',
     css:
       'Clean up CSS, SCSS, and utility classes with Tulkit so selectors and declarations are consistently indented for easier debugging.',
     js:
@@ -243,6 +247,15 @@ const en: Translation = {
         tips: [
           'Useful for prettifying XML-based API responses before sharing them in docs or tickets.',
           'Combine with the JSON and SQL tabs when you work across multiple data formats.'
+        ]
+      },
+      yaml: {
+        title: 'YAML Formatter',
+        description:
+          'Keeps YAML config files, CI pipelines, and infrastructure manifests aligned so nested keys remain safe and easy to edit.',
+        tips: [
+          'Handy for cleaning up YAML copied from docs or shared in chat.',
+          'Use smaller tab sizes to reduce line wrapping in deeply nested structures.'
         ]
       }
     }
@@ -415,6 +428,13 @@ const en: Translation = {
           'Overview content for the XML formatter slug. Explain how Tulkit helps clean up XML config files, sitemaps, or API payloads so they are easier to review.',
           'Update this copy to highlight the specific XML-based tools, platforms, or workflows that matter most to your users.'
         ]
+      },
+      yaml: {
+        heading: 'YAML Formatter overview',
+        paragraphs: [
+          'Overview content for the YAML formatter slug. Describe how Tulkit helps tidy CI configs, infrastructure manifests, or other YAML-based configuration files.',
+          'Adjust this text to focus on the deployment tools, CI platforms, or infrastructure stacks that are most relevant to your audience.'
+        ]
       }
     },
     uuid: {
@@ -456,6 +476,7 @@ const id: Translation = {
   headingByTab: {
     html: 'Pemformat HTML',
     xml: 'Pemformat XML',
+    yaml: 'Pemformat YAML',
     css: 'Pemformat CSS',
     js: 'Pemformat JavaScript',
     json: 'Pemformat JSON',
@@ -464,11 +485,13 @@ const id: Translation = {
   },
   descriptionByTab: {
     auto:
-      'Format HTML, XML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser Anda.',
+      'Format HTML, XML, YAML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser Anda.',
     html:
       'Gunakan Tulkit untuk merapikan HTML untuk landing page, email, dan potongan CMS sehingga tag bertingkat tetap mudah dibaca di editor dan saat code review.',
     xml:
       'Format XML untuk sitemap, feed, berkas konfigurasi, atau respons API sehingga tag dan atribut bertingkat tetap mudah dipindai.',
+    yaml:
+      'Rapiakan berkas konfigurasi YAML, pipeline CI, atau manifest infrastruktur agar indentasi tetap konsisten dan aman diedit.',
     css:
       'Bersihkan CSS, SCSS, dan kelas utilitas dengan Tulkit agar selector dan deklarasi memiliki indentasi konsisten sehingga mudah di-debug.',
     js:
@@ -573,6 +596,15 @@ const id: Translation = {
         tips: [
           'Gunakan ukuran tab kecil untuk file XML dengan struktur sangat bertingkat.',
           'Gabungkan dengan tab JSON dan SQL saat bekerja dengan payload lintas format.'
+        ]
+      },
+      yaml: {
+        title: 'Pemformat YAML',
+        description:
+          'Membantu menjaga berkas konfigurasi YAML, pipeline CI, dan manifest infrastruktur tetap rapi sehingga kunci bertingkat mudah dipahami.',
+        tips: [
+          'Bagus untuk merapikan YAML yang disalin dari dokumentasi atau chat sebelum dikomit.',
+          'Sesuaikan ukuran tab jika struktur YAML sangat dalam agar tetap nyaman dibaca.'
         ]
       }
     }

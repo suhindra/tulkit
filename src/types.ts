@@ -1,4 +1,4 @@
-export const formatterLangs = ['html','xml','css','js','json','sql','php'] as const
+export const formatterLangs = ['html','xml','yaml','css','js','json','sql','php'] as const
 
 export type FormatterLang = typeof formatterLangs[number]
 

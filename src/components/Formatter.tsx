@@ -8,6 +8,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import json from 'highlight.js/lib/languages/json'
 import sql from 'highlight.js/lib/languages/sql'
 import phpSyntax from 'highlight.js/lib/languages/php'
+import yamlSyntax from 'highlight.js/lib/languages/yaml'
 import 'highlight.js/styles/github.css'
 import { formatterLangs, type ActiveTab, type FormatterLang, type LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
@@ -19,6 +20,7 @@ hljs.registerLanguage('xml', xml)
 hljs.registerLanguage('json', json)
 hljs.registerLanguage('sql', sql)
 hljs.registerLanguage('php', phpSyntax)
+hljs.registerLanguage('yaml', yamlSyntax)
 
 type Lang = FormatterLang
 type EditorPane = 'input' | 'output'
@@ -32,6 +34,7 @@ const tabSlugs: Record<ActiveTab,string> = {
   auto: 'auto',
   html: 'html',
   xml: 'xml',
+  yaml: 'yaml',
   css: 'css',
   js: 'javascript',
   json: 'json',
@@ -43,6 +46,8 @@ const slugToTab: Record<string,ActiveTab> = {
   auto: 'auto',
   html: 'html',
   xml: 'xml',
+  yaml: 'yaml',
+  yml: 'yaml',
   css: 'css',
   javascript: 'js',
   js: 'js',
@@ -66,7 +71,7 @@ function detectLang(text:string):Lang{
 
   if(trimmed.startsWith('<?php') || trimmed.includes('<?php')) return 'php'
 
-   if(trimmed.startsWith('<?xml')) return 'xml'
+  if(trimmed.startsWith('<?xml')) return 'xml'
 
   if(trimmed.startsWith('<')) return 'html'
 
@@ -74,6 +79,10 @@ function detectLang(text:string):Lang{
     JSON.parse(trimmed)
     return 'json'
   }catch{}
+
+  if(trimmed.startsWith('---') || trimmed.includes(':\n') || trimmed.includes('\n- ')){
+    return 'yaml'
+  }
 
   const upper = trimmed.toUpperCase()
   if(upper.includes(' SELECT ') || upper.startsWith('SELECT ') || upper.startsWith('INSERT ') || upper.startsWith('UPDATE ') || upper.startsWith('DELETE ')){
@@ -158,11 +167,32 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     }
   }
 
+  async function formatYaml(text:string):Promise<string>{
+    setLoadingFormatter(true)
+    try{
+      const prettierModule = await import('prettier/standalone')
+      const yamlPluginModule = await import('prettier/plugins/yaml')
+      const prettier: any = (prettierModule as any).default || prettierModule
+      const yamlPlugin: any = (yamlPluginModule as any).default || yamlPluginModule
+
+      const formatted = prettier.format(text, {
+        parser: 'yaml',
+        plugins: [yamlPlugin],
+        tabWidth,
+        printWidth
+      })
+      return formatted
+    }finally{
+      setLoadingFormatter(false)
+    }
+  }
+
   async function formatCode(text:string, l:Lang){
     try{
       switch(l){
         case 'html': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
         case 'xml': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
+        case 'yaml': return formatYaml(text)
         case 'css': return Promise.resolve(css_beautify(text, {indent_size:tabWidth}))
         case 'js': return Promise.resolve(js_beautify(text, {indent_size:tabWidth}))
         case 'json': {
@@ -184,6 +214,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     const hlMap: Record<Lang,string> = {
       html: 'xml',
       xml: 'xml',
+      yaml: 'yaml',
       css: 'css',
       js: 'javascript',
       json: 'json',
@@ -215,6 +246,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       : lang === 'js' ? 'js'
       : lang === 'html' ? 'html'
       : lang === 'xml' ? 'xml'
+      : lang === 'yaml' ? 'yml'
       : lang === 'css' ? 'css'
       : lang === 'sql' ? 'sql'
       : 'php'
