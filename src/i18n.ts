@@ -114,6 +114,7 @@ type Translation = {
 
 const formatterLangLabelsBase: Record<FormatterLang,string> = {
   html: 'HTML',
+  xml: 'XML',
   css: 'CSS',
   js: 'JavaScript',
   json: 'JSON',
@@ -124,6 +125,7 @@ const formatterLangLabelsBase: Record<FormatterLang,string> = {
 const en: Translation = {
   headingByTab: {
     html: 'HTML Formatter',
+    xml: 'XML Formatter',
     css: 'CSS Formatter',
     js: 'JavaScript Formatter',
     json: 'JSON Formatter',
@@ -132,9 +134,11 @@ const en: Translation = {
   },
   descriptionByTab: {
     auto:
-      'Format HTML, CSS, JavaScript, JSON, SQL, or PHP in one place. Tulkit autodetects your language and cleans up snippets directly in your browser.',
+      'Format HTML, XML, CSS, JavaScript, JSON, SQL, or PHP in one place. Tulkit autodetects your language and cleans up snippets directly in your browser.',
     html:
       'Use Tulkit to beautify HTML for landing pages, emails, and CMS snippets so nested tags stay readable in editors and code reviews.',
+    xml:
+      'Format XML for sitemaps, feeds, configuration files, or API responses so nested tags and attributes remain easy to scan.',
     css:
       'Clean up CSS, SCSS, and utility classes with Tulkit so selectors and declarations are consistently indented for easier debugging.',
     js:
@@ -230,6 +234,15 @@ const en: Translation = {
         tips: [
           'Tab width and print width map directly to Prettier options.',
           'Formatting runs entirely in your browser to keep proprietary code private.'
+        ]
+      },
+      xml: {
+        title: 'XML Formatter',
+        description:
+          'Ideal for making XML sitemaps, feeds, and configuration files easier to read with consistent indentation and tag alignment.',
+        tips: [
+          'Useful for prettifying XML-based API responses before sharing them in docs or tickets.',
+          'Combine with the JSON and SQL tabs when you work across multiple data formats.'
         ]
       }
     }
@@ -395,6 +408,13 @@ const en: Translation = {
           'Overview content for the PHP formatter slug. Describe how this helps with Laravel, WordPress, or other PHP projects.',
           'Update these placeholders to match the frameworks, CMSs, or libraries that you want to target for SEO.'
         ]
+      },
+      xml: {
+        heading: 'XML Formatter overview',
+        paragraphs: [
+          'Overview content for the XML formatter slug. Explain how Tulkit helps clean up XML config files, sitemaps, or API payloads so they are easier to review.',
+          'Update this copy to highlight the specific XML-based tools, platforms, or workflows that matter most to your users.'
+        ]
       }
     },
     uuid: {
@@ -435,6 +455,7 @@ const en: Translation = {
 const id: Translation = {
   headingByTab: {
     html: 'Pemformat HTML',
+    xml: 'Pemformat XML',
     css: 'Pemformat CSS',
     js: 'Pemformat JavaScript',
     json: 'Pemformat JSON',
@@ -443,9 +464,11 @@ const id: Translation = {
   },
   descriptionByTab: {
     auto:
-      'Format HTML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser Anda.',
+      'Format HTML, XML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser Anda.',
     html:
       'Gunakan Tulkit untuk merapikan HTML untuk landing page, email, dan potongan CMS sehingga tag bertingkat tetap mudah dibaca di editor dan saat code review.',
+    xml:
+      'Format XML untuk sitemap, feed, berkas konfigurasi, atau respons API sehingga tag dan atribut bertingkat tetap mudah dipindai.',
     css:
       'Bersihkan CSS, SCSS, dan kelas utilitas dengan Tulkit agar selector dan deklarasi memiliki indentasi konsisten sehingga mudah di-debug.',
     js:
@@ -541,6 +564,15 @@ const id: Translation = {
         tips: [
           'Lebar tab dan lebar cetak mengikuti opsi Prettier secara langsung.',
           'Pemformatan berjalan sepenuhnya di browser Anda sehingga kode tetap privat.'
+        ]
+      },
+      xml: {
+        title: 'Pemformat XML',
+        description:
+          'Cocok untuk merapikan sitemap, feed, berkas konfigurasi, atau respons XML dari API. Tulkit membantu membuat struktur tag yang dalam tetap mudah dibaca.',
+        tips: [
+          'Gunakan ukuran tab kecil untuk file XML dengan struktur sangat bertingkat.',
+          'Gabungkan dengan tab JSON dan SQL saat bekerja dengan payload lintas format.'
         ]
       }
     }
@@ -705,6 +737,13 @@ const id: Translation = {
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat PHP. Terangkan bagaimana alat ini membantu proyek Laravel, WordPress, atau PHP lainnya.',
           'Perbarui placeholder ini agar sesuai dengan framework, CMS, atau library yang ingin Anda bidik untuk SEO.'
+        ]
+      },
+      xml: {
+        heading: 'Ikhtisar Pemformat XML',
+        paragraphs: [
+          'Konten ikhtisar untuk slug pemformat XML. Jelaskan bagaimana Tulkit membantu merapikan berkas konfigurasi, sitemap, atau payload XML lainnya.',
+          'Sesuaikan teks ini agar menonjolkan tools atau platform berbasis XML yang paling relevan bagi pengguna Anda.'
         ]
       }
     },

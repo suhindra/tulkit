@@ -31,6 +31,7 @@ type FormatterProps = {
 const tabSlugs: Record<ActiveTab,string> = {
   auto: 'auto',
   html: 'html',
+  xml: 'xml',
   css: 'css',
   js: 'javascript',
   json: 'json',
@@ -41,6 +42,7 @@ const tabSlugs: Record<ActiveTab,string> = {
 const slugToTab: Record<string,ActiveTab> = {
   auto: 'auto',
   html: 'html',
+  xml: 'xml',
   css: 'css',
   javascript: 'js',
   js: 'js',
@@ -63,6 +65,8 @@ function detectLang(text:string):Lang{
   if(!trimmed) return 'json'
 
   if(trimmed.startsWith('<?php') || trimmed.includes('<?php')) return 'php'
+
+   if(trimmed.startsWith('<?xml')) return 'xml'
 
   if(trimmed.startsWith('<')) return 'html'
 
@@ -158,6 +162,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     try{
       switch(l){
         case 'html': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
+        case 'xml': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
         case 'css': return Promise.resolve(css_beautify(text, {indent_size:tabWidth}))
         case 'js': return Promise.resolve(js_beautify(text, {indent_size:tabWidth}))
         case 'json': {
@@ -178,6 +183,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     setOutput(res)
     const hlMap: Record<Lang,string> = {
       html: 'xml',
+      xml: 'xml',
       css: 'css',
       js: 'javascript',
       json: 'json',
@@ -208,6 +214,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       lang === 'json' ? 'json'
       : lang === 'js' ? 'js'
       : lang === 'html' ? 'html'
+      : lang === 'xml' ? 'xml'
       : lang === 'css' ? 'css'
       : lang === 'sql' ? 'sql'
       : 'php'

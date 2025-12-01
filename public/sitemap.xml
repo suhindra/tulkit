@@ -90,6 +90,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/json"/>
   </url>
   <url>
+    <loc>https://tulkit.online/formatter/xml</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/xml"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/formatter/xml"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/xml"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/formatter/xml</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/xml"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/formatter/xml"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/xml"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/formatter/sql</loc>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/sql"/>
