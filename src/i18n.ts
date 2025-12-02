@@ -67,6 +67,30 @@ type EpochCopy = {
   copyErrorPrefix: string
 }
 
+type LoremCopy = {
+  paragraphCountLabel: string
+  classicPrefixLabel: string
+  lengthLabel: string
+  lengthShort: string
+  lengthMedium: string
+  lengthLong: string
+  generateLabel: string
+  copyLabel: string
+  copySuccess: string
+  copyErrorPrefix: string
+  referencesHeading: string
+  standardHeading: string
+  standardBody: string
+  cicero1Heading: string
+  cicero1Latin: string
+  cicero1TranslationHeading: string
+  cicero1Translation: string
+  cicero2Heading: string
+  cicero2Latin: string
+  cicero2TranslationHeading: string
+  cicero2Translation: string
+}
+
 type AppCopy = {
   logoAlt: string
   brandHeading: string
@@ -75,23 +99,27 @@ type AppCopy = {
   navFormatter: string
   navUuid: string
   navEpoch: string
+  navLorem: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
     uuid: string
     epoch: string
+    lorem: string
     notFound: string
   }
   seoBlurb: {
     formatter: string[]
     uuid: string[]
     epoch: string[]
+    lorem: string[]
   }
   notFoundHeading: string
   notFoundBody: string
   goToFormatterCta: string
   footerNote: string
   epochMetaDescription: string
+  loremMetaDescription: string
   notFoundMetaDescription: string
 }
 
@@ -99,6 +127,7 @@ type OverviewCopy = {
   formatter: Record<ActiveTab,OverviewContent>
   uuid: Record<UuidVersion,OverviewContent>
   epoch: OverviewContent
+  lorem: OverviewContent
 }
 
 type Translation = {
@@ -108,6 +137,7 @@ type Translation = {
   formatter: FormatterCopy
   uuid: UuidCopy
   epoch: EpochCopy
+  lorem: LoremCopy
   app: AppCopy
   overviews: OverviewCopy
 }
@@ -329,6 +359,34 @@ const en: Translation = {
     copySuccess: 'Copied to clipboard',
     copyErrorPrefix: 'Clipboard failed: '
   },
+  lorem: {
+    paragraphCountLabel: 'How many paragraphs?',
+    classicPrefixLabel: 'Start with “Lorem ipsum dolor sit amet…”',
+    lengthLabel: 'Sentence length',
+    lengthShort: 'Short',
+    lengthMedium: 'Medium',
+    lengthLong: 'Long',
+    generateLabel: 'Generate lorem ipsum',
+    copyLabel: 'Copy',
+    copySuccess: 'Lorem ipsum copied to clipboard',
+    copyErrorPrefix: 'Clipboard failed: ',
+    referencesHeading: 'Classic Lorem Ipsum sources',
+    standardHeading: 'The standard Lorem Ipsum passage, used since the 1500s',
+    standardBody:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    cicero1Heading: 'Section 1.10.32 of “De Finibus Bonorum et Malorum” (Cicero, 45 BC)',
+    cicero1Latin:
+      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
+    cicero1TranslationHeading: '1914 English translation by H. Rackham',
+    cicero1Translation:
+      'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?',
+    cicero2Heading: 'Section 1.10.33 of “De Finibus Bonorum et Malorum” (Cicero, 45 BC)',
+    cicero2Latin:
+      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
+    cicero2TranslationHeading: '1914 English translation by H. Rackham',
+    cicero2Translation:
+      'On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.'
+  },
   app: {
     logoAlt: 'Tulkit Online logo',
     brandHeading: 'Web Tools — Tulkit',
@@ -337,11 +395,13 @@ const en: Translation = {
     navFormatter: 'Formatter',
     navUuid: 'UUID Generator',
     navEpoch: 'Epoch Converter',
+    navLorem: 'Lorem Ipsum',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
       uuid: 'UUID Generator — Tulkit',
       epoch: 'Epoch Converter — Tulkit',
+      lorem: 'Lorem Ipsum Generator — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
@@ -356,6 +416,10 @@ const en: Translation = {
       epoch: [
         'Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and see matching UTC, GMT, and time-zone aware local output.',
         'You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the time zone to see how the same instant appears around the world.'
+      ],
+      lorem: [
+        'Generate reusable lorem ipsum placeholder text directly in your browser. Adjust the number of paragraphs and sentence length so your mockups and design drafts feel realistic without writing copy by hand.',
+        'Tulkit keeps all lorem generation in your browser, making it a quick helper when building wireframes, UI components, or content layouts.'
       ]
     },
     notFoundHeading: 'Page not found',
@@ -365,6 +429,8 @@ const en: Translation = {
     footerNote: 'Prototype — Tulkit Web Tools',
     epochMetaDescription:
       'Convert Unix epoch timestamps to readable dates and back again with Tulkit. Quickly switch between seconds, milliseconds, UTC, and local time directly in your browser.',
+    loremMetaDescription:
+      'Generate lorem ipsum placeholder paragraphs in your browser with Tulkit. Control paragraph count and sentence length for design mockups, UI components, and content layouts.',
     notFoundMetaDescription:
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
@@ -467,6 +533,15 @@ const en: Translation = {
         'Tulkit’s epoch converter turns those raw timestamp numbers into readable dates and times, and back again. You can paste a value like 1764298543 to see when it happens in UTC, GMT-style long form, or your preferred time zone, then copy the formatted result for documentation, debugging notes, or support replies.',
         'When you go the other direction—starting from a date—you can experiment with different time zones and immediately see the matching Unix seconds and milliseconds. This makes it easier to align logs, schedule jobs, or compare records between services that may all be storing timestamps in slightly different formats.',
         'All calculations run entirely in your browser using the built-in JavaScript date APIs, so none of your event data or log excerpts are uploaded to a server while you are exploring timestamps.'
+      ]
+    },
+    lorem: {
+      heading: 'Lorem Ipsum Generator — Tulkit overview',
+      paragraphs: [
+        'Lorem ipsum is a long‑lived dummy text used by printers, designers, and front‑end developers to stand in for real copy. It grew out of classical Latin writing, was adopted by typesetters in the 1500s, and later shipped with desktop publishing tools as convenient sample content.',
+        'People rely on lorem ipsum because its letters and word lengths resemble natural English, so layouts look realistic without inviting readers to focus on the wording itself. That makes it easier to judge spacing, hierarchy, and visual balance instead of getting distracted by “content here, content here” placeholders.',
+        'Although it can look random, the traditional lorem ipsum block is based on passages from Cicero’s “De Finibus Bonorum et Malorum”, trimmed and jumbled over time. Modern generators remix those Latin roots into chunks that feel familiar while avoiding embarrassing or out‑of‑place phrases.',
+        'Tulkit’s lorem ipsum generator follows that spirit: it assembles sensible paragraphs from a pool of sentences, lets you pick how much text you need, and keeps a classic “Lorem ipsum dolor sit amet…” opening when you want it. Everything runs locally in your browser so you can use it freely in mockups, prototypes, and client work.'
       ]
     }
   }
@@ -678,6 +753,34 @@ const id: Translation = {
     copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: '
   },
+  lorem: {
+    paragraphCountLabel: 'Berapa banyak paragraf?',
+    classicPrefixLabel: 'Mulai dengan “Lorem ipsum dolor sit amet…”',
+    lengthLabel: 'Panjang kalimat',
+    lengthShort: 'Pendek',
+    lengthMedium: 'Sedang',
+    lengthLong: 'Panjang',
+    generateLabel: 'Buat lorem ipsum',
+    copyLabel: 'Salin',
+    copySuccess: 'Teks lorem ipsum berhasil disalin',
+    copyErrorPrefix: 'Gagal menyalin: ',
+    referencesHeading: 'Sumber klasik Lorem Ipsum',
+    standardHeading: 'Paragraf standar Lorem Ipsum yang dipakai sejak 1500‑an',
+    standardBody:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    cicero1Heading: 'Bagian 1.10.32 dari “De Finibus Bonorum et Malorum” (Cicero, 45 SM)',
+    cicero1Latin:
+      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
+    cicero1TranslationHeading: 'Terjemahan Inggris 1914 oleh H. Rackham',
+    cicero1Translation:
+      'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?',
+    cicero2Heading: 'Bagian 1.10.33 dari “De Finibus Bonorum et Malorum” (Cicero, 45 SM)',
+    cicero2Latin:
+      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
+    cicero2TranslationHeading: 'Terjemahan Inggris 1914 oleh H. Rackham',
+    cicero2Translation:
+      'On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.'
+  },
   app: {
     logoAlt: 'Logo Tulkit Online',
     brandHeading: 'Peralatan Web — Tulkit',
@@ -686,11 +789,13 @@ const id: Translation = {
     navFormatter: 'Pemformat',
     navUuid: 'Generator UUID',
     navEpoch: 'Konverter Epoch',
+    navLorem: 'Generator Lorem Ipsum',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
       uuid: 'Generator UUID — Tulkit',
       epoch: 'Konverter Epoch — Tulkit',
+      lorem: 'Generator Lorem Ipsum — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
@@ -705,6 +810,10 @@ const id: Translation = {
       epoch: [
         'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dalam hitungan detik. Tempel nilai dalam detik atau milidetik untuk melihat keluaran UTC, GMT, dan zona waktu lokal.',
         'Anda juga bisa memilih tanggal dan waktu, menyalin nilai Unix untuk API atau query database, serta mengganti zona waktu untuk melihat bagaimana momen yang sama muncul di berbagai wilayah.'
+      ],
+      lorem: [
+        'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
+        'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
       ]
     },
     notFoundHeading: 'Halaman tidak ditemukan',
@@ -714,6 +823,8 @@ const id: Translation = {
     footerNote: 'Prototype — Tulkit Web Tools',
     epochMetaDescription:
       'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
+    loremMetaDescription:
+      'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     notFoundMetaDescription:
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },
@@ -809,6 +920,15 @@ const id: Translation = {
         'Konverter epoch Tulkit mengubah angka timestamp mentah menjadi tanggal dan waktu yang mudah dibaca, dan sebaliknya. Anda bisa menempel nilai seperti 1764298543 untuk melihat kapan itu terjadi di UTC, format panjang ala GMT, atau zona waktu pilihan Anda, lalu menyalin hasilnya untuk dokumentasi, catatan debugging, atau balasan dukungan.',
         'Saat berangkat dari tanggal menuju angka, Anda dapat bereksperimen dengan berbagai zona waktu dan langsung melihat kecocokan detik dan milidetik Unix. Ini memudahkan menyelaraskan log, menjadwalkan job, atau membandingkan catatan antar layanan yang mungkin menyimpan timestamp dalam format berbeda.',
         'Semua perhitungan berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan, jadi tidak ada data event atau potongan log yang diunggah ke server saat Anda menelusuri timestamp.'
+      ]
+    },
+    lorem: {
+      heading: 'Ikhtisar Generator Lorem Ipsum — Tulkit',
+      paragraphs: [
+        'Lorem ipsum adalah teks dummy klasik yang sudah lama dipakai di dunia percetakan, desain, dan pengembangan antarmuka untuk menggantikan tulisan asli. Teks ini berakar dari karya Latin kuno, lalu diadopsi para typesetter sejak 1500‑an dan akhirnya dibundel ke dalam software desktop publishing sebagai contoh isi bawaan.',
+        'Alasan lorem ipsum populer adalah karena pola huruf dan panjang katanya mirip bahasa nyata, sehingga layout tampak realistis tanpa membuat pembaca terpaku pada kalimatnya. Ini membantu desainer menilai spasi, hirarki, dan komposisi visual tanpa terdistraksi oleh placeholder generik seperti “content here, content here”.',
+        'Meski terlihat acak, blok lorem ipsum standar sebenarnya disusun dari potongan teks Cicero di “De Finibus Bonorum et Malorum” yang dipotong dan diacak seiring waktu. Generator modern mengambil akar Latin tersebut dan merangkainya kembali agar tetap terasa familiar sekaligus aman dipakai di beragam konteks.',
+        'Generator lorem ipsum Tulkit mengikuti semangat itu: ia menyusun paragraf yang wajar dari kumpulan kalimat, memungkinkan Anda memilih jumlah paragraf dan panjang kalimat, serta tetap menyediakan pembuka klasik “Lorem ipsum dolor sit amet…” bila diinginkan. Semua berjalan lokal di browser sehingga aman digunakan untuk mockup, prototipe, maupun proyek klien.'
       ]
     }
   }

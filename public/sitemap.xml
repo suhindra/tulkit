@@ -190,6 +190,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/uuid/uuid-v7"/>
   </url>
   <url>
+    <loc>https://tulkit.online/generator/lorem</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/lorem"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/lorem"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/lorem"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/lorem</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/lorem"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/lorem"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/lorem"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/converter/epoch</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>

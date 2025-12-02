@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Formatter from './components/Formatter'
 import UuidGenerator from './components/UuidGenerator'
 import EpochConverter from './components/EpochConverter'
+import LoremIpsumGenerator from './components/LoremIpsumGenerator'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
 import type { ActiveTab, LanguageCode, UuidVersion } from './types'
@@ -15,7 +16,7 @@ declare global {
   }
 }
 
-type View = 'formatter' | 'uuid' | 'epoch' | 'notfound'
+type View = 'formatter' | 'uuid' | 'epoch' | 'lorem' | 'notfound'
 
 export default function App(){
   const [language, setLanguage] = useState<LanguageCode>(() => {
@@ -68,17 +69,20 @@ export default function App(){
   const formatterOverview = getFormatterOverviewByTab(language)[activeTab]
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
+  const loremOverview = translations.overviews.lorem
 
   const seoHeading =
     view === 'uuid'
       ? `${appCopy.seoTitles.uuid} ${uuidVersion.toUpperCase()}`
       : view === 'epoch'
         ? appCopy.seoTitles.epoch
-        : view === 'notfound'
-          ? appCopy.seoTitles.notFound
-          : activeTab === 'auto'
-            ? appCopy.seoTitles.formatterDefault
-            : `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
+        : view === 'lorem'
+          ? appCopy.seoTitles.lorem
+          : view === 'notfound'
+            ? appCopy.seoTitles.notFound
+            : activeTab === 'auto'
+              ? appCopy.seoTitles.formatterDefault
+              : `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
 
   useEffect(()=>{
     document.title = seoHeading
@@ -92,6 +96,8 @@ export default function App(){
       setView('epoch')
     }else if(path.startsWith('/generator/uuid') || path.startsWith('/uuid')){
       setView('uuid')
+    }else if(path.startsWith('/generator/lorem')){
+      setView('lorem')
     }else if(path.startsWith('/formatter')){
       setView('formatter')
     }else{
@@ -110,6 +116,11 @@ export default function App(){
 
     if(view === 'epoch'){
       meta.content = appCopy.epochMetaDescription
+      return
+    }
+
+    if(view === 'lorem'){
+      meta.content = appCopy.loremMetaDescription
       return
     }
 
@@ -164,6 +175,67 @@ export default function App(){
   },[view, activeTab, uuidVersion, language])
 
   useEffect(()=>{
+    if(typeof window === 'undefined') return
+
+    const existing = document.getElementById('tulkit-breadcrumb-schema')
+    if(view === 'notfound'){
+      if(existing){
+        existing.remove()
+      }
+      return
+    }
+
+    const relativePath = stripLanguagePrefix(window.location.pathname) || '/'
+    const origin = window.location.origin.replace(/\/+$/,'')
+    const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
+    const currentPath = buildPathWithLanguage(ensureSlash(relativePath), language)
+    const currentUrl = `${origin}${currentPath}`
+    const homePath = buildPathWithLanguage('/', language)
+    const homeUrl = `${origin}${homePath}`
+
+    const homeName = language === 'id' ? 'Beranda' : 'Home'
+    let pageName = seoHeading
+
+    if(view === 'formatter'){
+      pageName = appCopy.navFormatter
+    }else if(view === 'uuid'){
+      pageName = `${appCopy.navUuid} ${uuidVersion.toUpperCase()}`
+    }else if(view === 'epoch'){
+      pageName = appCopy.navEpoch
+    }else if(view === 'lorem'){
+      pageName = appCopy.navLorem
+    }
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: homeName,
+          item: homeUrl
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: pageName,
+          item: currentUrl
+        }
+      ]
+    }
+
+    let script = existing as HTMLScriptElement | null
+    if(!script){
+      script = document.createElement('script')
+      script.type = 'application/ld+json'
+      script.id = 'tulkit-breadcrumb-schema'
+      document.head.appendChild(script)
+    }
+    script.textContent = JSON.stringify(jsonLd)
+  },[view, language, seoHeading, appCopy, uuidVersion])
+
+  useEffect(()=>{
     const existing = document.getElementById('kofi-overlay-widget')
     if(existing) return
 
@@ -200,6 +272,12 @@ export default function App(){
     const url = `${buildPathWithLanguage('/converter/epoch', language)}${window.location.search}`
     window.history.replaceState(null, '', url)
     setView('epoch')
+  }
+
+  function goToLorem(){
+    const url = `${buildPathWithLanguage('/generator/lorem', language)}${window.location.search}`
+    window.history.replaceState(null, '', url)
+    setView('lorem')
   }
 
   return (
@@ -250,6 +328,16 @@ export default function App(){
               >
                 {appCopy.navEpoch}
               </a>
+              <a
+                href={buildPathWithLanguage('/generator/lorem', language)}
+                className={`top-nav-item ${view === 'lorem' ? 'active' : ''}`}
+                onClick={e=>{
+                  e.preventDefault()
+                  goToLorem()
+                }}
+              >
+                {appCopy.navLorem}
+              </a>
             </nav>
             <label className="language-switcher">
               <span>{appCopy.languageSwitcherLabel}</span>
@@ -290,6 +378,13 @@ export default function App(){
                 ))}
               </>
             )}
+            {view === 'lorem' && (
+              <>
+                {appCopy.seoBlurb.lorem.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
           </div>
         </section>
       )}
@@ -297,6 +392,7 @@ export default function App(){
         {view === 'formatter' && <Formatter onTabChange={setActiveTab} language={language} />}
         {view === 'uuid' && <UuidGenerator onVersionChange={setUuidVersion} language={language} />}
         {view === 'epoch' && <EpochConverter language={language} />}
+        {view === 'lorem' && <LoremIpsumGenerator language={language} />}
         {view === 'notfound' && (
           <div className="not-found-card">
             <h2>{appCopy.notFoundHeading}</h2>
@@ -330,6 +426,14 @@ export default function App(){
               <>
                 <h2>{epochOverview.heading}</h2>
                 {epochOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'lorem' && (
+              <>
+                <h2>{loremOverview.heading}</h2>
+                {loremOverview.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

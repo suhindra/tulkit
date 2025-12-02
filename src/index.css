@@ -414,6 +414,100 @@ footer{
   padding:16px 18px 18px;
 }
 
+.lorem-card{
+  margin-top:26px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:16px 18px 18px;
+}
+
+.lorem-controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 16px;
+  align-items:flex-end;
+  margin-bottom:12px;
+}
+
+.lorem-field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:13px;
+  color:#374151;
+}
+
+.lorem-field input,
+.lorem-field select{
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-size:13px;
+}
+
+.lorem-actions{
+  margin-left:auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.lorem-checkbox{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  color:#374151;
+}
+
+.lorem-output textarea{
+  width:100%;
+  min-height:220px;
+  resize:vertical;
+  font-family:Consolas,Menlo,ui-monospace,monospace;
+  font-size:13px;
+  padding:10px 11px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  color:#111827;
+}
+
+.lorem-reference{
+  margin-top:20px;
+  border-top:1px solid var(--border);
+  padding-top:16px;
+}
+
+.lorem-reference h3{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.lorem-reference-block{
+  margin-bottom:14px;
+}
+
+.lorem-reference-block h4{
+  margin:0 0 6px;
+  font-size:14px;
+  font-style:italic;
+}
+
+.lorem-reference-block h5{
+  margin:6px 0 4px;
+  font-size:13px;
+  color:#4b5563;
+}
+
+.lorem-reference-block p{
+  margin:0 0 6px;
+  font-size:13px;
+  color:#374151;
+  line-height:1.6;
+}
+
 .epoch-current{
   display:flex;
   flex-wrap:wrap;
