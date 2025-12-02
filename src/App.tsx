@@ -3,6 +3,8 @@ import Formatter from './components/Formatter'
 import UuidGenerator from './components/UuidGenerator'
 import EpochConverter from './components/EpochConverter'
 import LoremIpsumGenerator from './components/LoremIpsumGenerator'
+const Encoder = React.lazy(()=>import('./components/Encoder'))
+const Decoder = React.lazy(()=>import('./components/Decoder'))
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
 import type { ActiveTab, LanguageCode, UuidVersion } from './types'
@@ -16,7 +18,7 @@ declare global {
   }
 }
 
-type View = 'formatter' | 'uuid' | 'epoch' | 'lorem' | 'notfound'
+type View = 'formatter' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
 
 export default function App(){
   const [language, setLanguage] = useState<LanguageCode>(() => {
@@ -69,6 +71,7 @@ export default function App(){
   const formatterOverview = getFormatterOverviewByTab(language)[activeTab]
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
+  const encodeOverview = translations.overviews.encode
   const loremOverview = translations.overviews.lorem
 
   const seoHeading =
@@ -76,13 +79,17 @@ export default function App(){
       ? `${appCopy.seoTitles.uuid} ${uuidVersion.toUpperCase()}`
       : view === 'epoch'
         ? appCopy.seoTitles.epoch
-        : view === 'lorem'
-          ? appCopy.seoTitles.lorem
-          : view === 'notfound'
-            ? appCopy.seoTitles.notFound
-            : activeTab === 'auto'
-              ? appCopy.seoTitles.formatterDefault
-              : `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
+        : view === 'encode'
+          ? appCopy.seoTitles.encode
+          : view === 'decode'
+            ? appCopy.seoTitles.decode
+            : view === 'lorem'
+              ? appCopy.seoTitles.lorem
+              : view === 'notfound'
+                ? appCopy.seoTitles.notFound
+                : activeTab === 'auto'
+                  ? appCopy.seoTitles.formatterDefault
+                  : `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
 
   useEffect(()=>{
     document.title = seoHeading
@@ -96,6 +103,10 @@ export default function App(){
       setView('epoch')
     }else if(path.startsWith('/generator/uuid') || path.startsWith('/uuid')){
       setView('uuid')
+    }else if(path.startsWith('/encode')){
+      setView('encode')
+    }else if(path.startsWith('/decode')){
+      setView('decode')
     }else if(path.startsWith('/generator/lorem')){
       setView('lorem')
     }else if(path.startsWith('/formatter')){
@@ -116,6 +127,16 @@ export default function App(){
 
     if(view === 'epoch'){
       meta.content = appCopy.epochMetaDescription
+      return
+    }
+
+    if(view === 'encode'){
+      meta.content = appCopy.encodeMetaDescription
+      return
+    }
+
+    if(view === 'decode'){
+      meta.content = appCopy.decodeMetaDescription
       return
     }
 
@@ -202,6 +223,10 @@ export default function App(){
       pageName = `${appCopy.navUuid} ${uuidVersion.toUpperCase()}`
     }else if(view === 'epoch'){
       pageName = appCopy.navEpoch
+    }else if(view === 'encode'){
+      pageName = appCopy.navEncode
+    }else if(view === 'decode'){
+      pageName = appCopy.navDecode
     }else if(view === 'lorem'){
       pageName = appCopy.navLorem
     }
@@ -274,6 +299,18 @@ export default function App(){
     setView('epoch')
   }
 
+  function goToEncode(){
+    const url = `${buildPathWithLanguage('/encode', language)}${window.location.search}`
+    window.history.replaceState(null, '', url)
+    setView('encode')
+  }
+
+  function goToDecode(){
+    const url = `${buildPathWithLanguage('/decode', language)}${window.location.search}`
+    window.history.replaceState(null, '', url)
+    setView('decode')
+  }
+
   function goToLorem(){
     const url = `${buildPathWithLanguage('/generator/lorem', language)}${window.location.search}`
     window.history.replaceState(null, '', url)
@@ -329,6 +366,26 @@ export default function App(){
                 {appCopy.navEpoch}
               </a>
               <a
+                href={buildPathWithLanguage('/encode', language)}
+                className={`top-nav-item ${view === 'encode' ? 'active' : ''}`}
+                onClick={e=>{
+                  e.preventDefault()
+                  goToEncode()
+                }}
+              >
+                {appCopy.navEncode}
+              </a>
+              <a
+                href={buildPathWithLanguage('/decode', language)}
+                className={`top-nav-item ${view === 'decode' ? 'active' : ''}`}
+                onClick={e=>{
+                  e.preventDefault()
+                  goToDecode()
+                }}
+              >
+                {appCopy.navDecode}
+              </a>
+              <a
                 href={buildPathWithLanguage('/generator/lorem', language)}
                 className={`top-nav-item ${view === 'lorem' ? 'active' : ''}`}
                 onClick={e=>{
@@ -378,6 +435,20 @@ export default function App(){
                 ))}
               </>
             )}
+            {view === 'encode' && (
+              <>
+                {appCopy.seoBlurb.encode.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'decode' && (
+              <>
+                {appCopy.seoBlurb.decode.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
             {view === 'lorem' && (
               <>
                 {appCopy.seoBlurb.lorem.map(text=>(
@@ -392,6 +463,16 @@ export default function App(){
         {view === 'formatter' && <Formatter onTabChange={setActiveTab} language={language} />}
         {view === 'uuid' && <UuidGenerator onVersionChange={setUuidVersion} language={language} />}
         {view === 'epoch' && <EpochConverter language={language} />}
+        {view === 'encode' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <Encoder language={language} />
+          </React.Suspense>
+        )}
+        {view === 'decode' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <Decoder language={language} />
+          </React.Suspense>
+        )}
         {view === 'lorem' && <LoremIpsumGenerator language={language} />}
         {view === 'notfound' && (
           <div className="not-found-card">
@@ -426,6 +507,22 @@ export default function App(){
               <>
                 <h2>{epochOverview.heading}</h2>
                 {epochOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'encode' && (
+              <>
+                <h2>{encodeOverview.heading}</h2>
+                {encodeOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'decode' && (
+              <>
+                <h2>{translations.overviews.decode.heading}</h2>
+                {translations.overviews.decode.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

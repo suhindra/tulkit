@@ -91,6 +91,31 @@ type LoremCopy = {
   cicero2Translation: string
 }
 
+type EncoderCopy = {
+  inputEncodingLabel: string
+  inputEncodingUtf8: string
+  inputEncodingBase64: string
+  inputEncodingBase32: string
+  inputEncodingBase58: string
+  inputEncodingHex: string
+  outputEncodingLabel: string
+  outputEncodingBase64: string
+  outputEncodingBase64Url: string
+  outputEncodingBase32: string
+  outputEncodingBase58: string
+  outputEncodingHex: string
+  outputEncodingText: string
+  inputLabel: string
+  inputPlaceholder: string
+  outputLabel: string
+  outputPlaceholder: string
+  convertLabel: string
+  copyLabel: string
+  copySuccess: string
+  copyErrorPrefix: string
+  inputErrorPrefix: string
+}
+
 type AppCopy = {
   logoAlt: string
   brandHeading: string
@@ -99,12 +124,16 @@ type AppCopy = {
   navFormatter: string
   navUuid: string
   navEpoch: string
+  navEncode: string
+  navDecode: string
   navLorem: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
     uuid: string
     epoch: string
+    encode: string
+    decode: string
     lorem: string
     notFound: string
   }
@@ -112,6 +141,8 @@ type AppCopy = {
     formatter: string[]
     uuid: string[]
     epoch: string[]
+    encode: string[]
+    decode: string[]
     lorem: string[]
   }
   notFoundHeading: string
@@ -119,6 +150,8 @@ type AppCopy = {
   goToFormatterCta: string
   footerNote: string
   epochMetaDescription: string
+  encodeMetaDescription: string
+  decodeMetaDescription: string
   loremMetaDescription: string
   notFoundMetaDescription: string
 }
@@ -127,6 +160,7 @@ type OverviewCopy = {
   formatter: Record<ActiveTab,OverviewContent>
   uuid: Record<UuidVersion,OverviewContent>
   epoch: OverviewContent
+  encode: OverviewContent
   lorem: OverviewContent
 }
 
@@ -138,6 +172,7 @@ type Translation = {
   uuid: UuidCopy
   epoch: EpochCopy
   lorem: LoremCopy
+  encoder: EncoderCopy
   app: AppCopy
   overviews: OverviewCopy
 }
@@ -359,6 +394,30 @@ const en: Translation = {
     copySuccess: 'Copied to clipboard',
     copyErrorPrefix: 'Clipboard failed: '
   },
+  encoder: {
+    inputEncodingLabel: 'Input encoding',
+    inputEncodingUtf8: 'Text (UTF-8)',
+    inputEncodingBase64: 'Base64 (standard or URL-safe)',
+    inputEncodingBase32: 'Base32',
+    inputEncodingBase58: 'Base58 (Bitcoin alphabet)',
+    inputEncodingHex: 'Hex (lower or upper case)',
+    outputEncodingLabel: 'Output encoding',
+    outputEncodingBase64: 'Base64',
+    outputEncodingBase64Url: 'Base64 (URL-safe)',
+    outputEncodingBase32: 'Base32',
+    outputEncodingBase58: 'Base58',
+    outputEncodingHex: 'Hex (lower case)',
+    outputEncodingText: 'Text (UTF-8)',
+    inputLabel: 'Input',
+    inputPlaceholder: 'Paste text, Base64, Base32, Base58, or hex to convert',
+    outputLabel: 'Output',
+    outputPlaceholder: 'Converted result will appear here',
+    convertLabel: 'Convert',
+    copyLabel: 'Copy',
+    copySuccess: 'Converted value copied to clipboard',
+    copyErrorPrefix: 'Clipboard failed: ',
+    inputErrorPrefix: 'Could not decode input: '
+  },
   lorem: {
     paragraphCountLabel: 'How many paragraphs?',
     classicPrefixLabel: 'Start with “Lorem ipsum dolor sit amet…”',
@@ -395,12 +454,16 @@ const en: Translation = {
     navFormatter: 'Formatter',
     navUuid: 'UUID Generator',
     navEpoch: 'Epoch Converter',
+    navEncode: 'Encoder',
+    navDecode: 'Decoder',
     navLorem: 'Lorem Ipsum',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
       uuid: 'UUID Generator — Tulkit',
       epoch: 'Epoch Converter — Tulkit',
+      encode: 'Encoder — Tulkit',
+      decode: 'Decoder — Tulkit',
       lorem: 'Lorem Ipsum Generator — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
@@ -417,6 +480,14 @@ const en: Translation = {
         'Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and see matching UTC, GMT, and time-zone aware local output.',
         'You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the time zone to see how the same instant appears around the world.'
       ],
+      encode: [
+        'Convert between text, hex, and Base64 directly in your browser. Paste any UTF-8 text, Base64 value, or hex string and Tulkit will normalize it into the format you need.',
+        'This encoder is handy when you are working with HTTP headers, JWT segments, configuration secrets, or binary blobs and need to quickly inspect or re-encode them without leaving the browser.'
+      ],
+      decode: [
+        'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser. Paste any encoded value and Tulkit will show both the UTF-8 text and raw bytes.',
+        'This decoder is useful when inspecting tokens, payloads, or binary blobs that you receive from APIs and need to turn back into something human-friendly for debugging or documentation.'
+      ],
       lorem: [
         'Generate reusable lorem ipsum placeholder text directly in your browser. Adjust the number of paragraphs and sentence length so your mockups and design drafts feel realistic without writing copy by hand.',
         'Tulkit keeps all lorem generation in your browser, making it a quick helper when building wireframes, UI components, or content layouts.'
@@ -429,6 +500,10 @@ const en: Translation = {
     footerNote: 'Prototype — Tulkit Web Tools',
     epochMetaDescription:
       'Convert Unix epoch timestamps to readable dates and back again with Tulkit. Quickly switch between seconds, milliseconds, UTC, and local time directly in your browser.',
+    encodeMetaDescription:
+      'Convert between UTF-8 text, Base64, and hex encodings in your browser with Tulkit’s encoder tool. Paste values to normalize or inspect binary-safe data without using external CLIs.',
+    decodeMetaDescription:
+      'Decode Base64, Base32, Base58, and hex values in your browser with Tulkit’s decoder. Turn opaque encoded data back into readable text for debugging and inspection.',
     loremMetaDescription:
       'Generate lorem ipsum placeholder paragraphs in your browser with Tulkit. Control paragraph count and sentence length for design mockups, UI components, and content layouts.',
     notFoundMetaDescription:
@@ -533,6 +608,21 @@ const en: Translation = {
         'Tulkit’s epoch converter turns those raw timestamp numbers into readable dates and times, and back again. You can paste a value like 1764298543 to see when it happens in UTC, GMT-style long form, or your preferred time zone, then copy the formatted result for documentation, debugging notes, or support replies.',
         'When you go the other direction—starting from a date—you can experiment with different time zones and immediately see the matching Unix seconds and milliseconds. This makes it easier to align logs, schedule jobs, or compare records between services that may all be storing timestamps in slightly different formats.',
         'All calculations run entirely in your browser using the built-in JavaScript date APIs, so none of your event data or log excerpts are uploaded to a server while you are exploring timestamps.'
+      ]
+    },
+    encode: {
+      heading: 'Encoder — Tulkit overview',
+      paragraphs: [
+        'Base64 originally appeared as a MIME content-transfer encoding: a way to represent arbitrary binary data using only readable ASCII characters. In practice, it works by slicing bytes into 6‑bit chunks, then mapping each chunk to one of 64 symbols made up of letters, digits, and a couple of punctuation characters.',
+        'Because Base64 output uses only safe characters, it is ideal for transporting data through systems that were designed for text rather than raw bytes. Email attachments, XML or JSON documents that need to embed binary blobs, and many HTTP APIs all rely on Base64 to keep data intact even when intermediate systems are not 8‑bit clean.',
+        'The “64” in Base64 refers to the size of the alphabet: A–Z, a–z, 0–9, plus two extra symbols that vary slightly between standards (such as + and / in RFC 4648). Tulkit’s encoder lets you move between UTF‑8 text, hex, Base64, Base32, and Base58 so you can inspect what is actually being sent over the wire, debug payloads, or generate test values for other tools without leaving your browser.'
+      ]
+    },
+    decode: {
+      heading: 'Decoder — Tulkit overview',
+      paragraphs: [
+        'When you receive Base64, Base32, Base58, or hex from an API or log file, the first step is often to turn it back into readable text. Tulkit’s decoder focuses on that workflow, letting you quickly inspect what an encoded value really contains.',
+        'Paste an encoded string, pick the matching encoding, and Tulkit will decode it to UTF-8 text or raw bytes so you can verify payloads, troubleshoot integration issues, or share clean examples in documentation — all without uploading data to any server.'
       ]
     },
     lorem: {
@@ -753,6 +843,30 @@ const id: Translation = {
     copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: '
   },
+  encoder: {
+    inputEncodingLabel: 'Encoding input',
+    inputEncodingUtf8: 'Teks (UTF-8)',
+    inputEncodingBase64: 'Base64 (standar atau URL-safe)',
+    inputEncodingBase32: 'Base32',
+    inputEncodingBase58: 'Base58 (alfabet Bitcoin)',
+    inputEncodingHex: 'Hex (huruf kecil/besar)',
+    outputEncodingLabel: 'Encoding output',
+    outputEncodingBase64: 'Base64',
+    outputEncodingBase64Url: 'Base64 (aman untuk URL)',
+    outputEncodingBase32: 'Base32',
+    outputEncodingBase58: 'Base58',
+    outputEncodingHex: 'Hex (huruf kecil)',
+    outputEncodingText: 'Teks (UTF-8)',
+    inputLabel: 'Input',
+    inputPlaceholder: 'Tempel teks, Base64, Base32, Base58, atau hex untuk dikonversi',
+    outputLabel: 'Output',
+    outputPlaceholder: 'Hasil konversi akan muncul di sini',
+    convertLabel: 'Konversi',
+    copyLabel: 'Salin',
+    copySuccess: 'Nilai hasil konversi berhasil disalin',
+    copyErrorPrefix: 'Gagal menyalin: ',
+    inputErrorPrefix: 'Input tidak dapat didekode: '
+  },
   lorem: {
     paragraphCountLabel: 'Berapa banyak paragraf?',
     classicPrefixLabel: 'Mulai dengan “Lorem ipsum dolor sit amet…”',
@@ -789,12 +903,16 @@ const id: Translation = {
     navFormatter: 'Pemformat',
     navUuid: 'Generator UUID',
     navEpoch: 'Konverter Epoch',
+    navEncode: 'Encoder',
+    navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
       uuid: 'Generator UUID — Tulkit',
       epoch: 'Konverter Epoch — Tulkit',
+      encode: 'Encoder — Tulkit',
+      decode: 'Decoder — Tulkit',
       lorem: 'Generator Lorem Ipsum — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
@@ -811,6 +929,14 @@ const id: Translation = {
         'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dalam hitungan detik. Tempel nilai dalam detik atau milidetik untuk melihat keluaran UTC, GMT, dan zona waktu lokal.',
         'Anda juga bisa memilih tanggal dan waktu, menyalin nilai Unix untuk API atau query database, serta mengganti zona waktu untuk melihat bagaimana momen yang sama muncul di berbagai wilayah.'
       ],
+      encode: [
+        'Konversi antara teks, hex, dan Base64 langsung di browser Anda. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
+        'Encoder ini berguna ketika Anda bekerja dengan header HTTP, segmen JWT, secret konfigurasi, atau blob biner dan ingin memeriksa atau menormalkan encoding tanpa membuka CLI terpisah.'
+      ],
+      decode: [
+        'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
+        'Decoder ini membantu saat Anda memeriksa token, payload, atau blob biner dari API dan perlu mengembalikannya ke bentuk yang mudah dibaca untuk debugging atau dokumentasi.'
+      ],
       lorem: [
         'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
         'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
@@ -823,6 +949,8 @@ const id: Translation = {
     footerNote: 'Prototype — Tulkit Web Tools',
     epochMetaDescription:
       'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
+    encodeMetaDescription:
+      'Konversikan teks UTF-8, Base64, dan hex dengan encoder Tulkit di browser Anda. Bantu memeriksa dan menormalkan data biner tanpa alat tambahan.',
     loremMetaDescription:
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     notFoundMetaDescription:
@@ -920,6 +1048,21 @@ const id: Translation = {
         'Konverter epoch Tulkit mengubah angka timestamp mentah menjadi tanggal dan waktu yang mudah dibaca, dan sebaliknya. Anda bisa menempel nilai seperti 1764298543 untuk melihat kapan itu terjadi di UTC, format panjang ala GMT, atau zona waktu pilihan Anda, lalu menyalin hasilnya untuk dokumentasi, catatan debugging, atau balasan dukungan.',
         'Saat berangkat dari tanggal menuju angka, Anda dapat bereksperimen dengan berbagai zona waktu dan langsung melihat kecocokan detik dan milidetik Unix. Ini memudahkan menyelaraskan log, menjadwalkan job, atau membandingkan catatan antar layanan yang mungkin menyimpan timestamp dalam format berbeda.',
         'Semua perhitungan berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan, jadi tidak ada data event atau potongan log yang diunggah ke server saat Anda menelusuri timestamp.'
+      ]
+    },
+    encode: {
+      heading: 'Ikhtisar Encoder — Tulkit',
+      paragraphs: [
+        'Istilah Base64 berasal dari skema content-transfer encoding di MIME: cara mengubah data biner menjadi deretan karakter ASCII yang aman dibaca. Secara sederhana, Base64 memecah byte menjadi potongan 6 bit lalu memetakan tiap potongan ke salah satu dari 64 simbol yang terdiri dari huruf, angka, dan beberapa tanda baca.',
+        'Karena keluarannya hanya berisi karakter yang “aman”, Base64 cocok untuk mengirimkan data melalui sistem yang awalnya didesain untuk teks, bukan byte mentah. Lampiran email, dokumen XML atau JSON yang perlu menyisipkan blob biner, hingga banyak API HTTP mengandalkan Base64 agar data tetap utuh meskipun melewati jalur yang tidak sepenuhnya 8‑bit clean.',
+        'Angka “64” pada Base64 merujuk pada ukuran alfabetnya: A–Z, a–z, 0–9, ditambah dua simbol yang sedikit berbeda antar standar (misalnya + dan / pada RFC 4648). Encoder Tulkit membantu Anda berpindah antara teks UTF‑8, hex, Base64, Base32, dan Base58 sehingga lebih mudah melihat apa yang benar‑benar dikirim di jaringan, men-debug payload, atau membuat nilai uji untuk alat lain langsung dari browser.'
+      ]
+    },
+    decode: {
+      heading: 'Ikhtisar Decoder — Tulkit',
+      paragraphs: [
+        'Ketika Anda menerima Base64, Base32, Base58, atau hex dari API atau berkas log, langkah pertama biasanya mengembalikannya ke teks yang bisa dibaca. Decoder Tulkit berfokus pada alur kerja itu sehingga Anda bisa dengan cepat melihat isi sebenarnya dari nilai yang terenkode.',
+        'Tempel string terenkode, pilih encoding yang sesuai, dan Tulkit akan mendekodekannya ke teks UTF-8 atau byte mentah sehingga Anda dapat memeriksa payload, menelusuri masalah integrasi, atau menyalin contoh yang bersih ke dokumentasi — semuanya tanpa mengunggah data ke server mana pun.'
       ]
     },
     lorem: {

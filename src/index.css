@@ -414,6 +414,80 @@ footer{
   padding:16px 18px 18px;
 }
 
+.encode-card{
+  margin-top:26px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:16px 18px 18px;
+}
+
+.encode-controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 16px;
+  align-items:flex-end;
+  margin-bottom:12px;
+}
+
+.encode-field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:13px;
+  color:#374151;
+}
+
+.encode-field select{
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-size:13px;
+}
+
+.encode-actions{
+  margin-left:auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.encode-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+}
+
+.encode-column{
+  flex:1 1 260px;
+}
+
+.encode-textarea-label{
+  display:block;
+  margin:0 0 6px;
+  font-size:13px;
+  color:#374151;
+}
+
+.encode-column textarea{
+  width:100%;
+  min-height:190px;
+  resize:vertical;
+  font-family:Consolas,Menlo,ui-monospace,monospace;
+  font-size:13px;
+  padding:10px 11px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  color:#111827;
+}
+
+.encode-error{
+  margin:6px 0 0;
+  font-size:12px;
+  color:#b91c1c;
+}
+
 .lorem-card{
   margin-top:26px;
   border-radius:10px;

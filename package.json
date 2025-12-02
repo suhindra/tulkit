@@ -12,6 +12,7 @@
     "ci": "npm ci && npm run check:lint && npm run build"
   },
   "dependencies": {
+    "hi-base64": "^0.4.1",
     "highlight.js": "^11.8.0",
     "js-beautify": "^1.14.7",
     "prettier": "^3.3.3",

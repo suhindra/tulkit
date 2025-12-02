@@ -190,6 +190,38 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/uuid/uuid-v7"/>
   </url>
   <url>
+    <loc>https://tulkit.online/encode</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/encode</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/decode</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/decode</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/generator/lorem</loc>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
