@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { v1 as uuidV1, v4 as uuidV4 } from 'uuid'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { LanguageCode, UuidVersion } from '../types'
@@ -6,6 +6,30 @@ import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
 
 const uuidVersions: UuidVersion[] = ['v1','v4','v7']
+
+const UUID_SETTINGS_KEY = 'tulkit-uuid-settings'
+
+type UuidPersistedState = {
+  count?: number
+  version?: UuidVersion
+  uppercase?: boolean
+  withHyphens?: boolean
+  withBraces?: boolean
+}
+
+function readUuidSettings(): UuidPersistedState | null{
+  if(typeof window === 'undefined') return null
+  try{
+    const raw = window.localStorage.getItem(UUID_SETTINGS_KEY)
+    return raw ? JSON.parse(raw) : null
+  }catch{
+    return null
+  }
+}
+
+function isUuidVersionValue(value: unknown): value is UuidVersion{
+  return uuidVersions.includes(value as UuidVersion)
+}
 
 type UuidGeneratorProps = {
   onVersionChange?: (version: UuidVersion) => void
@@ -53,11 +77,38 @@ function createUuid(version: UuidVersion): string {
 export default function UuidGenerator({ onVersionChange, language }: UuidGeneratorProps){
   const location = useLocation()
   const navigate = useNavigate()
-  const [count, setCount] = useState<number>(5)
-  const [version, setVersion] = useState<UuidVersion>('v4')
-  const [uppercase, setUppercase] = useState(false)
-  const [withHyphens, setWithHyphens] = useState(true)
-  const [withBraces, setWithBraces] = useState(false)
+  const savedSettings = useMemo(()=>readUuidSettings(),[])
+  const [count, setCount] = useState<number>(() => {
+    if(savedSettings && typeof savedSettings.count === 'number' && Number.isFinite(savedSettings.count)){
+      const rounded = Math.round(savedSettings.count)
+      return Math.min(Math.max(rounded, 1), 100)
+    }
+    return 5
+  })
+  const [version, setVersion] = useState<UuidVersion>(()=>{
+    if(savedSettings && savedSettings.version && isUuidVersionValue(savedSettings.version)){
+      return savedSettings.version
+    }
+    return 'v4'
+  })
+  const [uppercase, setUppercase] = useState<boolean>(()=>{
+    if(savedSettings && typeof savedSettings.uppercase === 'boolean'){
+      return savedSettings.uppercase
+    }
+    return false
+  })
+  const [withHyphens, setWithHyphens] = useState<boolean>(()=>{
+    if(savedSettings && typeof savedSettings.withHyphens === 'boolean'){
+      return savedSettings.withHyphens
+    }
+    return true
+  })
+  const [withBraces, setWithBraces] = useState<boolean>(()=>{
+    if(savedSettings && typeof savedSettings.withBraces === 'boolean'){
+      return savedSettings.withBraces
+    }
+    return false
+  })
   const [uuids, setUuids] = useState<string[]>([])
   const uuidCopy = getTranslations(language).uuid
 
@@ -71,6 +122,22 @@ export default function UuidGenerator({ onVersionChange, language }: UuidGenerat
       else setVersion('v4')
     }
   },[location.pathname])
+
+  useEffect(()=>{
+    if(typeof window === 'undefined') return
+    const payload: UuidPersistedState = {
+      count: Math.min(Math.max(Math.round(count || 5), 1), 100),
+      version,
+      uppercase,
+      withHyphens,
+      withBraces
+    }
+    try{
+      window.localStorage.setItem(UUID_SETTINGS_KEY, JSON.stringify(payload))
+    }catch{
+      // ignore
+    }
+  },[count, version, uppercase, withHyphens, withBraces])
 
   useEffect(()=>{
     onVersionChange?.(version)
