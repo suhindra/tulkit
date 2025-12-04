@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Formatter from './components/Formatter'
 import UuidGenerator from './components/UuidGenerator'
 import EpochConverter from './components/EpochConverter'
 import LoremIpsumGenerator from './components/LoremIpsumGenerator'
 const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
+import { useLocation, useNavigate } from 'react-router-dom'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
 import type { ActiveTab, LanguageCode, UuidVersion } from './types'
@@ -20,7 +21,35 @@ declare global {
 
 type View = 'formatter' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
 
+function getViewFromPath(path: string): View{
+  const normalized = path.toLowerCase()
+  if(normalized === '/' || normalized === ''){
+    return 'formatter'
+  }
+  if(normalized.startsWith('/converter/epoch')){
+    return 'epoch'
+  }
+  if(normalized.startsWith('/generator/uuid') || normalized.startsWith('/uuid')){
+    return 'uuid'
+  }
+  if(normalized.startsWith('/encode')){
+    return 'encode'
+  }
+  if(normalized.startsWith('/decode')){
+    return 'decode'
+  }
+  if(normalized.startsWith('/generator/lorem')){
+    return 'lorem'
+  }
+  if(normalized.startsWith('/formatter')){
+    return 'formatter'
+  }
+  return 'notfound'
+}
+
 export default function App(){
+  const location = useLocation()
+  const navigate = useNavigate()
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if(typeof window !== 'undefined'){
       const pathLang = detectLanguageFromPath(window.location.pathname)
@@ -39,19 +68,26 @@ export default function App(){
     return 'en'
   })
   const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
-  const [view, setView] = useState<View>('formatter')
   const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
+  const relativePath = useMemo(()=>stripLanguagePrefix(location.pathname) || '/', [location.pathname])
+  const view = useMemo(()=>getViewFromPath(relativePath), [relativePath])
 
   useEffect(()=>{
-    if(typeof window === 'undefined') return
-    const current = window.location.pathname
-    const relative = stripLanguagePrefix(current)
+    const detected = detectLanguageFromPath(location.pathname)
+    if(detected !== 'en'){
+      setLanguage(prev=>prev === detected ? prev : detected)
+    }
+  },[location.pathname])
+
+  useEffect(()=>{
+    const current = location.pathname
+    const relative = stripLanguagePrefix(current) || '/'
     const target = buildPathWithLanguage(relative, language)
     if(target !== current){
-      const nextUrl = `${target}${window.location.search}`
-      window.history.replaceState(null, '', nextUrl)
+      const nextUrl = `${target}${location.search}`
+      navigate(nextUrl, { replace: true })
     }
-  },[language])
+  },[language, location.pathname, location.search, navigate])
 
   useEffect(()=>{
     document.documentElement.lang = language
@@ -96,27 +132,6 @@ export default function App(){
   },[seoHeading])
 
   useEffect(()=>{
-    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
-    if(path === '/' || path === ''){
-      setView('formatter')
-    }else if(path.startsWith('/converter/epoch')){
-      setView('epoch')
-    }else if(path.startsWith('/generator/uuid') || path.startsWith('/uuid')){
-      setView('uuid')
-    }else if(path.startsWith('/encode')){
-      setView('encode')
-    }else if(path.startsWith('/decode')){
-      setView('decode')
-    }else if(path.startsWith('/generator/lorem')){
-      setView('lorem')
-    }else if(path.startsWith('/formatter')){
-      setView('formatter')
-    }else{
-      setView('notfound')
-    }
-  },[])
-
-  useEffect(()=>{
     const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
     if(!meta) return
 
@@ -156,10 +171,10 @@ export default function App(){
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
-    const relativePath = stripLanguagePrefix(window.location.pathname) || '/'
     const origin = window.location.origin.replace(/\/+$/,'')
     const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
-    const enPath = ensureSlash(relativePath === '' ? '/' : relativePath)
+    const normalized = relativePath === '' ? '/' : relativePath
+    const enPath = ensureSlash(normalized)
     const idPath = buildPathWithLanguage(enPath, 'id')
     const defaultHref = `${origin}/`
     const alternates = [
@@ -177,14 +192,13 @@ export default function App(){
       }
       link.href = href
     })
-  },[view, activeTab, uuidVersion, language])
+  },[relativePath, view, activeTab, uuidVersion, language])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
-    const relativePath = stripLanguagePrefix(window.location.pathname) || '/'
     const origin = window.location.origin.replace(/\/+$/,'')
     const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
-    const currentPath = buildPathWithLanguage(ensureSlash(relativePath), language)
+    const currentPath = buildPathWithLanguage(ensureSlash(relativePath || '/'), language)
     const canonicalHref = `${origin}${currentPath}`
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
     if(!canonical){
@@ -193,7 +207,7 @@ export default function App(){
       document.head.appendChild(canonical)
     }
     canonical.href = canonicalHref
-  },[view, activeTab, uuidVersion, language])
+  },[relativePath, view, activeTab, uuidVersion, language])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
@@ -206,10 +220,9 @@ export default function App(){
       return
     }
 
-    const relativePath = stripLanguagePrefix(window.location.pathname) || '/'
     const origin = window.location.origin.replace(/\/+$/,'')
     const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
-    const currentPath = buildPathWithLanguage(ensureSlash(relativePath), language)
+    const currentPath = buildPathWithLanguage(ensureSlash(relativePath || '/'), language)
     const currentUrl = `${origin}${currentPath}`
     const homePath = buildPathWithLanguage('/', language)
     const homeUrl = `${origin}${homePath}`
@@ -258,7 +271,7 @@ export default function App(){
       document.head.appendChild(script)
     }
     script.textContent = JSON.stringify(jsonLd)
-  },[view, language, seoHeading, appCopy, uuidVersion])
+  },[view, language, seoHeading, appCopy, uuidVersion, relativePath])
 
   useEffect(()=>{
     const existing = document.getElementById('kofi-overlay-widget')
@@ -281,40 +294,33 @@ export default function App(){
     document.body.appendChild(script)
   },[])
 
+  const appendSearch = (path: string)=>{
+    const basePath = buildPathWithLanguage(path, language)
+    return location.search ? `${basePath}${location.search}` : basePath
+  }
+
   function goToFormatter(){
-    const url = `${buildPathWithLanguage('/formatter', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('formatter')
+    navigate(appendSearch('/formatter'))
   }
 
   function goToUuid(){
-    const url = `${buildPathWithLanguage('/generator/uuid', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('uuid')
+    navigate(appendSearch('/generator/uuid'))
   }
 
   function goToEpoch(){
-    const url = `${buildPathWithLanguage('/converter/epoch', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('epoch')
+    navigate(appendSearch('/converter/epoch'))
   }
 
   function goToEncode(){
-    const url = `${buildPathWithLanguage('/encode', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('encode')
+    navigate(appendSearch('/encode'))
   }
 
   function goToDecode(){
-    const url = `${buildPathWithLanguage('/decode', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('decode')
+    navigate(appendSearch('/decode'))
   }
 
   function goToLorem(){
-    const url = `${buildPathWithLanguage('/generator/lorem', language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
-    setView('lorem')
+    navigate(appendSearch('/generator/lorem'))
   }
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { v1 as uuidV1, v4 as uuidV4 } from 'uuid'
+import { useLocation, useNavigate } from 'react-router-dom'
 import type { LanguageCode, UuidVersion } from '../types'
 import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
@@ -50,6 +51,8 @@ function createUuid(version: UuidVersion): string {
 }
 
 export default function UuidGenerator({ onVersionChange, language }: UuidGeneratorProps){
+  const location = useLocation()
+  const navigate = useNavigate()
   const [count, setCount] = useState<number>(5)
   const [version, setVersion] = useState<UuidVersion>('v4')
   const [uppercase, setUppercase] = useState(false)
@@ -59,7 +62,7 @@ export default function UuidGenerator({ onVersionChange, language }: UuidGenerat
   const uuidCopy = getTranslations(language).uuid
 
   useEffect(()=>{
-    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
+    const path = stripLanguagePrefix(location.pathname).toLowerCase()
     const match = path.match(/^\/(?:generator\/)?uuid(?:\/([^/]+))?/)
     if(match){
       const slug = (match[1] || '').toLowerCase()
@@ -67,7 +70,7 @@ export default function UuidGenerator({ onVersionChange, language }: UuidGenerat
       else if(slug === 'uuid-v7') setVersion('v7')
       else setVersion('v4')
     }
-  },[])
+  },[location.pathname])
 
   useEffect(()=>{
     onVersionChange?.(version)
@@ -80,8 +83,8 @@ export default function UuidGenerator({ onVersionChange, language }: UuidGenerat
       : ''
     const base = '/generator/uuid'
     const path = slug ? `${base}/${slug}` : base
-    const url = `${buildPathWithLanguage(path, language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
+    const url = `${buildPathWithLanguage(path, language)}${location.search}`
+    navigate(url, { replace: true })
   }
 
   function formatUuid(raw:string){

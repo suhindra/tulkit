@@ -10,6 +10,7 @@ import sql from 'highlight.js/lib/languages/sql'
 import phpSyntax from 'highlight.js/lib/languages/php'
 import yamlSyntax from 'highlight.js/lib/languages/yaml'
 import 'highlight.js/styles/github.css'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { formatterLangs, type ActiveTab, type FormatterLang, type LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
@@ -99,6 +100,8 @@ function detectLang(text:string):Lang{
 }
 
 export default function Formatter({ onTabChange, language }: FormatterProps){
+  const location = useLocation()
+  const navigate = useNavigate()
   const [lang, setLang] = useState<Lang>('html')
   const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
   const [input, setInput] = useState('')
@@ -113,15 +116,16 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
 
   // Initialize tab from URL path or hash slug
   useEffect(()=>{
+    if(typeof window === 'undefined') return
     let initial: ActiveTab | undefined
 
-    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
+    const path = stripLanguagePrefix(location.pathname).toLowerCase()
     const match = path.match(/^\/formatter(?:\/([^/]+))?/)
     if(match){
       const slug = (match[1] || 'auto').toLowerCase()
       initial = slugToTab[slug] || 'auto'
     }else{
-      const rawHash = window.location.hash.replace(/^#/, '').toLowerCase()
+      const rawHash = location.hash.replace(/^#/, '').toLowerCase()
       if(rawHash){
         initial = slugToTab[rawHash]
       }
@@ -133,14 +137,14 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     if(initial !== 'auto'){
       setLang(initial)
     }
-  },[])
+  },[location.pathname, location.hash])
 
   function updateUrlForTab(tab:ActiveTab){
     const slug = tabSlugs[tab]
     const base = '/formatter'
     const path = tab === 'auto' ? base : `${base}/${slug}`
-    const url = `${buildPathWithLanguage(path, language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
+    const url = `${buildPathWithLanguage(path, language)}${location.search}`
+    navigate(url, { replace: true })
   }
 
   useEffect(()=>{
