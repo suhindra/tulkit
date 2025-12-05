@@ -9,7 +9,7 @@ const Decoder = React.lazy(()=>import('./components/Decoder'))
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
-import type { ActiveTab, CodecSubtool, LanguageCode, UuidVersion } from './types'
+import type { ActiveTab, CodecSubtool, LanguageCode, MinifyTab, UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
@@ -63,6 +63,13 @@ function getCodecSlugFromPath(path: string): CodecSubtool{
     return 'base64'
   }
   return 'default'
+}
+
+function minifyTabFromActive(tab: ActiveTab): MinifyTab{
+  if(tab === 'html' || tab === 'css' || tab === 'js' || tab === 'json'){
+    return tab
+  }
+  return 'auto'
 }
 
 export default function App(){
@@ -124,6 +131,7 @@ export default function App(){
   const translations = getTranslations(language)
   const { app: appCopy, headingByTab, descriptionByTab, uuidDescriptionByVersion } = translations
 
+  const activeMinifyTab = useMemo(()=>minifyTabFromActive(activeTab), [activeTab])
   const formatterOverview = getFormatterOverviewByTab(language)[activeTab]
   const minifyOverview = translations.overviews.minify
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
@@ -135,7 +143,7 @@ export default function App(){
   const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
   const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
   const formatterSeoBlurb = appCopy.seoBlurb.formatter[activeTab] || appCopy.seoBlurb.formatter.auto
-  const minifySeoBlurb = appCopy.seoBlurb.minify[activeTab] || appCopy.seoBlurb.minify.auto
+  const minifySeoBlurb = appCopy.seoBlurb.minify[activeMinifyTab] || appCopy.seoBlurb.minify.auto
 
   const seoHeading = useMemo(()=>{
     if(view === 'uuid'){
@@ -197,7 +205,8 @@ export default function App(){
       return selected
     }
     if(view === 'minify'){
-      return appCopy.minifyMetaDescription
+      const map = appCopy.minifyMetaDescription
+      return map[activeMinifyTab] || map.auto
     }
     if(view === 'lorem'){
       return appCopy.loremMetaDescription
@@ -207,7 +216,7 @@ export default function App(){
     }
     const key: ActiveTab = activeTab || 'auto'
     return descriptionByTab[key]
-  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug])
+  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, activeMinifyTab])
 
   useEffect(()=>{
     if(typeof document === 'undefined') return

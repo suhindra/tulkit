@@ -714,8 +714,18 @@ const en: Translation = {
       'Encode text into Base58 with Tulkit’s encoder, using the Bitcoin alphabet. Useful for creating human-friendly identifiers and working with blockchain-style payloads.',
     encodeHexMetaDescription:
       'Turn UTF-8 text into lowercase hex strings in your browser with Tulkit’s encoder. Ideal for inspecting binary data, keys, or protocol payloads without external CLIs.',
-    minifyMetaDescription:
-      'Minify HTML, XML, CSS, JavaScript, and JSON snippets in your browser with Tulkit’s minifier. Paste code to strip whitespace and shrink payloads without setting up a build pipeline.',
+    minifyMetaDescription: {
+      auto:
+        'Minify HTML, CSS, JavaScript, or JSON directly in your browser with Tulkit. Paste a snippet, choose a tab, and ship smaller payloads without configuring build tooling.',
+      html:
+        'Trim whitespace, comments, and redundant attributes from landing pages or embeds using Tulkit’s in-browser HTML minifier so you can hand off lighter markup instantly.',
+      css:
+        'Compress CSS and SCSS output with Tulkit so inline styles shed whitespace and redundant tokens before you paste them into a CMS or email template.',
+      js:
+        'Use Tulkit to minify JavaScript snippets entirely in the browser, removing whitespace and dead code from inline scripts before they reach production.',
+      json:
+        'Flatten JSON payloads into compact one-line strings with Tulkit’s minifier—perfect for query parameters, data attributes, or configuration blobs where every byte matters.'
+    },
     decodeBase64MetaDescription:
       'Decode standard or URL-safe Base64 strings back into readable UTF-8 text in your browser with Tulkit’s Base64 decoder. Quickly inspect payloads, headers, or JWT segments.',
     decodeBase32MetaDescription:
@@ -1424,8 +1434,18 @@ const id: Translation = {
       'Encode teks menjadi Base58 dengan encoder Tulkit menggunakan alfabet Bitcoin. Ideal untuk membuat pengenal yang ramah dibaca dan payload bergaya blockchain.',
     encodeHexMetaDescription:
       'Ubah teks UTF-8 menjadi string hex huruf kecil di browser Anda dengan encoder Tulkit. Tepat untuk memeriksa data biner, kunci, atau payload protokol tanpa CLI eksternal.',
-    minifyMetaDescription:
-      'Padatkan HTML, XML, CSS, JavaScript, dan JSON langsung di browser dengan minifier Tulkit. Tempel kode untuk menghapus whitespace dan mengecilkan ukuran tanpa memasang pipeline build.',
+    minifyMetaDescription: {
+      auto:
+        'Padatkan HTML, CSS, JavaScript, atau JSON langsung di browser Anda dengan minifier Tulkit. Tempel snippet, pilih tab, dan kirimkan payload lebih ringan tanpa ribet setup build.',
+      html:
+        'Hapus whitespace, komentar, dan atribut berlebih dari landing page atau embed memakai minifier HTML Tulkit sehingga markup siap dibagikan dalam hitungan detik.',
+      css:
+        'Kompres CSS atau keluaran SCSS dengan Tulkit agar style inline bebas whitespace dan token berlebih sebelum ditempel ke CMS atau template email.',
+      js:
+        'Gunakan Tulkit untuk memadatkan snippet JavaScript sepenuhnya di browser, menyingkirkan whitespace dan kode mati dari skrip kecil sebelum dipublikasikan.',
+      json:
+        'Ratakan payload JSON menjadi satu baris ringkas dengan minifier Tulkit—pas untuk parameter query, atribut data, atau konfigurasi yang harus hemat byte.'
+    },
     decodeBase64MetaDescription:
       'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
     decodeBase32MetaDescription:
