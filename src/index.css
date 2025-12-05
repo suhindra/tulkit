@@ -33,6 +33,7 @@ header{
   background:#fff7ed;
   border-top:1px solid var(--border);
   border-bottom:1px solid var(--border);
+  min-height:120px;
 }
 
 .seo-blurb h2{
@@ -55,7 +56,8 @@ header{
 .brand-logo img{
   display:block;
   width:72px;
-  height:auto;
+  height:72px;
+  object-fit:cover;
 }
 
 .brand-text h1{

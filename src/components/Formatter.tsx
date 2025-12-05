@@ -1,27 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { js_beautify, html_beautify, css_beautify } from 'js-beautify'
-import { format as formatSql } from 'sql-formatter'
-import hljs from 'highlight.js/lib/core'
-import javascript from 'highlight.js/lib/languages/javascript'
-import css from 'highlight.js/lib/languages/css'
-import xml from 'highlight.js/lib/languages/xml'
-import json from 'highlight.js/lib/languages/json'
-import sql from 'highlight.js/lib/languages/sql'
-import phpSyntax from 'highlight.js/lib/languages/php'
-import yamlSyntax from 'highlight.js/lib/languages/yaml'
 import 'highlight.js/styles/github.css'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { formatterLangs, type ActiveTab, type FormatterLang, type LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
-
-hljs.registerLanguage('javascript', javascript)
-hljs.registerLanguage('css', css)
-hljs.registerLanguage('xml', xml)
-hljs.registerLanguage('json', json)
-hljs.registerLanguage('sql', sql)
-hljs.registerLanguage('php', phpSyntax)
-hljs.registerLanguage('yaml', yamlSyntax)
 
 const FORMATTER_SETTINGS_KEY = 'tulkit-formatter-settings'
 
@@ -93,6 +75,59 @@ const highlightLanguageMap: Record<Lang,string> = {
   json: 'json',
   sql: 'sql',
   php: 'php'
+}
+
+type BeautifyModule = typeof import('js-beautify')
+type SqlFormatterModule = typeof import('sql-formatter')
+type HighlightCore = typeof import('highlight.js/lib/core')
+
+let beautifyModulePromise: Promise<BeautifyModule> | null = null
+let sqlFormatterPromise: Promise<SqlFormatterModule> | null = null
+let highlightCorePromise: Promise<any> | null = null
+const registeredHighlightLanguages = new Set<string>()
+
+const highlightLanguageLoaders: Record<string, () => Promise<any>> = {
+  xml: ()=>import('highlight.js/lib/languages/xml'),
+  yaml: ()=>import('highlight.js/lib/languages/yaml'),
+  css: ()=>import('highlight.js/lib/languages/css'),
+  javascript: ()=>import('highlight.js/lib/languages/javascript'),
+  json: ()=>import('highlight.js/lib/languages/json'),
+  sql: ()=>import('highlight.js/lib/languages/sql'),
+  php: ()=>import('highlight.js/lib/languages/php')
+}
+
+async function loadBeautifyModule(){
+  if(!beautifyModulePromise){
+    beautifyModulePromise = import('js-beautify')
+  }
+  return beautifyModulePromise
+}
+
+async function loadSqlFormatterModule(){
+  if(!sqlFormatterPromise){
+    sqlFormatterPromise = import('sql-formatter')
+  }
+  return sqlFormatterPromise
+}
+
+async function loadHighlightCore(){
+  if(!highlightCorePromise){
+    highlightCorePromise = import('highlight.js/lib/core').then(mod=> (mod as any).default || mod)
+  }
+  return highlightCorePromise
+}
+
+async function getHighlighter(language: Lang){
+  const key = highlightLanguageMap[language]
+  const loader = highlightLanguageLoaders[key]
+  const core = await loadHighlightCore()
+  if(loader && !registeredHighlightLanguages.has(key)){
+    const module = await loader()
+    const languageModule = (module as any).default || module
+    core.registerLanguage(key, languageModule)
+    registeredHighlightLanguages.add(key)
+  }
+  return core
 }
 
 function escapeHtml(str: string){
@@ -224,58 +259,64 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   }
 
   async function formatPhp(text: string): Promise<string>{
-    setLoadingFormatter(true)
-    try{
-      const prettierModule = await import('prettier/standalone')
-      const pluginPhpModule = await import('@prettier/plugin-php/standalone')
-      const prettier: any = (prettierModule as any).default || prettierModule
-      const pluginPhp: any = (pluginPhpModule as any).default || pluginPhpModule
+    const prettierModule = await import('prettier/standalone')
+    const pluginPhpModule = await import('@prettier/plugin-php/standalone')
+    const prettier: any = (prettierModule as any).default || prettierModule
+    const pluginPhp: any = (pluginPhpModule as any).default || pluginPhpModule
 
-      return prettier.format(text, {
-        parser: 'php',
-        plugins: [pluginPhp],
-        tabWidth,
-        printWidth
-      })
-    }finally{
-      setLoadingFormatter(false)
-    }
+    return prettier.format(text, {
+      parser: 'php',
+      plugins: [pluginPhp],
+      tabWidth,
+      printWidth
+    })
   }
 
   async function formatYaml(text: string): Promise<string>{
-    setLoadingFormatter(true)
-    try{
-      const prettierModule = await import('prettier/standalone')
-      const yamlPluginModule = await import('prettier/plugins/yaml')
-      const prettier: any = (prettierModule as any).default || prettierModule
-      const yamlPlugin: any = (yamlPluginModule as any).default || yamlPluginModule
+    const prettierModule = await import('prettier/standalone')
+    const yamlPluginModule = await import('prettier/plugins/yaml')
+    const prettier: any = (prettierModule as any).default || prettierModule
+    const yamlPlugin: any = (yamlPluginModule as any).default || yamlPluginModule
 
-      return prettier.format(text, {
-        parser: 'yaml',
-        plugins: [yamlPlugin],
-        tabWidth,
-        printWidth
-      })
-    }finally{
-      setLoadingFormatter(false)
-    }
+    return prettier.format(text, {
+      parser: 'yaml',
+      plugins: [yamlPlugin],
+      tabWidth,
+      printWidth
+    })
   }
 
   async function formatCode(text: string, language: Lang){
     try{
       switch(language){
-        case 'html': return Promise.resolve(html_beautify(text, { indent_size: tabWidth }))
-        case 'xml': return Promise.resolve(html_beautify(text, { indent_size: tabWidth }))
-        case 'yaml': return formatYaml(text)
-        case 'css': return Promise.resolve(css_beautify(text, { indent_size: tabWidth }))
-        case 'js': return Promise.resolve(js_beautify(text, { indent_size: tabWidth }))
+        case 'html': {
+          const { html_beautify } = await loadBeautifyModule()
+          return html_beautify(text, { indent_size: tabWidth })
+        }
+        case 'xml': {
+          const { html_beautify } = await loadBeautifyModule()
+          return html_beautify(text, { indent_size: tabWidth })
+        }
+        case 'yaml':
+          return formatYaml(text)
+        case 'css': {
+          const { css_beautify } = await loadBeautifyModule()
+          return css_beautify(text, { indent_size: tabWidth })
+        }
+        case 'js': {
+          const { js_beautify } = await loadBeautifyModule()
+          return js_beautify(text, { indent_size: tabWidth })
+        }
         case 'json': {
           const obj = JSON.parse(text)
-          return Promise.resolve(JSON.stringify(obj, null, tabWidth))
+          return JSON.stringify(obj, null, tabWidth)
         }
-        case 'sql': return Promise.resolve(formatSql(text))
+        case 'sql': {
+          const { format } = await loadSqlFormatterModule()
+          return format(text)
+        }
         case 'php': return formatPhp(text)
-        default: return Promise.resolve(text)
+        default: return text
       }
     }catch(e: any){
       return `Error: ${e?.message || String(e)}`
@@ -283,16 +324,22 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   }
 
   async function onFormat(){
-    const effectiveLang = activeTab === 'auto' ? detectLang(input) : lang
-    const res = await formatCode(input, effectiveLang)
-    setOutput(res)
+    setLoadingFormatter(true)
     try{
-      const highlighted = hljs.highlight(res, { language: highlightLanguageMap[effectiveLang] }).value
-      setRenderedOutput(highlighted)
-    }catch{
-      setRenderedOutput(escapeHtml(res))
+      const effectiveLang = activeTab === 'auto' ? detectLang(input) : lang
+      const res = await formatCode(input, effectiveLang)
+      setOutput(res)
+      try{
+        const highlighter = await getHighlighter(effectiveLang)
+        const highlighted = highlighter.highlight(res, { language: highlightLanguageMap[effectiveLang] }).value
+        setRenderedOutput(highlighted)
+      }catch{
+        setRenderedOutput(escapeHtml(res))
+      }
+      setActivePane('output')
+    }finally{
+      setLoadingFormatter(false)
     }
-    setActivePane('output')
   }
 
   async function onCopy(){

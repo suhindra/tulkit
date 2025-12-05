@@ -13,14 +13,6 @@ import type { ActiveTab, CodecSubtool, LanguageCode, MinifyTab, UuidVersion } fr
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
-declare global {
-  interface Window {
-    kofiWidgetOverlay?: {
-      draw: (...args: any[]) => void
-    }
-  }
-}
-
 type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
 
 function getViewFromPath(path: string): View{
@@ -334,27 +326,6 @@ export default function App(){
     }
     script.textContent = JSON.stringify(jsonLd)
   },[view, language, seoHeading, appCopy, uuidVersion, relativePath])
-
-  useEffect(()=>{
-    const existing = document.getElementById('kofi-overlay-widget')
-    if(existing) return
-
-    const script = document.createElement('script')
-    script.id = 'kofi-overlay-widget'
-    script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'
-    script.async = true
-    script.onload = ()=>{
-      if(window.kofiWidgetOverlay){
-        window.kofiWidgetOverlay.draw('tulkit', {
-          type: 'floating-chat',
-          'floating-chat.donateButton.text': 'Donate',
-          'floating-chat.donateButton.background-color': '#323842',
-          'floating-chat.donateButton.text-color': '#fff'
-        })
-      }
-    }
-    document.body.appendChild(script)
-  },[])
 
   const appendSearch = (path: string)=>{
     const basePath = buildPathWithLanguage(path, language)
