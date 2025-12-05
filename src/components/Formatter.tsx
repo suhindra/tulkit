@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { js_beautify, html_beautify, css_beautify } from 'js-beautify'
 import { format as formatSql } from 'sql-formatter'
 import hljs from 'highlight.js/lib/core'
@@ -10,6 +10,7 @@ import sql from 'highlight.js/lib/languages/sql'
 import phpSyntax from 'highlight.js/lib/languages/php'
 import yamlSyntax from 'highlight.js/lib/languages/yaml'
 import 'highlight.js/styles/github.css'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { formatterLangs, type ActiveTab, type FormatterLang, type LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
@@ -21,6 +22,33 @@ hljs.registerLanguage('json', json)
 hljs.registerLanguage('sql', sql)
 hljs.registerLanguage('php', phpSyntax)
 hljs.registerLanguage('yaml', yamlSyntax)
+
+const FORMATTER_SETTINGS_KEY = 'tulkit-formatter-settings'
+
+type FormatterPersistedState = {
+  activeTab?: ActiveTab
+  tabWidth?: number
+  printWidth?: number
+  lang?: FormatterLang
+}
+
+function readFormatterSettings(): FormatterPersistedState | null{
+  if(typeof window === 'undefined') return null
+  try{
+    const raw = window.localStorage.getItem(FORMATTER_SETTINGS_KEY)
+    return raw ? JSON.parse(raw) : null
+  }catch{
+    return null
+  }
+}
+
+function isFormatterLang(value: unknown): value is FormatterLang{
+  return formatterLangs.includes(value as FormatterLang)
+}
+
+function isActiveTabValue(value: unknown): value is ActiveTab{
+  return value === 'auto' || isFormatterLang(value)
+}
 
 type Lang = FormatterLang
 type EditorPane = 'input' | 'output'
@@ -99,12 +127,35 @@ function detectLang(text:string):Lang{
 }
 
 export default function Formatter({ onTabChange, language }: FormatterProps){
-  const [lang, setLang] = useState<Lang>('html')
-  const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const savedSettings = useMemo(()=>readFormatterSettings(),[])
+  const [lang, setLang] = useState<Lang>(()=>{
+    if(savedSettings && savedSettings.lang && isFormatterLang(savedSettings.lang)){
+      return savedSettings.lang
+    }
+    return 'html'
+  })
+  const [activeTab, setActiveTab] = useState<ActiveTab>(()=>{
+    if(savedSettings && savedSettings.activeTab && isActiveTabValue(savedSettings.activeTab)){
+      return savedSettings.activeTab
+    }
+    return 'auto'
+  })
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
-  const [tabWidth, setTabWidth] = useState<number>(2)
-  const [printWidth, setPrintWidth] = useState<number>(80)
+  const [tabWidth, setTabWidth] = useState<number>(()=>{
+    if(savedSettings && typeof savedSettings.tabWidth === 'number' && Number.isFinite(savedSettings.tabWidth)){
+      return Math.min(Math.max(savedSettings.tabWidth, 0), 8)
+    }
+    return 2
+  })
+  const [printWidth, setPrintWidth] = useState<number>(()=>{
+    if(savedSettings && typeof savedSettings.printWidth === 'number' && Number.isFinite(savedSettings.printWidth)){
+      return Math.min(Math.max(savedSettings.printWidth, 20), 200)
+    }
+    return 80
+  })
   const [loadingFormatter, setLoadingFormatter] = useState(false)
   const [renderedOutput, setRenderedOutput] = useState('')
   const [activePane, setActivePane] = useState<EditorPane>('input')
@@ -113,15 +164,16 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
 
   // Initialize tab from URL path or hash slug
   useEffect(()=>{
+    if(typeof window === 'undefined') return
     let initial: ActiveTab | undefined
 
-    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
+    const path = stripLanguagePrefix(location.pathname).toLowerCase()
     const match = path.match(/^\/formatter(?:\/([^/]+))?/)
     if(match){
       const slug = (match[1] || 'auto').toLowerCase()
       initial = slugToTab[slug] || 'auto'
     }else{
-      const rawHash = window.location.hash.replace(/^#/, '').toLowerCase()
+      const rawHash = location.hash.replace(/^#/, '').toLowerCase()
       if(rawHash){
         initial = slugToTab[rawHash]
       }
@@ -133,14 +185,29 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     if(initial !== 'auto'){
       setLang(initial)
     }
-  },[])
+  },[location.pathname, location.hash])
+
+  useEffect(()=>{
+    if(typeof window === 'undefined') return
+    const payload: FormatterPersistedState = {
+      activeTab,
+      tabWidth,
+      printWidth,
+      lang
+    }
+    try{
+      window.localStorage.setItem(FORMATTER_SETTINGS_KEY, JSON.stringify(payload))
+    }catch{
+      // ignore
+    }
+  },[activeTab, tabWidth, printWidth, lang])
 
   function updateUrlForTab(tab:ActiveTab){
     const slug = tabSlugs[tab]
     const base = '/formatter'
     const path = tab === 'auto' ? base : `${base}/${slug}`
-    const url = `${buildPathWithLanguage(path, language)}${window.location.search}`
-    window.history.replaceState(null, '', url)
+    const url = `${buildPathWithLanguage(path, language)}${location.search}`
+    navigate(url, { replace: true })
   }
 
   useEffect(()=>{
