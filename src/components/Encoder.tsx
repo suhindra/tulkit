@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
+import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
 
 type InputEncoding = 'text-utf8' | 'base64' | 'base32' | 'base58' | 'hex'
 type OutputEncoding = 'text-utf8' | 'base64' | 'base64url' | 'base32' | 'base58' | 'hex'
@@ -9,7 +10,18 @@ type Props = {
   language: LanguageCode
   initialInputEncoding?: InputEncoding
   initialOutputEncoding?: OutputEncoding
+  variant?: 'encode' | 'decode'
 }
+
+type EncodeMode =
+  | 'encode-base64'
+  | 'encode-base32'
+  | 'encode-base58'
+  | 'encode-hex'
+  | 'decode-base64'
+  | 'decode-base32'
+  | 'decode-base58'
+  | 'decode-hex'
 
 function textToBytes(value: string): Uint8Array{
   return new TextEncoder().encode(value)
@@ -196,13 +208,104 @@ function base58ToBytes(value: string): Uint8Array{
   return out
 }
 
-export default function Encoder({ language, initialInputEncoding, initialOutputEncoding }: Props){
+function detectEncodeModeFromPath(pathname: string): EncodeMode | null{
+  const path = stripLanguagePrefix(pathname).toLowerCase()
+
+  const encodeMatch = path.match(/^\/encode(?:\/([^/]+))?/)
+  if(encodeMatch){
+    const slug = encodeMatch[1]
+    if(!slug) return 'encode-base64'
+    if(slug === 'base64') return 'encode-base64'
+    if(slug === 'base32') return 'encode-base32'
+    if(slug === 'base58') return 'encode-base58'
+    if(slug === 'hex') return 'encode-hex'
+    return 'encode-base64'
+  }
+
+  const decodeMatch = path.match(/^\/decode(?:\/([^/]+))?/)
+  if(decodeMatch){
+    const slug = decodeMatch[1]
+    if(!slug) return 'decode-base64'
+    if(slug === 'base64') return 'decode-base64'
+    if(slug === 'base32') return 'decode-base32'
+    if(slug === 'base58') return 'decode-base58'
+    if(slug === 'hex') return 'decode-hex'
+    return 'decode-base64'
+  }
+
+  return null
+}
+
+function encodeModeToEncodings(mode: EncodeMode): { input: InputEncoding; output: OutputEncoding }{
+  switch(mode){
+    case 'encode-base64':
+      return { input: 'text-utf8', output: 'base64' }
+    case 'encode-base32':
+      return { input: 'text-utf8', output: 'base32' }
+    case 'encode-base58':
+      return { input: 'text-utf8', output: 'base58' }
+    case 'encode-hex':
+      return { input: 'text-utf8', output: 'hex' }
+    case 'decode-base64':
+      return { input: 'base64', output: 'text-utf8' }
+    case 'decode-base32':
+      return { input: 'base32', output: 'text-utf8' }
+    case 'decode-base58':
+      return { input: 'base58', output: 'text-utf8' }
+    case 'decode-hex':
+      return { input: 'hex', output: 'text-utf8' }
+  }
+}
+
+function buildUrlForMode(mode: EncodeMode, language: LanguageCode, currentSearch: string): string{
+  const base =
+    mode === 'encode-base64' || mode === 'encode-base32' || mode === 'encode-base58' || mode === 'encode-hex'
+      ? '/encode'
+      : '/decode'
+  const suffix =
+    mode === 'encode-base64' || mode === 'decode-base64'
+      ? '/base64'
+      : mode === 'encode-base32' || mode === 'decode-base32'
+        ? '/base32'
+        : mode === 'encode-base58' || mode === 'decode-base58'
+          ? '/base58'
+          : '/hex'
+
+  const path = `${base}${suffix}`
+  const withLang = buildPathWithLanguage(path, language)
+  return `${withLang}${currentSearch}`
+}
+
+export default function Encoder({ language, initialInputEncoding, initialOutputEncoding, variant = 'encode' }: Props){
   const { encoder: encoderCopy } = getTranslations(language)
   const [inputEncoding, setInputEncoding] = useState<InputEncoding>(initialInputEncoding || 'text-utf8')
   const [outputEncoding, setOutputEncoding] = useState<OutputEncoding>(initialOutputEncoding || 'base64')
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [mode, setMode] = useState<EncodeMode | null>(null)
+
+  useEffect(()=>{
+    if(typeof window === 'undefined') return
+    const mode = detectEncodeModeFromPath(window.location.pathname)
+    if(!mode) return
+
+    const encodings = encodeModeToEncodings(mode)
+    setInputEncoding(encodings.input)
+    setOutputEncoding(encodings.output)
+    setMode(mode)
+  },[])
+
+  function applyMode(mode: EncodeMode){
+    const encodings = encodeModeToEncodings(mode)
+    setInputEncoding(encodings.input)
+    setOutputEncoding(encodings.output)
+    setMode(mode)
+
+    if(typeof window === 'undefined') return
+    const nextUrl = buildUrlForMode(mode, language, window.location.search)
+    window.history.replaceState(null, '', nextUrl)
+  }
 
   function convert(){
     setError(null)
@@ -270,40 +373,77 @@ export default function Encoder({ language, initialInputEncoding, initialOutputE
 
   return (
     <div className="encode-card">
+      <div className="lang-tabs encode-modes">
+        {variant === 'encode' && (
+          <>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'encode-base64' ? 'active' : ''}`}
+              onClick={()=>applyMode('encode-base64')}
+            >
+              {encoderCopy.presetEncodeBase64}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'encode-base32' ? 'active' : ''}`}
+              onClick={()=>applyMode('encode-base32')}
+            >
+              {encoderCopy.presetEncodeBase32}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'encode-base58' ? 'active' : ''}`}
+              onClick={()=>applyMode('encode-base58')}
+            >
+              {encoderCopy.presetEncodeBase58}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'encode-hex' ? 'active' : ''}`}
+              onClick={()=>applyMode('encode-hex')}
+            >
+              {encoderCopy.presetEncodeHex}
+            </button>
+          </>
+        )}
+        {variant === 'decode' && (
+          <>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'decode-base64' ? 'active' : ''}`}
+              onClick={()=>applyMode('decode-base64')}
+            >
+              {encoderCopy.presetDecodeBase64}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'decode-base32' ? 'active' : ''}`}
+              onClick={()=>applyMode('decode-base32')}
+            >
+              {encoderCopy.presetDecodeBase32}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'decode-base58' ? 'active' : ''}`}
+              onClick={()=>applyMode('decode-base58')}
+            >
+              {encoderCopy.presetDecodeBase58}
+            </button>
+            <button
+              type="button"
+              className={`lang-tab ${mode === 'decode-hex' ? 'active' : ''}`}
+              onClick={()=>applyMode('decode-hex')}
+            >
+              {encoderCopy.presetDecodeHex}
+            </button>
+          </>
+        )}
+      </div>
       <div className="encode-controls">
-        <div className="encode-field">
-          <label htmlFor="encode-input-encoding">{encoderCopy.inputEncodingLabel}</label>
-          <select
-            id="encode-input-encoding"
-            value={inputEncoding}
-            onChange={e=>setInputEncoding(e.target.value as InputEncoding)}
-          >
-            <option value="text-utf8">{encoderCopy.inputEncodingUtf8}</option>
-            <option value="base64">{encoderCopy.inputEncodingBase64}</option>
-            <option value="base32">{encoderCopy.inputEncodingBase32}</option>
-            <option value="base58">{encoderCopy.inputEncodingBase58}</option>
-            <option value="hex">{encoderCopy.inputEncodingHex}</option>
-          </select>
-        </div>
-        <div className="encode-field">
-          <label htmlFor="encode-output-encoding">{encoderCopy.outputEncodingLabel}</label>
-          <select
-            id="encode-output-encoding"
-            value={outputEncoding}
-            onChange={e=>setOutputEncoding(e.target.value as OutputEncoding)}
-          >
-            <option value="base64">{encoderCopy.outputEncodingBase64}</option>
-            <option value="base64url">{encoderCopy.outputEncodingBase64Url}</option>
-            <option value="base32">{encoderCopy.outputEncodingBase32}</option>
-            <option value="base58">{encoderCopy.outputEncodingBase58}</option>
-            <option value="hex">{encoderCopy.outputEncodingHex}</option>
-            <option value="text-utf8">{encoderCopy.outputEncodingText}</option>
-          </select>
-        </div>
         <div className="encode-actions">
           <button
             type="button"
-            className="toolbar-button"
+            className="toolbar-format"
             onClick={convert}
           >
             {encoderCopy.convertLabel}

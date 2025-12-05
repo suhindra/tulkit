@@ -103,7 +103,7 @@ export default function LoremIpsumGenerator({ language }: Props){
         <div className="lorem-actions">
           <button
             type="button"
-            className="toolbar-button"
+            className="toolbar-format"
             onClick={regenerate}
           >
             {loremCopy.generateLabel}

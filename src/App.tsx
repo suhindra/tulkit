@@ -120,6 +120,8 @@ export default function App(){
     const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
     if(!meta) return
 
+    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
+
     if(view === 'uuid'){
       meta.content = uuidDescriptionByVersion[uuidVersion]
       return
@@ -131,12 +133,28 @@ export default function App(){
     }
 
     if(view === 'encode'){
-      meta.content = appCopy.encodeMetaDescription
+      let selected = appCopy.encodeMetaDescription
+      if(path.startsWith('/encode/')){
+        const slug = path.split('/')[2]
+        if(slug === 'base64') selected = appCopy.encodeBase64MetaDescription
+        else if(slug === 'base32') selected = appCopy.encodeBase32MetaDescription
+        else if(slug === 'base58') selected = appCopy.encodeBase58MetaDescription
+        else if(slug === 'hex') selected = appCopy.encodeHexMetaDescription
+      }
+      meta.content = selected
       return
     }
 
     if(view === 'decode'){
-      meta.content = appCopy.decodeMetaDescription
+      let selected = appCopy.decodeMetaDescription
+      if(path.startsWith('/decode/')){
+        const slug = path.split('/')[2]
+        if(slug === 'base64') selected = appCopy.decodeBase64MetaDescription
+        else if(slug === 'base32') selected = appCopy.decodeBase32MetaDescription
+        else if(slug === 'base58') selected = appCopy.decodeBase58MetaDescription
+        else if(slug === 'hex') selected = appCopy.decodeHexMetaDescription
+      }
+      meta.content = selected
       return
     }
 

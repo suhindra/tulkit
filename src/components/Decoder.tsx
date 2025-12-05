@@ -12,7 +12,7 @@ export default function Decoder({ language }: Props){
       language={language}
       initialInputEncoding="base64"
       initialOutputEncoding="text-utf8"
+      variant="decode"
     />
   )
 }
-

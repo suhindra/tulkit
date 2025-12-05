@@ -222,6 +222,134 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode"/>
   </url>
   <url>
+    <loc>https://tulkit.online/encode/base64</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base64"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base64"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base64"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/encode/base32</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base32"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base32"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base32"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/encode/base32</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base32"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base32"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base32"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/encode/base58</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base58"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base58"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base58"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/encode/base58</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base58"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base58"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base58"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/encode/base64</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/base64"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/base64"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/base64"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/encode/hex</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/hex"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/encode/hex</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/encode/hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/encode/hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/encode/hex"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/decode/base64</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base64"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base64"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base64"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/decode/base64</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base64"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base64"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base64"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/decode/base32</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base32"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base32"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base32"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/decode/base32</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base32"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base32"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base32"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/decode/base58</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base58"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base58"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base58"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/decode/base58</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/base58"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/base58"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/base58"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/decode/hex</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/hex"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/decode/hex</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/decode/hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/decode/hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/decode/hex"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/generator/lorem</loc>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>

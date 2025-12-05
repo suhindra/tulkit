@@ -152,6 +152,14 @@ type AppCopy = {
   epochMetaDescription: string
   encodeMetaDescription: string
   decodeMetaDescription: string
+  encodeBase64MetaDescription: string
+  encodeBase32MetaDescription: string
+  encodeBase58MetaDescription: string
+  encodeHexMetaDescription: string
+  decodeBase64MetaDescription: string
+  decodeBase32MetaDescription: string
+  decodeBase58MetaDescription: string
+  decodeHexMetaDescription: string
   loremMetaDescription: string
   notFoundMetaDescription: string
 }
@@ -416,7 +424,15 @@ const en: Translation = {
     copyLabel: 'Copy',
     copySuccess: 'Converted value copied to clipboard',
     copyErrorPrefix: 'Clipboard failed: ',
-    inputErrorPrefix: 'Could not decode input: '
+    inputErrorPrefix: 'Could not decode input: ',
+    presetEncodeBase64: 'Base64',
+    presetEncodeBase32: 'Base32',
+    presetEncodeBase58: 'Base58',
+    presetEncodeHex: 'Hex',
+    presetDecodeBase64: 'Base64',
+    presetDecodeBase32: 'Base32',
+    presetDecodeBase58: 'Base58',
+    presetDecodeHex: 'Hex'
   },
   lorem: {
     paragraphCountLabel: 'How many paragraphs?',
@@ -504,6 +520,22 @@ const en: Translation = {
       'Convert between UTF-8 text, Base64, and hex encodings in your browser with Tulkit’s encoder tool. Paste values to normalize or inspect binary-safe data without using external CLIs.',
     decodeMetaDescription:
       'Decode Base64, Base32, Base58, and hex values in your browser with Tulkit’s decoder. Turn opaque encoded data back into readable text for debugging and inspection.',
+    encodeBase64MetaDescription:
+      'Encode UTF-8 text to standard or URL-safe Base64 in your browser with Tulkit’s Base64 encoder. Normalize header values, JWT segments, or binary snippets without touching external tools.',
+    encodeBase32MetaDescription:
+      'Convert UTF-8 text into Base32 using Tulkit’s encoder. Generate or inspect Base32 values for compatible protocols and systems directly in your browser.',
+    encodeBase58MetaDescription:
+      'Encode text into Base58 with Tulkit’s encoder, using the Bitcoin alphabet. Useful for creating human-friendly identifiers and working with blockchain-style payloads.',
+    encodeHexMetaDescription:
+      'Turn UTF-8 text into lowercase hex strings in your browser with Tulkit’s encoder. Ideal for inspecting binary data, keys, or protocol payloads without external CLIs.',
+    decodeBase64MetaDescription:
+      'Decode standard or URL-safe Base64 strings back into readable UTF-8 text in your browser with Tulkit’s Base64 decoder. Quickly inspect payloads, headers, or JWT segments.',
+    decodeBase32MetaDescription:
+      'Convert Base32-encoded values back into readable text using Tulkit’s decoder. Helpful when debugging systems that use Base32 for compact textual identifiers.',
+    decodeBase58MetaDescription:
+      'Decode Base58 strings that use the Bitcoin alphabet back to bytes and UTF-8 text with Tulkit’s decoder. Inspect blockchain-style identifiers or compact tokens directly in your browser.',
+    decodeHexMetaDescription:
+      'Turn hex strings back into readable text and raw bytes with Tulkit’s hex decoder. Useful for examining keys, binary blobs, or protocol messages without leaving your browser.',
     loremMetaDescription:
       'Generate lorem ipsum placeholder paragraphs in your browser with Tulkit. Control paragraph count and sentence length for design mockups, UI components, and content layouts.',
     notFoundMetaDescription:
@@ -865,7 +897,15 @@ const id: Translation = {
     copyLabel: 'Salin',
     copySuccess: 'Nilai hasil konversi berhasil disalin',
     copyErrorPrefix: 'Gagal menyalin: ',
-    inputErrorPrefix: 'Input tidak dapat didekode: '
+    inputErrorPrefix: 'Input tidak dapat didekode: ',
+    presetEncodeBase64: 'Base64',
+    presetEncodeBase32: 'Base32',
+    presetEncodeBase58: 'Base58',
+    presetEncodeHex: 'Hex',
+    presetDecodeBase64: 'Base64',
+    presetDecodeBase32: 'Base32',
+    presetDecodeBase58: 'Base58',
+    presetDecodeHex: 'Hex'
   },
   lorem: {
     paragraphCountLabel: 'Berapa banyak paragraf?',
@@ -951,6 +991,24 @@ const id: Translation = {
       'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
     encodeMetaDescription:
       'Konversikan teks UTF-8, Base64, dan hex dengan encoder Tulkit di browser Anda. Bantu memeriksa dan menormalkan data biner tanpa alat tambahan.',
+    decodeMetaDescription:
+      'Dekode nilai Base64, Base32, Base58, dan hex dengan decoder Tulkit di browser Anda. Ubah data terenkode menjadi teks yang mudah dibaca untuk debugging dan inspeksi payload.',
+    encodeBase64MetaDescription:
+      'Konversikan teks UTF-8 ke Base64 standar atau aman-URL dengan encoder Base64 Tulkit langsung di browser Anda. Cocok untuk header, segmen JWT, atau potongan biner.',
+    encodeBase32MetaDescription:
+      'Ubah teks UTF-8 menjadi Base32 menggunakan encoder Tulkit. Berguna untuk sistem dan protokol yang mengandalkan Base32 untuk pengenal teks yang ringkas.',
+    encodeBase58MetaDescription:
+      'Encode teks menjadi Base58 dengan encoder Tulkit menggunakan alfabet Bitcoin. Ideal untuk membuat pengenal yang ramah dibaca dan payload bergaya blockchain.',
+    encodeHexMetaDescription:
+      'Ubah teks UTF-8 menjadi string hex huruf kecil di browser Anda dengan encoder Tulkit. Tepat untuk memeriksa data biner, kunci, atau payload protokol tanpa CLI eksternal.',
+    decodeBase64MetaDescription:
+      'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
+    decodeBase32MetaDescription:
+      'Konversikan nilai Base32 kembali ke teks menggunakan decoder Tulkit. Membantu saat men-debug sistem yang memakai Base32 untuk pengenal teks yang ringkas.',
+    decodeBase58MetaDescription:
+      'Dekode string Base58 ber-alfabet Bitcoin kembali menjadi byte dan teks UTF-8 dengan decoder Tulkit. Periksa pengenal bergaya blockchain atau token ringkas langsung di browser.',
+    decodeHexMetaDescription:
+      'Ubah string hex kembali menjadi teks dan byte mentah dengan decoder hex Tulkit. Cocok untuk menelusuri kunci, blob biner, atau pesan protokol tanpa meninggalkan browser.',
     loremMetaDescription:
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     notFoundMetaDescription:
