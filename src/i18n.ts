@@ -153,7 +153,7 @@ type AppCopy = {
   }
   seoBlurb: {
     formatter: Record<ActiveTab,string[]>
-    uuid: string[]
+    uuid: Record<UuidVersion,string[]>
     epoch: string[]
     encode: Record<CodecSubtool,string[]>
     minify: Record<ActiveTab,string[]>
@@ -602,10 +602,20 @@ const en: Translation = {
           'Tulkit is useful for tidying snippets copied from docs or chat before you commit them back to the repo.'
         ]
       },
-      uuid: [
-        'Generate one or many RFC-4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match how your application expects IDs.',
-        'UUIDs are generated using the Web Crypto API when available, so identifiers are high-quality and never sent to a server.'
-      ],
+      uuid: {
+        v1: [
+          'Generate UUID v1 identifiers that embed a timestamp and node hint so IDs roughly follow creation order right in your browser.',
+          'Great for log processors, background jobs, or import batches where chronological grouping matters more than total randomness.'
+        ],
+        v4: [
+          'Generate one or many RFC-4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match how your application expects IDs.',
+          'UUIDs are generated using the Web Crypto API when available, so identifiers are high-quality and never sent to a server.'
+        ],
+        v7: [
+          'Create UUID v7 values that stay sortable by time while still providing strong randomness for safety.',
+          'Use them for analytics pipelines, append-only databases, or queues that benefit from monotonic IDs without leaking hardware metadata.'
+        ]
+      },
       epoch: [
         'Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and see matching UTC, GMT, and time-zone aware local output.',
         'You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the time zone to see how the same instant appears around the world.'
@@ -1302,10 +1312,20 @@ const id: Translation = {
           'Tulkit memudahkan merapikan cuplikan dari dokumentasi atau chat sebelum dikomit kembali ke repo.'
         ]
       },
-      uuid: [
-        'Buat satu atau banyak UUID v4 sesuai RFC-4122 langsung di browser. Atur huruf dan format agar sesuai kebutuhan aplikasi Anda.',
-        'UUID dibuat menggunakan Web Crypto API ketika tersedia, sehingga hasilnya berkualitas tinggi dan tidak pernah dikirim ke server.'
-      ],
+      uuid: {
+        v1: [
+          'Buat UUID v1 yang menyertakan stempel waktu dan petunjuk node sehingga ID cenderung mengikuti urutan pembuatan, semuanya langsung di browser Anda.',
+          'Cocok untuk log, job latar belakang, atau proses impor yang membutuhkan pengelompokan kronologis tanpa menyiapkan layanan tambahan.'
+        ],
+        v4: [
+          'Buat satu atau banyak UUID v4 sesuai RFC-4122 langsung di browser. Atur huruf dan format agar sesuai kebutuhan aplikasi Anda.',
+          'UUID dibuat menggunakan Web Crypto API ketika tersedia, sehingga hasilnya berkualitas tinggi dan tidak pernah dikirim ke server.'
+        ],
+        v7: [
+          'Hasilkan UUID v7 yang tetap berurutan waktu namun tetap memiliki entropi kuat sehingga aman dipakai untuk ID publik.',
+          'Gunakan untuk pipeline analitik, basis data append-only, atau antrean yang diuntungkan dari ID monotonic tanpa membocorkan informasi perangkat.'
+        ]
+      },
       epoch: [
         'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dalam hitungan detik. Tempel nilai dalam detik atau milidetik untuk melihat keluaran UTC, GMT, dan zona waktu lokal.',
         'Anda juga bisa memilih tanggal dan waktu, menyalin nilai Unix untuk API atau query database, serta mengganti zona waktu untuk melihat bagaimana momen yang sama muncul di berbagai wilayah.'

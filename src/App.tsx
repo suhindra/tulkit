@@ -133,6 +133,7 @@ export default function App(){
   const loremOverview = translations.overviews.lorem
   const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
   const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
+  const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
   const formatterSeoBlurb = appCopy.seoBlurb.formatter[activeTab] || appCopy.seoBlurb.formatter.auto
   const minifySeoBlurb = appCopy.seoBlurb.minify[activeTab] || appCopy.seoBlurb.minify.auto
 
@@ -499,7 +500,7 @@ export default function App(){
             )}
             {view === 'uuid' && (
               <>
-                {appCopy.seoBlurb.uuid.map(text=>(
+                {uuidSeoBlurb.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
