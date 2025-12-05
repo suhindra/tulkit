@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import Formatter from './components/Formatter'
-import Minifier from './components/Minifier'
-import UuidGenerator from './components/UuidGenerator'
-import EpochConverter from './components/EpochConverter'
-import LoremIpsumGenerator from './components/LoremIpsumGenerator'
+const Formatter = React.lazy(()=>import('./components/Formatter'))
+const Minifier = React.lazy(()=>import('./components/Minifier'))
+const UuidGenerator = React.lazy(()=>import('./components/UuidGenerator'))
+const EpochConverter = React.lazy(()=>import('./components/EpochConverter'))
+const LoremIpsumGenerator = React.lazy(()=>import('./components/LoremIpsumGenerator'))
 const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -543,10 +543,26 @@ export default function App(){
         </section>
       )}
       <main className="container">
-        {view === 'formatter' && <Formatter onTabChange={setActiveTab} language={language} />}
-        {view === 'minify' && <Minifier language={language} onTabChange={setActiveTab} />}
-        {view === 'uuid' && <UuidGenerator onVersionChange={setUuidVersion} language={language} />}
-        {view === 'epoch' && <EpochConverter language={language} />}
+        {view === 'formatter' && (
+          <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
+            <Formatter onTabChange={setActiveTab} language={language} />
+          </React.Suspense>
+        )}
+        {view === 'minify' && (
+          <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
+            <Minifier language={language} onTabChange={setActiveTab} />
+          </React.Suspense>
+        )}
+        {view === 'uuid' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <UuidGenerator onVersionChange={setUuidVersion} language={language} />
+          </React.Suspense>
+        )}
+        {view === 'epoch' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <EpochConverter language={language} />
+          </React.Suspense>
+        )}
         {view === 'encode' && (
           <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
             <Encoder language={language} />
@@ -557,7 +573,11 @@ export default function App(){
             <Decoder language={language} />
           </React.Suspense>
         )}
-        {view === 'lorem' && <LoremIpsumGenerator language={language} />}
+        {view === 'lorem' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <LoremIpsumGenerator language={language} />
+          </React.Suspense>
+        )}
         {view === 'notfound' && (
           <div className="not-found-card">
             <h2>{appCopy.notFoundHeading}</h2>
