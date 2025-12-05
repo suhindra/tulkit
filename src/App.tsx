@@ -10,6 +10,7 @@ import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview }
 import { getTranslations, languageNames } from './i18n'
 import type { ActiveTab, LanguageCode, UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
+import { Helmet } from 'react-helmet-async'
 
 declare global {
   interface Window {
@@ -110,82 +111,77 @@ export default function App(){
   const encodeOverview = translations.overviews.encode
   const loremOverview = translations.overviews.lorem
 
-  const seoHeading =
-    view === 'uuid'
-      ? `${appCopy.seoTitles.uuid} ${uuidVersion.toUpperCase()}`
-      : view === 'epoch'
-        ? appCopy.seoTitles.epoch
-        : view === 'encode'
-          ? appCopy.seoTitles.encode
-          : view === 'decode'
-            ? appCopy.seoTitles.decode
-            : view === 'lorem'
-              ? appCopy.seoTitles.lorem
-              : view === 'notfound'
-                ? appCopy.seoTitles.notFound
-                : activeTab === 'auto'
-                  ? appCopy.seoTitles.formatterDefault
-                  : `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
-
-  useEffect(()=>{
-    document.title = seoHeading
-  },[seoHeading])
-
-  useEffect(()=>{
-    const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
-    if(!meta) return
-
-    const path = stripLanguagePrefix(window.location.pathname).toLowerCase()
-
+  const seoHeading = useMemo(()=>{
     if(view === 'uuid'){
-      meta.content = uuidDescriptionByVersion[uuidVersion]
-      return
+      return `${appCopy.seoTitles.uuid} ${uuidVersion.toUpperCase()}`
     }
-
     if(view === 'epoch'){
-      meta.content = appCopy.epochMetaDescription
-      return
+      return appCopy.seoTitles.epoch
     }
+    if(view === 'encode' || view === 'decode'){
+      const parts = relativePath.toLowerCase().split('/')
+      const slug = parts[2]
+      if(view === 'encode'){
+        if(slug === 'base64') return appCopy.seoTitles.encodeBase64
+        if(slug === 'base32') return appCopy.seoTitles.encodeBase32
+        if(slug === 'base58') return appCopy.seoTitles.encodeBase58
+        if(slug === 'hex') return appCopy.seoTitles.encodeHex
+        return appCopy.seoTitles.encode
+      }
+      if(slug === 'base64') return appCopy.seoTitles.decodeBase64
+      if(slug === 'base32') return appCopy.seoTitles.decodeBase32
+      if(slug === 'base58') return appCopy.seoTitles.decodeBase58
+      if(slug === 'hex') return appCopy.seoTitles.decodeHex
+      return appCopy.seoTitles.decode
+    }
+    if(view === 'lorem'){
+      return appCopy.seoTitles.lorem
+    }
+    if(view === 'notfound'){
+      return appCopy.seoTitles.notFound
+    }
+    if(activeTab === 'auto'){
+      return appCopy.seoTitles.formatterDefault
+    }
+    return `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
+  },[view, uuidVersion, appCopy, activeTab, headingByTab, relativePath])
 
+  const metaDescription = useMemo(()=>{
+    if(view === 'uuid'){
+      return uuidDescriptionByVersion[uuidVersion]
+    }
+    if(view === 'epoch'){
+      return appCopy.epochMetaDescription
+    }
     if(view === 'encode'){
       let selected = appCopy.encodeMetaDescription
-      if(path.startsWith('/encode/')){
-        const slug = path.split('/')[2]
-        if(slug === 'base64') selected = appCopy.encodeBase64MetaDescription
-        else if(slug === 'base32') selected = appCopy.encodeBase32MetaDescription
-        else if(slug === 'base58') selected = appCopy.encodeBase58MetaDescription
-        else if(slug === 'hex') selected = appCopy.encodeHexMetaDescription
-      }
-      meta.content = selected
-      return
+      const parts = relativePath.toLowerCase().split('/')
+      const slug = parts[2]
+      if(slug === 'base64') selected = appCopy.encodeBase64MetaDescription
+      else if(slug === 'base32') selected = appCopy.encodeBase32MetaDescription
+      else if(slug === 'base58') selected = appCopy.encodeBase58MetaDescription
+      else if(slug === 'hex') selected = appCopy.encodeHexMetaDescription
+      return selected
     }
-
     if(view === 'decode'){
       let selected = appCopy.decodeMetaDescription
-      if(path.startsWith('/decode/')){
-        const slug = path.split('/')[2]
-        if(slug === 'base64') selected = appCopy.decodeBase64MetaDescription
-        else if(slug === 'base32') selected = appCopy.decodeBase32MetaDescription
-        else if(slug === 'base58') selected = appCopy.decodeBase58MetaDescription
-        else if(slug === 'hex') selected = appCopy.decodeHexMetaDescription
-      }
-      meta.content = selected
-      return
+      const parts = relativePath.toLowerCase().split('/')
+      const slug = parts[2]
+      if(slug === 'base64') selected = appCopy.decodeBase64MetaDescription
+      else if(slug === 'base32') selected = appCopy.decodeBase32MetaDescription
+      else if(slug === 'base58') selected = appCopy.decodeBase58MetaDescription
+      else if(slug === 'hex') selected = appCopy.decodeHexMetaDescription
+      return selected
     }
-
     if(view === 'lorem'){
-      meta.content = appCopy.loremMetaDescription
-      return
+      return appCopy.loremMetaDescription
     }
-
     if(view === 'notfound'){
-      meta.content = appCopy.notFoundMetaDescription
-      return
+      return appCopy.notFoundMetaDescription
     }
-
     const key: ActiveTab = activeTab || 'auto'
-    meta.content = descriptionByTab[key]
-  },[view, activeTab, uuidVersion, descriptionByTab, uuidDescriptionByVersion, appCopy])
+    return descriptionByTab[key]
+  },[view, uuidVersion, appCopy, relativePath, activeTab, descriptionByTab, uuidDescriptionByVersion])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
@@ -343,6 +339,10 @@ export default function App(){
 
   return (
     <div className="app">
+      <Helmet>
+        <title>{seoHeading}</title>
+        <meta name="description" content={metaDescription} />
+      </Helmet>
       <header>
         <div className="container">
           <div className="brand">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import type { LanguageCode } from '../types'
 import { getTranslations } from '../i18n'
 import { buildPathWithLanguage, stripLanguagePrefix } from '../routing'
@@ -278,6 +279,8 @@ function buildUrlForMode(mode: EncodeMode, language: LanguageCode, currentSearch
 
 export default function Encoder({ language, initialInputEncoding, initialOutputEncoding, variant = 'encode' }: Props){
   const { encoder: encoderCopy } = getTranslations(language)
+  const location = useLocation()
+  const navigate = useNavigate()
   const [inputEncoding, setInputEncoding] = useState<InputEncoding>(initialInputEncoding || 'text-utf8')
   const [outputEncoding, setOutputEncoding] = useState<OutputEncoding>(initialOutputEncoding || 'base64')
   const [input, setInput] = useState('')
@@ -286,15 +289,14 @@ export default function Encoder({ language, initialInputEncoding, initialOutputE
   const [mode, setMode] = useState<EncodeMode | null>(null)
 
   useEffect(()=>{
-    if(typeof window === 'undefined') return
-    const mode = detectEncodeModeFromPath(window.location.pathname)
+    const mode = detectEncodeModeFromPath(location.pathname)
     if(!mode) return
 
     const encodings = encodeModeToEncodings(mode)
     setInputEncoding(encodings.input)
     setOutputEncoding(encodings.output)
     setMode(mode)
-  },[])
+  },[location.pathname])
 
   function applyMode(mode: EncodeMode){
     const encodings = encodeModeToEncodings(mode)
@@ -302,9 +304,8 @@ export default function Encoder({ language, initialInputEncoding, initialOutputE
     setOutputEncoding(encodings.output)
     setMode(mode)
 
-    if(typeof window === 'undefined') return
-    const nextUrl = buildUrlForMode(mode, language, window.location.search)
-    window.history.replaceState(null, '', nextUrl)
+    const nextUrl = buildUrlForMode(mode, language, location.search)
+    navigate(nextUrl, { replace: true })
   }
 
   function convert(){

@@ -134,6 +134,14 @@ type AppCopy = {
     epoch: string
     encode: string
     decode: string
+    encodeBase64: string
+    encodeBase32: string
+    encodeBase58: string
+    encodeHex: string
+    decodeBase64: string
+    decodeBase32: string
+    decodeBase58: string
+    decodeHex: string
     lorem: string
     notFound: string
   }
@@ -480,6 +488,14 @@ const en: Translation = {
       epoch: 'Epoch Converter — Tulkit',
       encode: 'Encoder — Tulkit',
       decode: 'Decoder — Tulkit',
+      encodeBase64: 'Base64 Encoder — Tulkit',
+      encodeBase32: 'Base32 Encoder — Tulkit',
+      encodeBase58: 'Base58 Encoder — Tulkit',
+      encodeHex: 'Hex Encoder — Tulkit',
+      decodeBase64: 'Base64 Decoder — Tulkit',
+      decodeBase32: 'Base32 Decoder — Tulkit',
+      decodeBase58: 'Base58 Decoder — Tulkit',
+      decodeHex: 'Hex Decoder — Tulkit',
       lorem: 'Lorem Ipsum Generator — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
@@ -953,6 +969,14 @@ const id: Translation = {
       epoch: 'Konverter Epoch — Tulkit',
       encode: 'Encoder — Tulkit',
       decode: 'Decoder — Tulkit',
+      encodeBase64: 'Encoder Base64 — Tulkit',
+      encodeBase32: 'Encoder Base32 — Tulkit',
+      encodeBase58: 'Encoder Base58 — Tulkit',
+      encodeHex: 'Encoder Hex — Tulkit',
+      decodeBase64: 'Decoder Base64 — Tulkit',
+      decodeBase32: 'Decoder Base32 — Tulkit',
+      decodeBase58: 'Decoder Base58 — Tulkit',
+      decodeHex: 'Decoder Hex — Tulkit',
       lorem: 'Generator Lorem Ipsum — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
