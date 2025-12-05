@@ -1,4 +1,4 @@
-import type { ActiveTab, FormatterLang, LanguageCode, UuidVersion } from './types'
+import type { ActiveTab, CodecSubtool, FormatterLang, LanguageCode, MinifyTab, UuidVersion } from './types'
 
 type LangInfo = {
   title: string
@@ -24,6 +24,10 @@ type FormatterCopy = {
   clearLabel: string
   copySuccess: string
   copyErrorPrefix: string
+  minifyLabel: string
+  minifyingLabel: string
+  minifyUnsupportedLabel: string
+  minifyErrorPrefix: string
   langLabels: Record<FormatterLang,string>
   langInfo: Record<ActiveTab,LangInfo>
 }
@@ -122,6 +126,7 @@ type AppCopy = {
   brandSubheading: string
   brandNote: string
   navFormatter: string
+  navMinify: string
   navUuid: string
   navEpoch: string
   navEncode: string
@@ -133,6 +138,7 @@ type AppCopy = {
     uuid: string
     epoch: string
     encode: string
+    minify: string
     decode: string
     encodeBase64: string
     encodeBase32: string
@@ -146,11 +152,12 @@ type AppCopy = {
     notFound: string
   }
   seoBlurb: {
-    formatter: string[]
+    formatter: Record<ActiveTab,string[]>
     uuid: string[]
     epoch: string[]
-    encode: string[]
-    decode: string[]
+    encode: Record<CodecSubtool,string[]>
+    minify: Record<ActiveTab,string[]>
+    decode: Record<CodecSubtool,string[]>
     lorem: string[]
   }
   notFoundHeading: string
@@ -164,6 +171,7 @@ type AppCopy = {
   encodeBase32MetaDescription: string
   encodeBase58MetaDescription: string
   encodeHexMetaDescription: string
+  minifyMetaDescription: string
   decodeBase64MetaDescription: string
   decodeBase32MetaDescription: string
   decodeBase58MetaDescription: string
@@ -176,7 +184,9 @@ type OverviewCopy = {
   formatter: Record<ActiveTab,OverviewContent>
   uuid: Record<UuidVersion,OverviewContent>
   epoch: OverviewContent
-  encode: OverviewContent
+  encode: Record<CodecSubtool,OverviewContent>
+  minify: OverviewContent
+  decode: Record<CodecSubtool,OverviewContent>
   lorem: OverviewContent
 }
 
@@ -185,6 +195,7 @@ type Translation = {
   descriptionByTab: Record<ActiveTab,string>
   uuidDescriptionByVersion: Record<UuidVersion,string>
   formatter: FormatterCopy
+  minifierLangInfo: Record<MinifyTab,LangInfo>
   uuid: UuidCopy
   epoch: EpochCopy
   lorem: LoremCopy
@@ -256,6 +267,10 @@ const en: Translation = {
     clearLabel: 'Clear',
     copySuccess: 'Copied to clipboard',
     copyErrorPrefix: 'Clipboard failed: ',
+    minifyLabel: 'Minify',
+    minifyingLabel: 'Minifying…',
+    minifyUnsupportedLabel: 'Minify is available for HTML, XML, CSS, JavaScript, or JSON.',
+    minifyErrorPrefix: 'Minify failed: ',
     langLabels: formatterLangLabelsBase,
     langInfo: {
       auto: {
@@ -339,6 +354,53 @@ const en: Translation = {
           'Use smaller tab sizes to reduce line wrapping in deeply nested structures.'
         ]
       }
+    }
+  },
+  minifierLangInfo: {
+    auto: {
+      title: 'Autodetect Minify Mode',
+      description:
+        'Paste any HTML, CSS, JavaScript, or JSON and Tulkit will choose the right minifier automatically so you can compress snippets without extra clicks.',
+      tips: [
+        'Great when you frequently switch between assets and just want to shrink whatever is in your clipboard.',
+        'If detection guesses wrong, pick a language tab manually to lock the mode.'
+      ]
+    },
+    html: {
+      title: 'HTML Minifier',
+      description:
+        'Remove whitespace, comments, and redundant attributes from landing pages, emails, and embed snippets while keeping markup valid.',
+      tips: [
+        'Perfect for CMS snippets or documentation embeds where every byte counts.',
+        'Pair with Preview to double-check that conditional comments are still intact before publishing.'
+      ]
+    },
+    css: {
+      title: 'CSS Minifier',
+      description:
+        'Use csso in your browser to squeeze inline styles, utility classes, or stylesheet fragments without touching a build pipeline.',
+      tips: [
+        'Helpful for tidying style blocks pasted into CMS fields or HTML emails.',
+        'If you need to debug later, keep a formatted copy alongside the minified output.'
+      ]
+    },
+    js: {
+      title: 'JavaScript Minifier',
+      description:
+        'Powered by Terser, this mode strips whitespace, renames variables, and removes dead code so inline scripts stay fast and compact.',
+      tips: [
+        'Ideal for feature flags, small widgets, or snippets shared in support replies.',
+        'Use the Copy button right after minifying to avoid sending the uncompressed version by accident.'
+      ]
+    },
+    json: {
+      title: 'JSON Minifier',
+      description:
+        'Flatten configuration files, localization bundles, or API payloads into a single line without changing their meaning.',
+      tips: [
+        'Great when embedding JSON inside query parameters or HTML data attributes.',
+        'If you need a readable copy later, keep the source in version control and only minify the shared snippet.'
+      ]
     }
   },
   uuid: {
@@ -479,6 +541,7 @@ const en: Translation = {
     navUuid: 'UUID Generator',
     navEpoch: 'Epoch Converter',
     navEncode: 'Encoder',
+    navMinify: 'Minifier',
     navDecode: 'Decoder',
     navLorem: 'Lorem Ipsum',
     languageSwitcherLabel: 'Language',
@@ -487,6 +550,7 @@ const en: Translation = {
       uuid: 'UUID Generator — Tulkit',
       epoch: 'Epoch Converter — Tulkit',
       encode: 'Encoder — Tulkit',
+      minify: 'Minifier — Tulkit',
       decode: 'Decoder — Tulkit',
       encodeBase64: 'Base64 Encoder — Tulkit',
       encodeBase32: 'Base32 Encoder — Tulkit',
@@ -500,10 +564,44 @@ const en: Translation = {
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
-      formatter: [
-        'A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.',
-        'The formatter includes syntax highlighting, tab width controls, and automatic language detection, so it is a handy companion whether you are polishing front-end assets or reviewing database queries. All formatting stays local in your browser for maximum privacy.'
-      ],
+      formatter: {
+        auto: [
+          'A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.',
+          'The formatter includes syntax highlighting, tab width controls, and automatic language detection, so it is a handy companion whether you are polishing front-end assets or reviewing database queries. All formatting stays local in your browser for maximum privacy.'
+        ],
+        html: [
+          'Use Tulkit’s HTML formatter to clean up landing pages, email templates, or CMS snippets so nested tags stay readable when you paste them back into editors.',
+          'It is perfect for inline SVG or templated components when you just need consistent indentation without firing up a full IDE.'
+        ],
+        css: [
+          'Normalize selectors, utility classes, and component styles so spacing and braces line up before you share a stylesheet.',
+          'Tulkit respects your preferred tab width, making it easy to tidy SCSS, Tailwind blocks, or designer handoffs directly in the browser.'
+        ],
+        js: [
+          'Clean up JavaScript or TypeScript snippets copied from experiments, code pens, or log output in seconds.',
+          'The formatter handles modules, async functions, and arrow-heavy code so you can inspect logic without fighting indentation.'
+        ],
+        json: [
+          'Pretty-print JSON payloads, configs, or API responses while keeping the structure valid the entire time.',
+          'It is ideal for debugging webhook payloads, editing service configs, or sharing readable examples with teammates.'
+        ],
+        sql: [
+          'Reflow long SQL queries so SELECT, JOIN, and CTE clauses become easier to scan before handing them to reviewers.',
+          'Great for documenting analytics queries or inspecting ORM-generated statements without opening a database IDE.'
+        ],
+        php: [
+          'Tidy PHP snippets for WordPress, Laravel, or legacy projects without booting a local stack.',
+          'Tulkit streams the PHP formatter on demand so you can clean up Blade templates, controllers, or helpers entirely in the browser.'
+        ],
+        xml: [
+          'Format XML sitemaps, feeds, or config files so attributes and nested elements stay aligned.',
+          'Helpful when you review API responses, sitemap indexes, or system descriptors that become messy after multiple edits.'
+        ],
+        yaml: [
+          'Keep YAML manifests, CI configs, and infrastructure files safe to edit by enforcing consistent indentation.',
+          'Tulkit is useful for tidying snippets copied from docs or chat before you commit them back to the repo.'
+        ]
+      },
       uuid: [
         'Generate one or many RFC-4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match how your application expects IDs.',
         'UUIDs are generated using the Web Crypto API when available, so identifiers are high-quality and never sent to a server.'
@@ -512,14 +610,76 @@ const en: Translation = {
         'Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and see matching UTC, GMT, and time-zone aware local output.',
         'You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the time zone to see how the same instant appears around the world.'
       ],
-      encode: [
-        'Convert between text, hex, and Base64 directly in your browser. Paste any UTF-8 text, Base64 value, or hex string and Tulkit will normalize it into the format you need.',
-        'This encoder is handy when you are working with HTTP headers, JWT segments, configuration secrets, or binary blobs and need to quickly inspect or re-encode them without leaving the browser.'
-      ],
-      decode: [
-        'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser. Paste any encoded value and Tulkit will show both the UTF-8 text and raw bytes.',
-        'This decoder is useful when inspecting tokens, payloads, or binary blobs that you receive from APIs and need to turn back into something human-friendly for debugging or documentation.'
-      ],
+      encode: {
+        default: [
+          'Convert between text, hex, and Base64 directly in your browser. Paste any UTF-8 text, Base64 value, or hex string and Tulkit will normalize it into the format you need.',
+          'This encoder is handy when you are working with HTTP headers, JWT segments, configuration secrets, or binary blobs and need to quickly inspect or re-encode them without leaving the browser.'
+        ],
+        base64: [
+          'Convert UTF-8 text to standard or URL-safe Base64 instantly. Tulkit normalizes padding and strips stray whitespace so you can drop the output into Authorization headers, MIME attachments, or JWT claims without extra cleanup.',
+          'Use this when you want to double-check how secrets, certificates, or binary blobs will travel through systems that only accept ASCII characters.'
+        ],
+        base32: [
+          'Encode values with the RFC 4648 Base32 alphabet that is often used for DNS-safe identifiers, recovery codes, or TOTP seeds.',
+          'Tulkit keeps spacing consistent and avoids accidental padding so you can copy the result directly into provisioning flows or API payloads.'
+        ],
+        base58: [
+          'Produce Base58 strings that skip confusing characters like 0/O or I/l while still packing a lot of information into a short value.',
+          'Helpful for blockchain-style addresses, invite codes, or short IDs that humans need to read or dictate without mistakes.'
+        ],
+        hex: [
+          'Turn any text into lowercase hex pairs to mirror how binaries, hashes, or signatures are represented in most CLI tools.',
+          'Great for inspecting payloads, computing fixtures by hand, or sharing deterministic values with QA and back-end teammates.'
+        ]
+      },
+      minify: {
+        auto: [
+          'Minify HTML, XML, CSS, JavaScript, or JSON right in your browser. Paste the asset you plan to ship, click Minify, and Tulkit will strip whitespace, collapse attributes, and shrink payload size without sending code anywhere.',
+          'Useful when you need production-ready snippets for embeds, email templates, configuration blobs, or inline scripts and styles but do not want to wire up a full build step just to compress a quick fix.'
+        ],
+        html: [
+          'Compress landing pages, email templates, or embeds by stripping whitespace, comments, and redundant attributes while keeping HTML semantics intact.',
+          'Ideal when you need to hand off a small snippet to marketing or documentation teams and want it as light as possible.'
+        ],
+        xml: [
+          'Minify XML sitemaps, feeds, and configuration files without breaking tag casing or required closing tags.',
+          'Handy when you want to ship compact XML payloads to partners or CDNs and cannot rely on server-side tooling.'
+        ],
+        css: [
+          'Shrink CSS or SCSS output by removing whitespace and redundant tokens using csso’s browser build.',
+          'Great for inline style blocks in CMSs, email templates, or design systems where every byte counts.'
+        ],
+        js: [
+          'Use the built-in Terser bundle to minify inline JavaScript, feature flags, or widget snippets without leaving the browser.',
+          'Perfect when you are tweaking a small script inside a CMS or support reply and still want a compact production version.'
+        ],
+        json: [
+          'Flatten configuration files, API payloads, or localization bundles into the smallest possible JSON without introducing errors.',
+          'Helpful when you need to embed JSON in query parameters, data attributes, or migration files and want to save space.'
+        ]
+      },
+      decode: {
+        default: [
+          'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser. Paste any encoded value and Tulkit will show both the UTF-8 text and raw bytes.',
+          'This decoder is useful when inspecting tokens, payloads, or binary blobs that you receive from APIs and need to turn back into something human-friendly for debugging or documentation.'
+        ],
+        base64: [
+          'Paste Base64 or Base64URL strings and Tulkit will normalize padding, swap URL-safe characters, and show you the decoded text immediately.',
+          'Ideal for debugging JWT payloads, email attachments, or Authorization headers that hide their meaning behind Base64.'
+        ],
+        base32: [
+          'Quickly decode Base32 values that appear in provisioning URIs, backup codes, or DNS-friendly identifiers.',
+          'Tulkit uppercases everything for you and reveals the UTF-8 text or bytes so you can confirm what a device or API really stored.'
+        ],
+        base58: [
+          'Inspect Base58 strings that use the Bitcoin alphabet and avoid ambiguous characters. Tulkit converts them back into raw bytes and readable text in one click.',
+          'Helpful when you want to validate blockchain addresses, short invite codes, or shareable tokens without reaching for a CLI.'
+        ],
+        hex: [
+          'Turn long hex dumps back into words or binary data so you can see what was actually captured in a log, packet trace, or checksum.',
+          'Useful when double-checking keys, binary payloads, or signature material that engineers typically pass around as hex.'
+        ]
+      },
       lorem: [
         'Generate reusable lorem ipsum placeholder text directly in your browser. Adjust the number of paragraphs and sentence length so your mockups and design drafts feel realistic without writing copy by hand.',
         'Tulkit keeps all lorem generation in your browser, making it a quick helper when building wireframes, UI components, or content layouts.'
@@ -544,6 +704,8 @@ const en: Translation = {
       'Encode text into Base58 with Tulkit’s encoder, using the Bitcoin alphabet. Useful for creating human-friendly identifiers and working with blockchain-style payloads.',
     encodeHexMetaDescription:
       'Turn UTF-8 text into lowercase hex strings in your browser with Tulkit’s encoder. Ideal for inspecting binary data, keys, or protocol payloads without external CLIs.',
+    minifyMetaDescription:
+      'Minify HTML, XML, CSS, JavaScript, and JSON snippets in your browser with Tulkit’s minifier. Paste code to strip whitespace and shrink payloads without setting up a build pipeline.',
     decodeBase64MetaDescription:
       'Decode standard or URL-safe Base64 strings back into readable UTF-8 text in your browser with Tulkit’s Base64 decoder. Quickly inspect payloads, headers, or JWT segments.',
     decodeBase32MetaDescription:
@@ -659,19 +821,87 @@ const en: Translation = {
       ]
     },
     encode: {
-      heading: 'Encoder — Tulkit overview',
+      default: {
+        heading: 'Encoder — Tulkit overview',
+        paragraphs: [
+          'Base64 originally appeared as a MIME content-transfer encoding: a way to represent arbitrary binary data using only readable ASCII characters. In practice, it works by slicing bytes into 6-bit chunks, then mapping each chunk to one of 64 symbols made up of letters, digits, and a couple of punctuation characters.',
+          'Because Base64 output uses only safe characters, it is ideal for transporting data through systems that were designed for text rather than raw bytes. Email attachments, XML or JSON documents that need to embed binary blobs, and many HTTP APIs all rely on Base64 to keep data intact even when intermediate systems are not 8-bit clean.',
+          'The "64" in Base64 refers to the size of the alphabet: A-Z, a-z, 0-9, plus two extra symbols that vary slightly between standards (such as + and / in RFC 4648). Tulkit’s encoder lets you move between UTF-8 text, hex, Base64, Base32, and Base58 so you can inspect what is actually being sent over the wire, debug payloads, or generate test values for other tools without leaving your browser.'
+        ]
+      },
+      base64: {
+        heading: 'Base64 encoder overview',
+        paragraphs: [
+          'Tulkit’s Base64 encoder turns UTF-8 text or raw bytes into the familiar alphabet of A-Z, a-z, 0-9, plus + and /. It also supports the URL-safe flavor so you can prepare strings for JWTs, cookies, or signed URLs.',
+          'Use it when you need to normalize padding, strip whitespace, or double-check what will be sent through APIs that expect Base64 payloads for attachments, certificates, or HTTP headers.'
+        ]
+      },
+      base32: {
+        heading: 'Base32 encoder overview',
+        paragraphs: [
+          'Base32 represents data with a restricted alphabet that stays legible even in case-insensitive systems such as DNS labels or backup codes.',
+          'Tulkit emits uppercase RFC 4648 output, making it easy to provision TOTP seeds, generate recovery codes, or embed identifiers that must survive OCR and transcription.'
+        ]
+      },
+      base58: {
+        heading: 'Base58 encoder overview',
+        paragraphs: [
+          'Base58 drops visually confusing characters so the encoded value is friendlier for humans while still compact. The Bitcoin alphabet is the de facto standard for wallet addresses and blockchain payloads.',
+          'Generate those values directly in your browser to craft shareable invite codes, short IDs, or fixtures for blockchain integrations without worrying about desktop tooling.'
+        ]
+      },
+      hex: {
+        heading: 'Hex encoder overview',
+        paragraphs: [
+          'Hex encoding spells out every byte as two hexadecimal characters, which makes it perfect for logs, checksums, and protocols that like deterministic ASCII.',
+          'Tulkit produces lowercase hex strings so you can copy keys, salts, or binary payloads into CLIs, environment files, or documentation with zero surprises.'
+        ]
+      }
+    },
+    minify: {
+      heading: 'Minifier — Tulkit overview',
       paragraphs: [
-        'Base64 originally appeared as a MIME content-transfer encoding: a way to represent arbitrary binary data using only readable ASCII characters. In practice, it works by slicing bytes into 6‑bit chunks, then mapping each chunk to one of 64 symbols made up of letters, digits, and a couple of punctuation characters.',
-        'Because Base64 output uses only safe characters, it is ideal for transporting data through systems that were designed for text rather than raw bytes. Email attachments, XML or JSON documents that need to embed binary blobs, and many HTTP APIs all rely on Base64 to keep data intact even when intermediate systems are not 8‑bit clean.',
-        'The “64” in Base64 refers to the size of the alphabet: A–Z, a–z, 0–9, plus two extra symbols that vary slightly between standards (such as + and / in RFC 4648). Tulkit’s encoder lets you move between UTF‑8 text, hex, Base64, Base32, and Base58 so you can inspect what is actually being sent over the wire, debug payloads, or generate test values for other tools without leaving your browser.'
+        'Sometimes you just need to shrink a snippet before shipping it—maybe it is a CSS block going into a CMS, inline JavaScript for an email, or an HTML include that you hand off to another team. Tulkit’s minifier focuses on that workflow by letting you paste code, pick the matching language tab, and compress it instantly in your browser.',
+        'HTML and XML minification keeps closing tags valid while trimming attributes and whitespace. CSS minification relies on csso to drop redundant characters without rewriting your selectors. JavaScript minification uses Terser’s browser build so you can squeeze inline scripts without touching Node.js tooling. JSON minification simply strips spaces while keeping your data intact.',
+        'Because everything runs locally, you can confidently minify snippets that contain API keys, proprietary markup, or private customer data. Once you are done, copy or download the compressed result and drop it straight into your project.'
       ]
     },
     decode: {
-      heading: 'Decoder — Tulkit overview',
-      paragraphs: [
-        'When you receive Base64, Base32, Base58, or hex from an API or log file, the first step is often to turn it back into readable text. Tulkit’s decoder focuses on that workflow, letting you quickly inspect what an encoded value really contains.',
-        'Paste an encoded string, pick the matching encoding, and Tulkit will decode it to UTF-8 text or raw bytes so you can verify payloads, troubleshoot integration issues, or share clean examples in documentation — all without uploading data to any server.'
-      ]
+      default: {
+        heading: 'Decoder — Tulkit overview',
+        paragraphs: [
+          'When you receive Base64, Base32, Base58, or hex from an API or log file, the first step is often to turn it back into readable text. Tulkit’s decoder focuses on that workflow, letting you quickly inspect what an encoded value really contains.',
+          'Paste an encoded string, pick the matching encoding, and Tulkit will decode it to UTF-8 text or raw bytes so you can verify payloads, troubleshoot integration issues, or share clean examples in documentation — all without uploading data to any server.'
+        ]
+      },
+      base64: {
+        heading: 'Base64 decoder overview',
+        paragraphs: [
+          'When you run into Base64 blobs, Tulkit shows what is inside right away. Paste the value and the decoder will handle both standard and URL-safe alphabets, fix padding, and reveal the original bytes as readable text.',
+          'That is perfect for reversing Authorization headers, opaque API payloads, or JWT segments when you need to audit exactly what the sender included.'
+        ]
+      },
+      base32: {
+        heading: 'Base32 decoder overview',
+        paragraphs: [
+          'Base32 decoding is useful when troubleshooting time-based one-time password secrets, provisioning URIs, or vendor-specific recovery codes that rely on uppercase letters and digits.',
+          'Tulkit flags invalid characters and shows the resulting text so you can verify what a device or API is storing before you roll it out to customers.'
+        ]
+      },
+      base58: {
+        heading: 'Base58 decoder overview',
+        paragraphs: [
+          'Wallet addresses, content identifiers, and other blockchain-style tokens often arrive as Base58. Tulkit converts them back into raw bytes so you can inspect version bytes, payloads, or checksums.',
+          'It is an easy way to validate addresses pasted by users, unit-test integrations, or explain what a given Base58 string represents in documentation.'
+        ]
+      },
+      hex: {
+        heading: 'Hex decoder overview',
+        paragraphs: [
+          'Hex dumps tend to obscure meaning when you are looking at them in a console or support ticket. Tulkit turns those pairs back into text or binary data instantly.',
+          'Use the decoder to inspect log fragments, verify keys, or confirm that the payload you captured really matches the bytes you expect.'
+        ]
+      }
     },
     lorem: {
       heading: 'Lorem Ipsum Generator — Tulkit overview',
@@ -737,6 +967,10 @@ const id: Translation = {
     clearLabel: 'Bersihkan',
     copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: ',
+    minifyLabel: 'Minify',
+    minifyingLabel: 'Sedang memadatkan…',
+    minifyUnsupportedLabel: 'Minify hanya tersedia untuk HTML, XML, CSS, JavaScript, atau JSON.',
+    minifyErrorPrefix: 'Gagal memadatkan: ',
     langLabels: formatterLangLabelsBase,
     langInfo: {
       auto: {
@@ -820,6 +1054,53 @@ const id: Translation = {
           'Sesuaikan ukuran tab jika struktur YAML sangat dalam agar tetap nyaman dibaca.'
         ]
       }
+    }
+  },
+  minifierLangInfo: {
+    auto: {
+      title: 'Mode Minify Otomatis',
+      description:
+        'Tempel HTML, CSS, JavaScript, atau JSON apa pun dan Tulkit akan memilih minifier yang tepat secara otomatis sehingga Anda bisa mengecilkan snippet tanpa klik tambahan.',
+      tips: [
+        'Cocok ketika Anda sering berganti jenis aset dan hanya ingin memadatkan apa pun yang ada di clipboard.',
+        'Jika deteksi salah, pilih tab bahasa secara manual untuk mengunci mode.'
+      ]
+    },
+    html: {
+      title: 'Minifier HTML',
+      description:
+        'Hapus whitespace, komentar, dan atribut berlebih dari landing page, email, atau snippet embed sambil menjaga markup tetap valid.',
+      tips: [
+        'Pas untuk potongan CMS atau embed dokumentasi ketika setiap byte berarti.',
+        'Gunakan Preview jika perlu memastikan komentar kondisional masih utuh sebelum diterbitkan.'
+      ]
+    },
+    css: {
+      title: 'Minifier CSS',
+      description:
+        'Gunakan csso langsung di browser untuk memadatkan style inline, kelas utilitas, atau potongan stylesheet tanpa menyentuh pipeline build.',
+      tips: [
+        'Berguna untuk merapikan blok style di CMS atau email HTML.',
+        'Simpan salinan yang sudah diformat jika nanti perlu men-debug.'
+      ]
+    },
+    js: {
+      title: 'Minifier JavaScript',
+      description:
+        'Ditenagai Terser, mode ini mengecilkan whitespace, mengganti nama variabel, dan membuang kode mati sehingga skrip inline tetap ringkas.',
+      tips: [
+        'Ideal untuk feature flag, widget kecil, atau snippet yang dibagikan di balasan dukungan.',
+        'Gunakan tombol Salin segera setelah minify agar tidak sengaja mengirim versi tidak terkompres.'
+      ]
+    },
+    json: {
+      title: 'Minifier JSON',
+      description:
+        'Ubah konfigurasi, bundle lokalisasi, atau payload API menjadi satu baris tanpa mengubah artinya.',
+      tips: [
+        'Cocok saat menaruh JSON di parameter query atau atribut data HTML.',
+        'Simpan versi yang mudah dibaca di repositori dan hanya bagikan hasil minify-nya.'
+      ]
     }
   },
   uuid: {
@@ -960,6 +1241,7 @@ const id: Translation = {
     navUuid: 'Generator UUID',
     navEpoch: 'Konverter Epoch',
     navEncode: 'Encoder',
+    navMinify: 'Minifier',
     navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
     languageSwitcherLabel: 'Bahasa',
@@ -968,6 +1250,7 @@ const id: Translation = {
       uuid: 'Generator UUID — Tulkit',
       epoch: 'Konverter Epoch — Tulkit',
       encode: 'Encoder — Tulkit',
+      minify: 'Minifier — Tulkit',
       decode: 'Decoder — Tulkit',
       encodeBase64: 'Encoder Base64 — Tulkit',
       encodeBase32: 'Encoder Base32 — Tulkit',
@@ -981,10 +1264,44 @@ const id: Translation = {
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
-      formatter: [
-        'Alternatif WebFormatter yang cepat untuk HTML, CSS, JavaScript, SQL, JSON, dan PHP. Tulkit membantu developer, penulis teknis, dan tim QA merapikan kode langsung di browser tanpa memasang alat tambahan. Tempel potongan dari editor atau seret berkas, lalu dapatkan hasil bersih yang siap untuk dokumentasi, pull request, atau sesi debugging.',
-        'Pemformat ini memiliki highlight sintaks, pengaturan lebar tab, dan deteksi bahasa otomatis sehingga cocok mendampingi pekerjaan Anda baik saat memoles aset front-end maupun meninjau query database. Semua pemformatan tetap lokal di browser demi privasi maksimal.'
-      ],
+      formatter: {
+        auto: [
+          'Alternatif WebFormatter yang cepat untuk HTML, CSS, JavaScript, SQL, JSON, dan PHP. Tulkit membantu developer, penulis teknis, dan tim QA merapikan kode langsung di browser tanpa memasang alat tambahan. Tempel potongan dari editor atau seret berkas, lalu dapatkan hasil bersih yang siap untuk dokumentasi, pull request, atau sesi debugging.',
+          'Pemformat ini memiliki highlight sintaks, pengaturan lebar tab, dan deteksi bahasa otomatis sehingga cocok mendampingi pekerjaan Anda baik saat memoles aset front-end maupun meninjau query database. Semua pemformatan tetap lokal di browser demi privasi maksimal.'
+        ],
+        html: [
+          'Gunakan pemformat HTML Tulkit untuk merapikan landing page, template email, atau potongan CMS agar tag bertingkat tetap mudah dibaca saat ditempel kembali ke editor.',
+          'Cocok untuk SVG inline atau komponen templat ketika Anda hanya perlu indentasi konsisten tanpa membuka IDE penuh.'
+        ],
+        css: [
+          'Normalkan selector, kelas utilitas, dan gaya komponen sehingga jarak dan kurung kurawal rapi sebelum membagikan stylesheet.',
+          'Tulkit mengikuti lebar tab pilihan Anda sehingga mudah membersihkan SCSS, blok Tailwind, atau hasil handoff desainer langsung di browser.'
+        ],
+        js: [
+          'Rapikan potongan JavaScript atau TypeScript dari eksperimen, codepen, atau output log dalam hitungan detik.',
+          'Pemformat ini menangani modul, fungsi async, dan kode penuh arrow sehingga Anda bisa fokus ke logika tanpa repot indentasi.'
+        ],
+        json: [
+          'Cetak cantik payload JSON, konfigurasi, atau respons API sambil memastikan strukturnya tetap valid.',
+          'Pas untuk men-debug payload webhook, mengedit konfigurasi layanan, atau berbagi contoh yang mudah dibaca ke tim.'
+        ],
+        sql: [
+          'Susun ulang query SQL panjang agar klausa SELECT, JOIN, dan CTE gampang dipindai sebelum direview.',
+          'Ideal saat mendokumentasikan query analitik atau memeriksa pernyataan hasil ORM tanpa membuka IDE database.'
+        ],
+        php: [
+          'Rapikan potongan PHP untuk WordPress, Laravel, atau proyek legacy tanpa menyalakan stack lokal.',
+          'Tulkit memuat pemformat PHP sesuai kebutuhan sehingga Anda bisa membersihkan template Blade, controller, atau helper langsung di browser.'
+        ],
+        xml: [
+          'Format sitemap, feed, atau berkas konfigurasi XML agar atribut dan elemen bertingkat tetap sejajar.',
+          'Berguna ketika meninjau respons API, indeks sitemap, atau deskriptor sistem yang jadi berantakan setelah banyak revisi.'
+        ],
+        yaml: [
+          'Jaga manifest, konfigurasi CI, dan berkas infrastruktur berbasis YAML tetap aman diedit dengan indentasi konsisten.',
+          'Tulkit memudahkan merapikan cuplikan dari dokumentasi atau chat sebelum dikomit kembali ke repo.'
+        ]
+      },
       uuid: [
         'Buat satu atau banyak UUID v4 sesuai RFC-4122 langsung di browser. Atur huruf dan format agar sesuai kebutuhan aplikasi Anda.',
         'UUID dibuat menggunakan Web Crypto API ketika tersedia, sehingga hasilnya berkualitas tinggi dan tidak pernah dikirim ke server.'
@@ -993,14 +1310,76 @@ const id: Translation = {
         'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dalam hitungan detik. Tempel nilai dalam detik atau milidetik untuk melihat keluaran UTC, GMT, dan zona waktu lokal.',
         'Anda juga bisa memilih tanggal dan waktu, menyalin nilai Unix untuk API atau query database, serta mengganti zona waktu untuk melihat bagaimana momen yang sama muncul di berbagai wilayah.'
       ],
-      encode: [
-        'Konversi antara teks, hex, dan Base64 langsung di browser Anda. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
-        'Encoder ini berguna ketika Anda bekerja dengan header HTTP, segmen JWT, secret konfigurasi, atau blob biner dan ingin memeriksa atau menormalkan encoding tanpa membuka CLI terpisah.'
-      ],
-      decode: [
-        'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
-        'Decoder ini membantu saat Anda memeriksa token, payload, atau blob biner dari API dan perlu mengembalikannya ke bentuk yang mudah dibaca untuk debugging atau dokumentasi.'
-      ],
+      encode: {
+        default: [
+          'Konversi antara teks, hex, dan Base64 langsung di browser Anda. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
+          'Encoder ini berguna ketika Anda bekerja dengan header HTTP, segmen JWT, secret konfigurasi, atau blob biner dan ingin memeriksa atau menormalkan encoding tanpa membuka CLI terpisah.'
+        ],
+        base64: [
+          'Ubah teks UTF-8 ke Base64 standar atau aman-URL secara instan. Tulkit menormalkan padding dan menghapus spasi berlebih sehingga output siap ditempel ke header Authorization, lampiran MIME, atau klaim JWT tanpa edit tambahan.',
+          'Gunakan saat Anda ingin memastikan secret, sertifikat, atau blob biner akan berjalan mulus di sistem yang hanya menerima karakter ASCII.'
+        ],
+        base32: [
+          'Encode nilai dengan alfabet Base32 RFC 4648 yang sering dipakai untuk pengenal aman-DNS, kode pemulihan, atau seed TOTP.',
+          'Tulkit menjaga jarak dan padding tetap konsisten sehingga hasilnya bisa langsung ditempel ke alur provisioning atau payload API.'
+        ],
+        base58: [
+          'Buat string Base58 yang menghindari karakter membingungkan seperti 0/O atau I/l namun tetap padat informasi.',
+          'Cocok untuk alamat bergaya blockchain, kode undangan, atau ID pendek yang harus dibacakan manusia tanpa salah.'
+        ],
+        hex: [
+          'Ubah teks menjadi pasangan hex huruf kecil seperti yang biasa Anda lihat di banyak alat CLI.',
+          'Berguna untuk memeriksa payload, menyiapkan fixture manual, atau membagikan nilai deterministik ke tim QA dan backend.'
+        ]
+      },
+      minify: {
+        auto: [
+          'Padatkan HTML, XML, CSS, JavaScript, atau JSON langsung di browser Anda. Tempel kode yang ingin dikirim, klik Minify, dan Tulkit akan memangkas whitespace serta atribut berlebih tanpa mengunggah apa pun.',
+          'Cocok ketika Anda perlu snippet siap produksi untuk embed, template email, atau konfigurasi kecil namun tidak mau repot menyiapkan pipeline build hanya demi mengecilkan perbaikan cepat.'
+        ],
+        html: [
+          'Kecilkan template landing page, email, atau embed dengan menghapus whitespace, komentar, dan atribut berlebih sambil menjaga struktur HTML tetap sah.',
+          'Pas ketika Anda menyerahkan snippet ringan ke tim marketing atau dokumentasi tanpa bantuan pipeline build.'
+        ],
+        xml: [
+          'Minify sitemap, feed, atau berkas konfigurasi XML tanpa merusak huruf besar kecil atau tag penutup wajib.',
+          'Bermanfaat saat ingin mengirim payload XML yang ringkas ke partner atau CDN tetapi tidak punya tooling server.'
+        ],
+        css: [
+          'Padatkan CSS atau keluaran SCSS memakai csso agar selector tetap aman tetapi byte berkurang.',
+          'Ideal untuk blok style inline di CMS, template email, atau komponen desain yang sensitif terhadap ukuran.'
+        ],
+        js: [
+          'Gunakan bundle Terser bawaan untuk memadatkan JavaScript inline, feature flag, atau snippet widget tanpa meninggalkan browser.',
+          'Sangat membantu ketika mengedit skrip kecil di CMS atau balasan dukungan namun tetap ingin versi produksi yang ringkas.'
+        ],
+        json: [
+          'Ubah konfigurasi, payload API, atau bundle lokalisasi menjadi JSON satu baris tanpa mengubah isinya.',
+          'Mudah ketika Anda perlu menaruh JSON di parameter query, atribut data, atau berkas migrasi supaya hemat ruang.'
+        ]
+      },
+      decode: {
+        default: [
+          'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
+          'Decoder ini membantu saat Anda memeriksa token, payload, atau blob biner dari API dan perlu mengembalikannya ke bentuk yang mudah dibaca untuk debugging atau dokumentasi.'
+        ],
+        base64: [
+          'Tempel string Base64 atau Base64URL dan Tulkit akan menormalkan padding, mengganti karakter aman-URL, lalu menampilkan teks hasil decode.',
+          'Sempurna untuk men-debug payload JWT, lampiran email, atau header Authorization yang sering menyembunyikan data penting di balik Base64.'
+        ],
+        base32: [
+          'Dekode cepat nilai Base32 yang muncul di URI provisioning, kode cadangan, atau pengenal ramah DNS.',
+          'Tulkit mengubahnya ke huruf besar dan menampilkan teks UTF-8 atau byte mentah agar Anda tahu apa yang sebenarnya disimpan perangkat atau API.'
+        ],
+        base58: [
+          'Periksa string Base58 beralfabet Bitcoin tanpa takut salah baca karakter mirip.',
+          'Tulkit mengubahnya kembali ke byte mentah dan teks sehingga Anda bisa memvalidasi alamat blockchain, kode undangan, atau token ringkas tanpa CLI.'
+        ],
+        hex: [
+          'Kembalikan dump hex panjang menjadi teks atau data biner sehingga Anda bisa melihat isi log, trace paket, atau checksum.',
+          'Bermanfaat saat mengecek ulang kunci, payload biner, atau materi signature yang biasanya dibagikan sebagai hex.'
+        ]
+      },
       lorem: [
         'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
         'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
@@ -1025,6 +1404,8 @@ const id: Translation = {
       'Encode teks menjadi Base58 dengan encoder Tulkit menggunakan alfabet Bitcoin. Ideal untuk membuat pengenal yang ramah dibaca dan payload bergaya blockchain.',
     encodeHexMetaDescription:
       'Ubah teks UTF-8 menjadi string hex huruf kecil di browser Anda dengan encoder Tulkit. Tepat untuk memeriksa data biner, kunci, atau payload protokol tanpa CLI eksternal.',
+    minifyMetaDescription:
+      'Padatkan HTML, XML, CSS, JavaScript, dan JSON langsung di browser dengan minifier Tulkit. Tempel kode untuk menghapus whitespace dan mengecilkan ukuran tanpa memasang pipeline build.',
     decodeBase64MetaDescription:
       'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
     decodeBase32MetaDescription:
@@ -1098,6 +1479,13 @@ const id: Translation = {
           'Konten ikhtisar untuk slug pemformat XML. Jelaskan bagaimana Tulkit membantu merapikan berkas konfigurasi, sitemap, atau payload XML lainnya.',
           'Sesuaikan teks ini agar menonjolkan tools atau platform berbasis XML yang paling relevan bagi pengguna Anda.'
         ]
+      },
+      yaml: {
+        heading: 'Ikhtisar Pemformat YAML',
+        paragraphs: [
+          'Konten ikhtisar untuk slug pemformat YAML. Jelaskan bagaimana Tulkit membantu merapikan konfigurasi CI, manifest infrastruktur, atau berkas YAML lain agar aman diedit.',
+          'Perbarui teks ini untuk menonjolkan tool deployment, platform CI, atau stack infrastruktur yang paling relevan bagi audiens Anda.'
+        ]
       }
     },
     uuid: {
@@ -1133,19 +1521,87 @@ const id: Translation = {
       ]
     },
     encode: {
-      heading: 'Ikhtisar Encoder — Tulkit',
+      default: {
+        heading: 'Ikhtisar Encoder — Tulkit',
+        paragraphs: [
+          'Istilah Base64 berasal dari skema content-transfer encoding di MIME: cara mengubah data biner menjadi deretan karakter ASCII yang aman dibaca. Secara sederhana, Base64 memecah byte menjadi potongan 6 bit lalu memetakan tiap potongan ke salah satu dari 64 simbol yang terdiri dari huruf, angka, dan beberapa tanda baca.',
+          'Karena keluarannya hanya berisi karakter yang "aman", Base64 cocok untuk mengirimkan data melalui sistem yang awalnya didesain untuk teks, bukan byte mentah. Lampiran email, dokumen XML atau JSON yang perlu menyisipkan blob biner, hingga banyak API HTTP mengandalkan Base64 agar data tetap utuh meskipun melewati jalur yang tidak sepenuhnya 8-bit clean.',
+          'Angka "64" pada Base64 merujuk pada ukuran alfabetnya: A-Z, a-z, 0-9, ditambah dua simbol yang sedikit berbeda antar standar (misalnya + dan / pada RFC 4648). Encoder Tulkit membantu Anda berpindah antara teks UTF-8, hex, Base64, Base32, dan Base58 sehingga lebih mudah melihat apa yang benar-benar dikirim di jaringan, men-debug payload, atau membuat nilai uji untuk alat lain langsung dari browser.'
+        ]
+      },
+      base64: {
+        heading: 'Ikhtisar encoder Base64',
+        paragraphs: [
+          'Encoder Base64 Tulkit mengubah teks UTF-8 atau byte mentah menjadi alfabet familiar A-Z, a-z, 0-9 plus + dan /. Varian aman-URL juga tersedia sehingga string siap dipakai untuk JWT, cookie, atau URL bertanda tangan.',
+          'Gunakan ketika Anda perlu menormalkan padding, membersihkan whitespace, atau memastikan apa yang akan dikirim melalui API yang mengharuskan payload Base64 untuk lampiran, sertifikat, atau header HTTP.'
+        ]
+      },
+      base32: {
+        heading: 'Ikhtisar encoder Base32',
+        paragraphs: [
+          'Base32 merepresentasikan data dengan alfabet terbatas yang tetap mudah dibaca pada sistem yang tidak peka huruf besar kecil seperti label DNS atau kode pemulihan.',
+          'Tulkit menghasilkan output huruf besar sesuai RFC 4648 sehingga Anda bisa menyiapkan seed TOTP, membuat kode pemulihan, atau menyematkan pengenal yang harus tahan terhadap OCR dan pengetikan ulang.'
+        ]
+      },
+      base58: {
+        heading: 'Ikhtisar encoder Base58',
+        paragraphs: [
+          'Base58 menghilangkan karakter mirip sehingga nilai terenkode lebih ramah manusia namun tetap ringkas. Alfabet Bitcoin menjadi standar de facto untuk alamat dompet dan payload blockchain.',
+          'Buat nilai tersebut langsung di browser untuk kode undangan, ID pendek, atau fixture integrasi blockchain tanpa repot mengatur alat desktop.'
+        ]
+      },
+      hex: {
+        heading: 'Ikhtisar encoder Hex',
+        paragraphs: [
+          'Encoding hex menuliskan setiap byte sebagai dua karakter heksadesimal sehingga cocok untuk log, checksum, dan protokol yang membutuhkan ASCII deterministik.',
+          'Tulkit menghasilkan string hex huruf kecil sehingga Anda bisa menyalin kunci, salt, atau payload biner ke CLI, file environment, atau dokumentasi tanpa kejutan.'
+        ]
+      }
+    },
+    minify: {
+      heading: 'Ikhtisar Minifier — Tulkit',
       paragraphs: [
-        'Istilah Base64 berasal dari skema content-transfer encoding di MIME: cara mengubah data biner menjadi deretan karakter ASCII yang aman dibaca. Secara sederhana, Base64 memecah byte menjadi potongan 6 bit lalu memetakan tiap potongan ke salah satu dari 64 simbol yang terdiri dari huruf, angka, dan beberapa tanda baca.',
-        'Karena keluarannya hanya berisi karakter yang “aman”, Base64 cocok untuk mengirimkan data melalui sistem yang awalnya didesain untuk teks, bukan byte mentah. Lampiran email, dokumen XML atau JSON yang perlu menyisipkan blob biner, hingga banyak API HTTP mengandalkan Base64 agar data tetap utuh meskipun melewati jalur yang tidak sepenuhnya 8‑bit clean.',
-        'Angka “64” pada Base64 merujuk pada ukuran alfabetnya: A–Z, a–z, 0–9, ditambah dua simbol yang sedikit berbeda antar standar (misalnya + dan / pada RFC 4648). Encoder Tulkit membantu Anda berpindah antara teks UTF‑8, hex, Base64, Base32, dan Base58 sehingga lebih mudah melihat apa yang benar‑benar dikirim di jaringan, men-debug payload, atau membuat nilai uji untuk alat lain langsung dari browser.'
+        'Kadang Anda hanya perlu mengecilkan snippet sebelum dikirim—entah itu blok CSS dalam CMS, JavaScript inline untuk email, atau include HTML yang dibagikan ke tim lain. Minifier Tulkit dibuat untuk alur tersebut dengan membiarkan Anda menempel kode, memilih tab bahasa, lalu memadatkannya seketika di browser.',
+        'Minifikasi HTML dan XML menjaga struktur tag tetap valid sembari memangkas atribut serta whitespace. CSS menggunakan csso agar selector tetap aman tanpa karakter berlebih. JavaScript memanfaatkan build Terser untuk memadatkan script inline tanpa harus membuka tooling Node.js. JSON cukup diubah menjadi satu baris sehingga payload tetap valid tetapi lebih ringan.',
+        'Karena semua proses berjalan lokal, Anda bisa meminify snippet yang mengandung data sensitif tanpa khawatir keluar dari perangkat. Setelah selesai, salin atau unduh hasilnya dan tempelkan langsung ke proyek Anda.'
       ]
     },
     decode: {
-      heading: 'Ikhtisar Decoder — Tulkit',
-      paragraphs: [
-        'Ketika Anda menerima Base64, Base32, Base58, atau hex dari API atau berkas log, langkah pertama biasanya mengembalikannya ke teks yang bisa dibaca. Decoder Tulkit berfokus pada alur kerja itu sehingga Anda bisa dengan cepat melihat isi sebenarnya dari nilai yang terenkode.',
-        'Tempel string terenkode, pilih encoding yang sesuai, dan Tulkit akan mendekodekannya ke teks UTF-8 atau byte mentah sehingga Anda dapat memeriksa payload, menelusuri masalah integrasi, atau menyalin contoh yang bersih ke dokumentasi — semuanya tanpa mengunggah data ke server mana pun.'
-      ]
+      default: {
+        heading: 'Ikhtisar Decoder — Tulkit',
+        paragraphs: [
+          'Ketika Anda menerima Base64, Base32, Base58, atau hex dari API atau berkas log, langkah pertama biasanya mengembalikannya ke teks yang bisa dibaca. Decoder Tulkit berfokus pada alur kerja itu sehingga Anda bisa dengan cepat melihat isi sebenarnya dari nilai yang terenkode.',
+          'Tempel string terenkode, pilih encoding yang sesuai, dan Tulkit akan mendekodekannya ke teks UTF-8 atau byte mentah sehingga Anda dapat memeriksa payload, menelusuri masalah integrasi, atau menyalin contoh yang bersih ke dokumentasi — semuanya tanpa mengunggah data ke server mana pun.'
+        ]
+      },
+      base64: {
+        heading: 'Ikhtisar decoder Base64',
+        paragraphs: [
+          'Saat bertemu blob Base64, Tulkit langsung menunjukkan isinya. Tempel nilai tersebut dan decoder akan menangani alfabet standar serta aman-URL, memperbaiki padding, dan menampilkan byte asli sebagai teks yang bisa dibaca.',
+          'Sangat pas untuk membongkar header Authorization, payload API yang samar, atau segmen JWT ketika Anda perlu mengaudit isi yang dikirim.'
+        ]
+      },
+      base32: {
+        heading: 'Ikhtisar decoder Base32',
+        paragraphs: [
+          'Dekode Base32 berguna saat menelusuri secret TOTP, URI provisioning, atau kode pemulihan vendor yang mengandalkan huruf besar dan angka.',
+          'Tulkit memberi tahu jika ada karakter tidak valid dan memperlihatkan teks hasil decode sehingga Anda bisa memverifikasi apa yang disimpan perangkat atau API sebelum digunakan pelanggan.'
+        ]
+      },
+      base58: {
+        heading: 'Ikhtisar decoder Base58',
+        paragraphs: [
+          'Alamat dompet, content identifier, dan token bergaya blockchain sering datang sebagai Base58. Tulkit mengubahnya kembali menjadi byte mentah sehingga Anda bisa memeriksa byte versi, payload, atau checksum.',
+          'Ini cara mudah memvalidasi alamat yang ditempel pengguna, menguji integrasi, atau menjelaskan arti string Base58 tertentu di dokumentasi.'
+        ]
+      },
+      hex: {
+        heading: 'Ikhtisar decoder Hex',
+        paragraphs: [
+          'Dump hex mudah membuat bingung ketika dilihat di konsol atau tiket dukungan. Tulkit mengembalikan pasangan tersebut menjadi teks atau data biner secara instan.',
+          'Gunakan decoder untuk memeriksa potongan log, mengecek kunci, atau memastikan payload yang Anda tangkap benar-benar sesuai dengan byte yang diharapkan.'
+        ]
+      }
     },
     lorem: {
       heading: 'Ikhtisar Generator Lorem Ipsum — Tulkit',

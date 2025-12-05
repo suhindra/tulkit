@@ -725,6 +725,13 @@ footer{
   border-radius:0;
 }
 
+.toolbar-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
 .lang-info{
   margin:0;
   padding:18px 20px 22px;

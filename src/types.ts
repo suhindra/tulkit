@@ -7,3 +7,7 @@ export type ActiveTab = 'auto' | FormatterLang
 export type LanguageCode = 'en' | 'id'
 
 export type UuidVersion = 'v1' | 'v4' | 'v7'
+
+export type MinifyTab = 'auto' | 'html' | 'css' | 'js' | 'json'
+
+export type CodecSubtool = 'default' | 'base64' | 'base32' | 'base58' | 'hex'

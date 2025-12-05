@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import Formatter from './components/Formatter'
+import Minifier from './components/Minifier'
 import UuidGenerator from './components/UuidGenerator'
 import EpochConverter from './components/EpochConverter'
 import LoremIpsumGenerator from './components/LoremIpsumGenerator'
@@ -8,7 +9,7 @@ const Decoder = React.lazy(()=>import('./components/Decoder'))
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
-import type { ActiveTab, LanguageCode, UuidVersion } from './types'
+import type { ActiveTab, CodecSubtool, LanguageCode, UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
@@ -20,7 +21,7 @@ declare global {
   }
 }
 
-type View = 'formatter' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
+type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -39,6 +40,9 @@ function getViewFromPath(path: string): View{
   if(normalized.startsWith('/decode')){
     return 'decode'
   }
+  if(normalized.startsWith('/minify')){
+    return 'minify'
+  }
   if(normalized.startsWith('/generator/lorem')){
     return 'lorem'
   }
@@ -46,6 +50,19 @@ function getViewFromPath(path: string): View{
     return 'formatter'
   }
   return 'notfound'
+}
+
+function getCodecSlugFromPath(path: string): CodecSubtool{
+  const normalized = path.toLowerCase()
+  const segments = normalized.split('/')
+  const slug = segments[2]
+  if(slug === 'base32' || slug === 'base58' || slug === 'hex'){
+    return slug
+  }
+  if(slug === 'base64'){
+    return 'base64'
+  }
+  return 'default'
 }
 
 export default function App(){
@@ -72,6 +89,8 @@ export default function App(){
   const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
   const relativePath = useMemo(()=>stripLanguagePrefix(location.pathname) || '/', [location.pathname])
   const view = useMemo(()=>getViewFromPath(relativePath), [relativePath])
+  const encodeSlug = useMemo<CodecSubtool>(()=> (view === 'encode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
+  const decodeSlug = useMemo<CodecSubtool>(()=> (view === 'decode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
 
   useEffect(()=>{
     const detected = detectLanguageFromPath(location.pathname)
@@ -106,10 +125,16 @@ export default function App(){
   const { app: appCopy, headingByTab, descriptionByTab, uuidDescriptionByVersion } = translations
 
   const formatterOverview = getFormatterOverviewByTab(language)[activeTab]
+  const minifyOverview = translations.overviews.minify
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
-  const encodeOverview = translations.overviews.encode
+  const encodeOverview = translations.overviews.encode[encodeSlug]
+  const decodeOverview = translations.overviews.decode[decodeSlug]
   const loremOverview = translations.overviews.lorem
+  const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
+  const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
+  const formatterSeoBlurb = appCopy.seoBlurb.formatter[activeTab] || appCopy.seoBlurb.formatter.auto
+  const minifySeoBlurb = appCopy.seoBlurb.minify[activeTab] || appCopy.seoBlurb.minify.auto
 
   const seoHeading = useMemo(()=>{
     if(view === 'uuid'){
@@ -118,21 +143,22 @@ export default function App(){
     if(view === 'epoch'){
       return appCopy.seoTitles.epoch
     }
-    if(view === 'encode' || view === 'decode'){
-      const parts = relativePath.toLowerCase().split('/')
-      const slug = parts[2]
-      if(view === 'encode'){
-        if(slug === 'base64') return appCopy.seoTitles.encodeBase64
-        if(slug === 'base32') return appCopy.seoTitles.encodeBase32
-        if(slug === 'base58') return appCopy.seoTitles.encodeBase58
-        if(slug === 'hex') return appCopy.seoTitles.encodeHex
-        return appCopy.seoTitles.encode
-      }
-      if(slug === 'base64') return appCopy.seoTitles.decodeBase64
-      if(slug === 'base32') return appCopy.seoTitles.decodeBase32
-      if(slug === 'base58') return appCopy.seoTitles.decodeBase58
-      if(slug === 'hex') return appCopy.seoTitles.decodeHex
+    if(view === 'encode'){
+      if(encodeSlug === 'base64') return appCopy.seoTitles.encodeBase64
+      if(encodeSlug === 'base32') return appCopy.seoTitles.encodeBase32
+      if(encodeSlug === 'base58') return appCopy.seoTitles.encodeBase58
+      if(encodeSlug === 'hex') return appCopy.seoTitles.encodeHex
+      return appCopy.seoTitles.encode
+    }
+    if(view === 'decode'){
+      if(decodeSlug === 'base64') return appCopy.seoTitles.decodeBase64
+      if(decodeSlug === 'base32') return appCopy.seoTitles.decodeBase32
+      if(decodeSlug === 'base58') return appCopy.seoTitles.decodeBase58
+      if(decodeSlug === 'hex') return appCopy.seoTitles.decodeHex
       return appCopy.seoTitles.decode
+    }
+    if(view === 'minify'){
+      return appCopy.seoTitles.minify
     }
     if(view === 'lorem'){
       return appCopy.seoTitles.lorem
@@ -144,7 +170,7 @@ export default function App(){
       return appCopy.seoTitles.formatterDefault
     }
     return `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
-  },[view, uuidVersion, appCopy, activeTab, headingByTab, relativePath])
+  },[view, uuidVersion, appCopy, activeTab, headingByTab, encodeSlug, decodeSlug])
 
   const metaDescription = useMemo(()=>{
     if(view === 'uuid'){
@@ -155,23 +181,22 @@ export default function App(){
     }
     if(view === 'encode'){
       let selected = appCopy.encodeMetaDescription
-      const parts = relativePath.toLowerCase().split('/')
-      const slug = parts[2]
-      if(slug === 'base64') selected = appCopy.encodeBase64MetaDescription
-      else if(slug === 'base32') selected = appCopy.encodeBase32MetaDescription
-      else if(slug === 'base58') selected = appCopy.encodeBase58MetaDescription
-      else if(slug === 'hex') selected = appCopy.encodeHexMetaDescription
+      if(encodeSlug === 'base64') selected = appCopy.encodeBase64MetaDescription
+      else if(encodeSlug === 'base32') selected = appCopy.encodeBase32MetaDescription
+      else if(encodeSlug === 'base58') selected = appCopy.encodeBase58MetaDescription
+      else if(encodeSlug === 'hex') selected = appCopy.encodeHexMetaDescription
       return selected
     }
     if(view === 'decode'){
       let selected = appCopy.decodeMetaDescription
-      const parts = relativePath.toLowerCase().split('/')
-      const slug = parts[2]
-      if(slug === 'base64') selected = appCopy.decodeBase64MetaDescription
-      else if(slug === 'base32') selected = appCopy.decodeBase32MetaDescription
-      else if(slug === 'base58') selected = appCopy.decodeBase58MetaDescription
-      else if(slug === 'hex') selected = appCopy.decodeHexMetaDescription
+      if(decodeSlug === 'base64') selected = appCopy.decodeBase64MetaDescription
+      else if(decodeSlug === 'base32') selected = appCopy.decodeBase32MetaDescription
+      else if(decodeSlug === 'base58') selected = appCopy.decodeBase58MetaDescription
+      else if(decodeSlug === 'hex') selected = appCopy.decodeHexMetaDescription
       return selected
+    }
+    if(view === 'minify'){
+      return appCopy.minifyMetaDescription
     }
     if(view === 'lorem'){
       return appCopy.loremMetaDescription
@@ -181,7 +206,18 @@ export default function App(){
     }
     const key: ActiveTab = activeTab || 'auto'
     return descriptionByTab[key]
-  },[view, uuidVersion, appCopy, relativePath, activeTab, descriptionByTab, uuidDescriptionByVersion])
+  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug])
+
+  useEffect(()=>{
+    if(typeof document === 'undefined') return
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    if(!meta){
+      meta = document.createElement('meta')
+      meta.name = 'description'
+      document.head.appendChild(meta)
+    }
+    meta.content = metaDescription
+  },[metaDescription])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
@@ -246,6 +282,8 @@ export default function App(){
 
     if(view === 'formatter'){
       pageName = appCopy.navFormatter
+    }else if(view === 'minify'){
+      pageName = appCopy.navMinify
     }else if(view === 'uuid'){
       pageName = `${appCopy.navUuid} ${uuidVersion.toUpperCase()}`
     }else if(view === 'epoch'){
@@ -333,6 +371,10 @@ export default function App(){
     navigate(appendSearch('/decode'))
   }
 
+  function goToMinify(){
+    navigate(appendSearch('/minify'))
+  }
+
   function goToLorem(){
     navigate(appendSearch('/generator/lorem'))
   }
@@ -368,6 +410,16 @@ export default function App(){
                 }}
               >
                 {appCopy.navFormatter}
+              </a>
+              <a
+                href={buildPathWithLanguage('/minify', language)}
+                className={`top-nav-item ${view === 'minify' ? 'active' : ''}`}
+                onClick={e=>{
+                  e.preventDefault()
+                  goToMinify()
+                }}
+              >
+                {appCopy.navMinify}
               </a>
               <a
                 href={buildPathWithLanguage('/generator/uuid', language)}
@@ -440,7 +492,7 @@ export default function App(){
             <h2>{seoHeading}</h2>
             {view === 'formatter' && (
               <>
-                {appCopy.seoBlurb.formatter.map(text=>(
+                {formatterSeoBlurb.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -461,14 +513,21 @@ export default function App(){
             )}
             {view === 'encode' && (
               <>
-                {appCopy.seoBlurb.encode.map(text=>(
+                {encodeSeoBlurb.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'minify' && (
+              <>
+                {minifySeoBlurb.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'decode' && (
               <>
-                {appCopy.seoBlurb.decode.map(text=>(
+                {decodeSeoBlurb.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -485,6 +544,7 @@ export default function App(){
       )}
       <main className="container">
         {view === 'formatter' && <Formatter onTabChange={setActiveTab} language={language} />}
+        {view === 'minify' && <Minifier language={language} onTabChange={setActiveTab} />}
         {view === 'uuid' && <UuidGenerator onVersionChange={setUuidVersion} language={language} />}
         {view === 'epoch' && <EpochConverter language={language} />}
         {view === 'encode' && (
@@ -543,10 +603,18 @@ export default function App(){
                 ))}
               </>
             )}
+            {view === 'minify' && (
+              <>
+                <h2>{minifyOverview.heading}</h2>
+                {minifyOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
             {view === 'decode' && (
               <>
-                <h2>{translations.overviews.decode.heading}</h2>
-                {translations.overviews.decode.paragraphs.map(text=>(
+                <h2>{decodeOverview.heading}</h2>
+                {decodeOverview.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

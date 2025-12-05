@@ -12,7 +12,9 @@
     "ci": "npm ci && npm run check:lint && npm run build"
   },
   "dependencies": {
+    "csso": "^5.0.5",
     "hi-base64": "^0.4.1",
+    "html-minifier-terser": "^7.2.0",
     "highlight.js": "^11.8.0",
     "js-beautify": "^1.14.7",
     "prettier": "^3.3.3",
@@ -21,6 +23,7 @@
     "react-helmet-async": "^2.0.0",
     "react-router-dom": "^7.10.0",
     "sql-formatter": "^15.6.10",
+    "terser": "^5.31.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -84,7 +84,18 @@ const slugToTab: Record<string,ActiveTab> = {
   php: 'php'
 }
 
-function escapeHtml(str:string){
+const highlightLanguageMap: Record<Lang,string> = {
+  html: 'xml',
+  xml: 'xml',
+  yaml: 'yaml',
+  css: 'css',
+  js: 'javascript',
+  json: 'json',
+  sql: 'sql',
+  php: 'php'
+}
+
+function escapeHtml(str: string){
   return str
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
@@ -93,7 +104,7 @@ function escapeHtml(str:string){
     .replace(/'/g,'&#39;')
 }
 
-function detectLang(text:string):Lang{
+function detectLang(text: string): Lang{
   const trimmed = text.trim()
   if(!trimmed) return 'json'
 
@@ -130,13 +141,13 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   const location = useLocation()
   const navigate = useNavigate()
   const savedSettings = useMemo(()=>readFormatterSettings(),[])
-  const [lang, setLang] = useState<Lang>(()=>{
+  const [lang, setLang] = useState<Lang>(()=> {
     if(savedSettings && savedSettings.lang && isFormatterLang(savedSettings.lang)){
       return savedSettings.lang
     }
     return 'html'
   })
-  const [activeTab, setActiveTab] = useState<ActiveTab>(()=>{
+  const [activeTab, setActiveTab] = useState<ActiveTab>(()=> {
     if(savedSettings && savedSettings.activeTab && isActiveTabValue(savedSettings.activeTab)){
       return savedSettings.activeTab
     }
@@ -144,13 +155,13 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   })
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
-  const [tabWidth, setTabWidth] = useState<number>(()=>{
+  const [tabWidth, setTabWidth] = useState<number>(()=> {
     if(savedSettings && typeof savedSettings.tabWidth === 'number' && Number.isFinite(savedSettings.tabWidth)){
       return Math.min(Math.max(savedSettings.tabWidth, 0), 8)
     }
     return 2
   })
-  const [printWidth, setPrintWidth] = useState<number>(()=>{
+  const [printWidth, setPrintWidth] = useState<number>(()=> {
     if(savedSettings && typeof savedSettings.printWidth === 'number' && Number.isFinite(savedSettings.printWidth)){
       return Math.min(Math.max(savedSettings.printWidth, 20), 200)
     }
@@ -162,7 +173,6 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   const formatterCopy = getTranslations(language).formatter
   const activeInfo = formatterCopy.langInfo[activeTab]
 
-  // Initialize tab from URL path or hash slug
   useEffect(()=>{
     if(typeof window === 'undefined') return
     let initial: ActiveTab | undefined
@@ -202,19 +212,18 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     }
   },[activeTab, tabWidth, printWidth, lang])
 
-  function updateUrlForTab(tab:ActiveTab){
-    const slug = tabSlugs[tab]
-    const base = '/formatter'
-    const path = tab === 'auto' ? base : `${base}/${slug}`
-    const url = `${buildPathWithLanguage(path, language)}${location.search}`
-    navigate(url, { replace: true })
-  }
-
   useEffect(()=>{
     onTabChange?.(activeTab)
   },[activeTab, onTabChange])
 
-  async function formatPhp(text:string):Promise<string>{
+  function updateUrlForTab(tab: ActiveTab){
+    const slug = tabSlugs[tab]
+    const path = tab === 'auto' ? '/formatter' : `/formatter/${slug}`
+    const url = `${buildPathWithLanguage(path, language)}${location.search}`
+    navigate(url, { replace: true })
+  }
+
+  async function formatPhp(text: string): Promise<string>{
     setLoadingFormatter(true)
     try{
       const prettierModule = await import('prettier/standalone')
@@ -222,19 +231,18 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       const prettier: any = (prettierModule as any).default || prettierModule
       const pluginPhp: any = (pluginPhpModule as any).default || pluginPhpModule
 
-      const formatted = prettier.format(text, {
+      return prettier.format(text, {
         parser: 'php',
         plugins: [pluginPhp],
         tabWidth,
         printWidth
       })
-      return formatted
     }finally{
       setLoadingFormatter(false)
     }
   }
 
-  async function formatYaml(text:string):Promise<string>{
+  async function formatYaml(text: string): Promise<string>{
     setLoadingFormatter(true)
     try{
       const prettierModule = await import('prettier/standalone')
@@ -242,35 +250,35 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       const prettier: any = (prettierModule as any).default || prettierModule
       const yamlPlugin: any = (yamlPluginModule as any).default || yamlPluginModule
 
-      const formatted = prettier.format(text, {
+      return prettier.format(text, {
         parser: 'yaml',
         plugins: [yamlPlugin],
         tabWidth,
         printWidth
       })
-      return formatted
     }finally{
       setLoadingFormatter(false)
     }
   }
 
-  async function formatCode(text:string, l:Lang){
+  async function formatCode(text: string, language: Lang){
     try{
-      switch(l){
-        case 'html': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
-        case 'xml': return Promise.resolve(html_beautify(text, {indent_size:tabWidth}))
+      switch(language){
+        case 'html': return Promise.resolve(html_beautify(text, { indent_size: tabWidth }))
+        case 'xml': return Promise.resolve(html_beautify(text, { indent_size: tabWidth }))
         case 'yaml': return formatYaml(text)
-        case 'css': return Promise.resolve(css_beautify(text, {indent_size:tabWidth}))
-        case 'js': return Promise.resolve(js_beautify(text, {indent_size:tabWidth}))
+        case 'css': return Promise.resolve(css_beautify(text, { indent_size: tabWidth }))
+        case 'js': return Promise.resolve(js_beautify(text, { indent_size: tabWidth }))
         case 'json': {
           const obj = JSON.parse(text)
-          return Promise.resolve(JSON.stringify(obj,null,tabWidth))
+          return Promise.resolve(JSON.stringify(obj, null, tabWidth))
         }
         case 'sql': return Promise.resolve(formatSql(text))
         case 'php': return formatPhp(text)
+        default: return Promise.resolve(text)
       }
-    }catch(e:any){
-      return `Error: ${e?.message||String(e)}`
+    }catch(e: any){
+      return `Error: ${e?.message || String(e)}`
     }
   }
 
@@ -278,18 +286,8 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     const effectiveLang = activeTab === 'auto' ? detectLang(input) : lang
     const res = await formatCode(input, effectiveLang)
     setOutput(res)
-    const hlMap: Record<Lang,string> = {
-      html: 'xml',
-      xml: 'xml',
-      yaml: 'yaml',
-      css: 'css',
-      js: 'javascript',
-      json: 'json',
-      sql: 'sql',
-      php: 'php'
-    }
     try{
-      const highlighted = hljs.highlight(res, {language: hlMap[effectiveLang]}).value
+      const highlighted = hljs.highlight(res, { language: highlightLanguageMap[effectiveLang] }).value
       setRenderedOutput(highlighted)
     }catch{
       setRenderedOutput(escapeHtml(res))
@@ -300,7 +298,6 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
   async function onCopy(){
     try{
       await navigator.clipboard.writeText(output)
-      // small feedback
       alert(formatterCopy.copySuccess)
     }catch(e){
       alert(formatterCopy.copyErrorPrefix+String(e))
@@ -317,7 +314,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       : lang === 'css' ? 'css'
       : lang === 'sql' ? 'sql'
       : 'php'
-    const blob = new Blob([output], {type:'text/plain;charset=utf-8'})
+    const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -334,7 +331,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
     if(!file) return
 
     const reader = new FileReader()
-    reader.onload = () => {
+    reader.onload = ()=>{
       const text = typeof reader.result === 'string' ? reader.result : ''
       setInput(text)
     }
@@ -402,7 +399,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
               <pre className="hljs editor-output">
                 <code
                   className="hljs"
-                  dangerouslySetInnerHTML={{__html: renderedOutput || escapeHtml(output)}}
+                  dangerouslySetInnerHTML={{ __html: renderedOutput || escapeHtml(output) }}
                 />
               </pre>
             )}
@@ -411,15 +408,17 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
       </div>
 
       <div className="toolbar">
-        <button
-          type="button"
-          onClick={onFormat}
-          className="toolbar-format"
-        >
-          {loadingFormatter ? formatterCopy.formattingLabel : formatterCopy.formatLabel}
-        </button>
-
-      <div className="toolbar-right">
+        <div className="toolbar-left">
+          <button
+            type="button"
+            onClick={onFormat}
+            className="toolbar-format"
+            disabled={loadingFormatter}
+          >
+            {loadingFormatter ? formatterCopy.formattingLabel : formatterCopy.formatLabel}
+          </button>
+        </div>
+        <div className="toolbar-right">
           <label className="toolbar-field">
             {formatterCopy.tabSizeLabel}
             <input
@@ -430,9 +429,15 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
               onChange={e=>setTabWidth(Number(e.target.value))}
             />
           </label>
-
           <button type="button" className="toolbar-button" onClick={onDownload}>{formatterCopy.downloadLabel}</button>
-          <button type="button" className="toolbar-button" onClick={onCopy}>{formatterCopy.copyLabel}</button>
+          <button
+            type="button"
+            className="toolbar-button"
+            onClick={onCopy}
+            disabled={!output}
+          >
+            {formatterCopy.copyLabel}
+          </button>
           <button
             type="button"
             className="toolbar-button"
@@ -453,7 +458,7 @@ export default function Formatter({ onTabChange, language }: FormatterProps){
         <p>{activeInfo.description}</p>
         {activeInfo.tips && (
           <ul>
-            {activeInfo.tips!.map((tip)=>(
+            {activeInfo.tips.map(tip=>(
               <li key={tip}>{tip}</li>
             ))}
           </ul>
