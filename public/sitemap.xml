@@ -146,6 +146,78 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/php"/>
   </url>
   <url>
+    <loc>https://tulkit.online/minify</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/minify</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/minify/html</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/html"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/html"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/minify/html</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/html"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/html"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/minify/css</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/css"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/css"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/css"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/minify/css</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/css"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/css"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/css"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/minify/javascript</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/javascript"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/javascript"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/javascript"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/minify/javascript</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/javascript"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/javascript"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/javascript"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/minify/json</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/json"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/json"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/json"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/minify/json</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/minify/json"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/minify/json"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/json"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/generator/uuid</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
