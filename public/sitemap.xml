@@ -438,6 +438,70 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/lorem"/>
   </url>
   <url>
+    <loc>https://tulkit.online/generator/hash</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha256"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/hash</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha256"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/hash/sha1</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha1"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha1"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha1"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/hash/sha1</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha1"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha1"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha1"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/hash/sha256</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha256"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/hash/sha256</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha256"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha256"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/hash/sha512</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha512"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha512"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha512"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/hash/sha512</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash/sha512"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash/sha512"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha512"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/converter/epoch</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>

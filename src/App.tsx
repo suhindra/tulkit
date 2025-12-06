@@ -6,6 +6,7 @@ const EpochConverter = React.lazy(()=>import('./components/EpochConverter'))
 const LoremIpsumGenerator = React.lazy(()=>import('./components/LoremIpsumGenerator'))
 const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
+const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
 import { getTranslations, languageNames } from './i18n'
@@ -13,7 +14,7 @@ import type { ActiveTab, CodecSubtool, LanguageCode, MinifyTab, UuidVersion } fr
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
-type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'notfound'
+type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -25,6 +26,9 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/generator/uuid') || normalized.startsWith('/uuid')){
     return 'uuid'
+  }
+  if(normalized.startsWith('/generator/hash') || normalized.startsWith('/hash')){
+    return 'hash'
   }
   if(normalized.startsWith('/encode')){
     return 'encode'
@@ -55,6 +59,19 @@ function getCodecSlugFromPath(path: string): CodecSubtool{
     return 'base64'
   }
   return 'default'
+}
+
+type HashAlgorithmKey = 'sha1' | 'sha256' | 'sha512'
+
+function getHashSlugFromPath(path: string): HashAlgorithmKey{
+  const normalized = path.toLowerCase()
+  const segments = normalized.split('/')
+  // paths like /generator/hash/sha256 or /hash/sha256
+  const slug = segments[3] || segments[2]
+  if(slug === 'sha1' || slug === 'sha512'){
+    return slug
+  }
+  return 'sha256'
 }
 
 function minifyTabFromActive(tab: ActiveTab): MinifyTab{
@@ -90,6 +107,7 @@ export default function App(){
   const view = useMemo(()=>getViewFromPath(relativePath), [relativePath])
   const encodeSlug = useMemo<CodecSubtool>(()=> (view === 'encode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const decodeSlug = useMemo<CodecSubtool>(()=> (view === 'decode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
+  const hashSlug = useMemo<HashAlgorithmKey>(()=> (view === 'hash' ? getHashSlugFromPath(relativePath) : 'sha256'), [view, relativePath])
 
   useEffect(()=>{
     const detected = detectLanguageFromPath(location.pathname)
@@ -131,11 +149,13 @@ export default function App(){
   const encodeOverview = translations.overviews.encode[encodeSlug]
   const decodeOverview = translations.overviews.decode[decodeSlug]
   const loremOverview = translations.overviews.lorem
+  const hashOverview = translations.overviews.hash
   const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
   const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
   const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
   const formatterSeoBlurb = appCopy.seoBlurb.formatter[activeTab] || appCopy.seoBlurb.formatter.auto
   const minifySeoBlurb = appCopy.seoBlurb.minify[activeMinifyTab] || appCopy.seoBlurb.minify.auto
+  const hashSeoBlurb = appCopy.seoBlurb.hash[hashSlug]
 
   const seoHeading = useMemo(()=>{
     if(view === 'uuid'){
@@ -146,6 +166,9 @@ export default function App(){
     }
     if(view === 'epoch'){
       return appCopy.seoTitles.epoch
+    }
+    if(view === 'hash'){
+      return appCopy.seoTitles.hash
     }
     if(view === 'encode'){
       if(encodeSlug === 'base64') return appCopy.seoTitles.encodeBase64
@@ -216,6 +239,10 @@ export default function App(){
       const map = appCopy.minifyMetaDescription
       return map[activeMinifyTab] || map.auto
     }
+    if(view === 'hash'){
+      const map = appCopy.hashMetaDescription
+      return map[hashSlug] || map.sha256
+    }
     if(view === 'lorem'){
       return appCopy.loremMetaDescription
     }
@@ -224,7 +251,7 @@ export default function App(){
     }
     const key: ActiveTab = activeTab || 'auto'
     return descriptionByTab[key]
-  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, activeMinifyTab])
+  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, activeMinifyTab, hashSlug])
 
   useEffect(()=>{
     if(typeof document === 'undefined') return
@@ -310,6 +337,8 @@ export default function App(){
       pageName = appCopy.navEncode
     }else if(view === 'decode'){
       pageName = appCopy.navDecode
+    }else if(view === 'hash'){
+      pageName = appCopy.navHash
     }else if(view === 'lorem'){
       pageName = appCopy.navLorem
     }
@@ -370,6 +399,10 @@ export default function App(){
 
   function goToMinify(){
     navigate(appendSearch('/minify'))
+  }
+
+  function goToHash(){
+    navigate(appendSearch('/generator/hash'))
   }
 
   function goToLorem(){
@@ -459,6 +492,16 @@ export default function App(){
                 {appCopy.navDecode}
               </a>
               <a
+                href={buildPathWithLanguage('/generator/hash', language)}
+                className={`top-nav-item ${view === 'hash' ? 'active' : ''}`}
+                onClick={e=>{
+                  e.preventDefault()
+                  goToHash()
+                }}
+              >
+                {appCopy.navHash}
+              </a>
+              <a
                 href={buildPathWithLanguage('/generator/lorem', language)}
                 className={`top-nav-item ${view === 'lorem' ? 'active' : ''}`}
                 onClick={e=>{
@@ -522,6 +565,13 @@ export default function App(){
                 ))}
               </>
             )}
+            {view === 'hash' && (
+              <>
+                {hashSeoBlurb.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
             {view === 'decode' && (
               <>
                 {decodeSeoBlurb.map(text=>(
@@ -568,6 +618,11 @@ export default function App(){
         {view === 'decode' && (
           <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
             <Decoder language={language} />
+          </React.Suspense>
+        )}
+        {view === 'hash' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <HashGenerator language={language} />
           </React.Suspense>
         )}
         {view === 'lorem' && (
@@ -632,6 +687,14 @@ export default function App(){
               <>
                 <h2>{decodeOverview.heading}</h2>
                 {decodeOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'hash' && (
+              <>
+                <h2>{hashOverview.heading}</h2>
+                {hashOverview.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

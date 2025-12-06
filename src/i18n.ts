@@ -120,6 +120,23 @@ type EncoderCopy = {
   inputErrorPrefix: string
 }
 
+type HashCopy = {
+  algorithmLabel: string
+  algorithmSha1: string
+  algorithmSha256: string
+  algorithmSha512: string
+  inputLabel: string
+  inputPlaceholder: string
+  outputLabel: string
+  outputPlaceholder: string
+  generateLabel: string
+  hashingLabel: string
+  copyLabel: string
+  copySuccess: string
+  copyErrorPrefix: string
+  inputErrorPrefix: string
+}
+
 type AppCopy = {
   logoAlt: string
   brandHeading: string
@@ -132,6 +149,7 @@ type AppCopy = {
   navEncode: string
   navDecode: string
   navLorem: string
+  navHash: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
@@ -165,6 +183,7 @@ type AppCopy = {
     decodeBase58: string
     decodeHex: string
     lorem: string
+    hash: string
     notFound: string
   }
   seoBlurb: {
@@ -175,6 +194,7 @@ type AppCopy = {
     minify: Record<ActiveTab,string[]>
     decode: Record<CodecSubtool,string[]>
     lorem: string[]
+    hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
   }
   notFoundHeading: string
   notFoundBody: string
@@ -193,6 +213,7 @@ type AppCopy = {
   decodeBase58MetaDescription: string
   decodeHexMetaDescription: string
   loremMetaDescription: string
+  hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
   notFoundMetaDescription: string
 }
 
@@ -204,6 +225,7 @@ type OverviewCopy = {
   minify: OverviewContent
   decode: Record<CodecSubtool,OverviewContent>
   lorem: OverviewContent
+  hash: OverviewContent
 }
 
 type Translation = {
@@ -216,6 +238,7 @@ type Translation = {
   epoch: EpochCopy
   lorem: LoremCopy
   encoder: EncoderCopy
+  hash: HashCopy
   app: AppCopy
   overviews: OverviewCopy
 }
@@ -520,6 +543,22 @@ const en: Translation = {
     presetDecodeBase58: 'Base58',
     presetDecodeHex: 'Hex'
   },
+  hash: {
+    algorithmLabel: 'Hash algorithm',
+    algorithmSha1: 'SHA-1',
+    algorithmSha256: 'SHA-256',
+    algorithmSha512: 'SHA-512',
+    inputLabel: 'Input',
+    inputPlaceholder: 'Paste text to hash (UTF-8)',
+    outputLabel: 'Hex digest',
+    outputPlaceholder: 'Hash output will appear here',
+    generateLabel: 'Generate hash',
+    hashingLabel: 'Hashing…',
+    copyLabel: 'Copy',
+    copySuccess: 'Hash copied to clipboard',
+    copyErrorPrefix: 'Clipboard failed: ',
+    inputErrorPrefix: 'Could not compute hash: '
+  },
   lorem: {
     paragraphCountLabel: 'How many paragraphs?',
     classicPrefixLabel: 'Start with “Lorem ipsum dolor sit amet…”',
@@ -560,6 +599,7 @@ const en: Translation = {
     navMinify: 'Minifier',
     navDecode: 'Decoder',
     navLorem: 'Lorem Ipsum',
+    navHash: 'Hash Generator',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
@@ -593,6 +633,7 @@ const en: Translation = {
       decodeBase58: 'Base58 Decoder — Tulkit',
       decodeHex: 'Hex Decoder — Tulkit',
       lorem: 'Lorem Ipsum Generator — Tulkit',
+      hash: 'Hash Generator — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
@@ -700,6 +741,20 @@ const en: Translation = {
           'Helpful when you need to embed JSON in query parameters, data attributes, or migration files and want to save space.'
         ]
       },
+      hash: {
+        sha1: [
+          'Generate SHA-1 digests for any text directly in your browser. Tulkit uses the Web Crypto API so hashes are computed locally and never leave your device.',
+          'Use SHA-1 here only for compatibility with legacy systems that still expect it, such as old APIs or archival tools, while keeping the workflow quick and browser-based.'
+        ],
+        sha256: [
+          'Generate SHA-256 hashes for snippets, configuration blocks, or small files directly in your browser. Tulkit relies on the Web Crypto API so digests match common CLI tools and libraries.',
+          'Use the SHA-256 view when you want modern, widely supported fingerprints for downloads, fixtures, or cache keys without leaving the browser.'
+        ],
+        sha512: [
+          'Compute SHA-512 hashes entirely in your browser for cases where you prefer longer, more robust digests for archival or security-adjacent workflows.',
+          'This mode is useful when experimenting with signature schemes, long-term storage, or systems that standardize on SHA-512 while still benefiting from Tulkit’s in-browser convenience.'
+        ]
+      },
       decode: {
         default: [
           'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser. Paste any encoded value and Tulkit will show both the UTF-8 text and raw bytes.',
@@ -757,6 +812,14 @@ const en: Translation = {
         'Use Tulkit to minify JavaScript snippets entirely in the browser, removing whitespace and dead code from inline scripts before they reach production.',
       json:
         'Flatten JSON payloads into compact one-line strings with Tulkit’s minifier—perfect for query parameters, data attributes, or configuration blobs where every byte matters.'
+    },
+    hashMetaDescription: {
+      sha1:
+        'Generate SHA-1 hashes entirely in your browser with Tulkit when you need compatibility with legacy systems. Paste any text to compute reproducible hex digests using the Web Crypto API.',
+      sha256:
+        'Generate SHA-256 hashes directly in your browser with Tulkit’s hash generator. Paste text to compute deterministic hex digests that match common CLI tools and libraries.',
+      sha512:
+        'Compute SHA-512 hashes in your browser with Tulkit, ideal for longer fingerprints used in archival or security-adjacent workflows. Digests are calculated locally using the Web Crypto API.'
     },
     decodeBase64MetaDescription:
       'Decode standard or URL-safe Base64 strings back into readable UTF-8 text in your browser with Tulkit’s Base64 decoder. Quickly inspect payloads, headers, or JWT segments.',
@@ -916,6 +979,14 @@ const en: Translation = {
         'Sometimes you just need to shrink a snippet before shipping it—maybe it is a CSS block going into a CMS, inline JavaScript for an email, or an HTML include that you hand off to another team. Tulkit’s minifier focuses on that workflow by letting you paste code, pick the matching language tab, and compress it instantly in your browser.',
         'HTML and XML minification keeps closing tags valid while trimming attributes and whitespace. CSS minification relies on csso to drop redundant characters without rewriting your selectors. JavaScript minification uses Terser’s browser build so you can squeeze inline scripts without touching Node.js tooling. JSON minification simply strips spaces while keeping your data intact.',
         'Because everything runs locally, you can confidently minify snippets that contain API keys, proprietary markup, or private customer data. Once you are done, copy or download the compressed result and drop it straight into your project.'
+      ]
+    },
+    hash: {
+      heading: 'Hash Generator — Tulkit overview',
+      paragraphs: [
+        'Hash functions like SHA-1, SHA-256, and SHA-512 turn arbitrary text into fixed-length fingerprints that are easy to compare but hard to reverse. Developers rely on these digests for checksums, cache keys, and test fixtures across many tools and languages.',
+        'Tulkit’s hash generator focuses on that day-to-day workflow: paste any snippet, pick an algorithm, and compute a deterministic hex digest entirely in your browser. Because everything runs on top of the Web Crypto API, inputs never leave your device and the results match what you would see from common CLIs and libraries.',
+        'Use it to verify file downloads, generate stable IDs for configuration blocks, or quickly inspect how a value will be represented in logs and database fields without leaving the browser.'
       ]
     },
     decode: {
@@ -1256,6 +1327,22 @@ const id: Translation = {
     presetDecodeBase58: 'Base58',
     presetDecodeHex: 'Hex'
   },
+  hash: {
+    algorithmLabel: 'Algoritma hash',
+    algorithmSha1: 'SHA-1',
+    algorithmSha256: 'SHA-256',
+    algorithmSha512: 'SHA-512',
+    inputLabel: 'Input',
+    inputPlaceholder: 'Tempel teks yang akan di-hash (UTF-8)',
+    outputLabel: 'Digest hex',
+    outputPlaceholder: 'Hasil hash akan muncul di sini',
+    generateLabel: 'Buat hash',
+    hashingLabel: 'Memproses…',
+    copyLabel: 'Salin',
+    copySuccess: 'Hash berhasil disalin ke clipboard',
+    copyErrorPrefix: 'Gagal menyalin: ',
+    inputErrorPrefix: 'Hash tidak dapat dihitung: '
+  },
   lorem: {
     paragraphCountLabel: 'Berapa banyak paragraf?',
     classicPrefixLabel: 'Mulai dengan “Lorem ipsum dolor sit amet…”',
@@ -1296,6 +1383,7 @@ const id: Translation = {
     navMinify: 'Minifier',
     navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
+    navHash: 'Generator Hash',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
@@ -1329,6 +1417,7 @@ const id: Translation = {
       decodeBase58: 'Decoder Base58 — Tulkit',
       decodeHex: 'Decoder Hex — Tulkit',
       lorem: 'Generator Lorem Ipsum — Tulkit',
+      hash: 'Generator Hash — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
@@ -1436,6 +1525,20 @@ const id: Translation = {
           'Mudah ketika Anda perlu menaruh JSON di parameter query, atribut data, atau berkas migrasi supaya hemat ruang.'
         ]
       },
+      hash: {
+        sha1: [
+          'Buat hash SHA-1 dari teks apa pun langsung di browser Anda ketika perlu kompatibilitas dengan sistem lama. Tulkit memanfaatkan Web Crypto API agar perhitungan digest berlangsung lokal dan tidak meninggalkan perangkat.',
+          'Gunakan mode SHA-1 ini hanya ketika Anda berurusan dengan API atau alat lama yang masih mengharuskannya, sambil tetap menikmati alur kerja ringan di browser.'
+        ],
+        sha256: [
+          'Buat hash SHA-256 untuk snippet, blok konfigurasi, atau berkas kecil langsung di browser Anda. Tulkit mengandalkan Web Crypto API sehingga digest selaras dengan hasil banyak CLI dan library populer.',
+          'Mode SHA-256 cocok ketika Anda membutuhkan sidik jari modern yang luas dukungannya untuk unduhan, fixture, atau kunci cache tanpa harus membuka terminal.'
+        ],
+        sha512: [
+          'Hitung hash SHA-512 sepenuhnya di browser untuk kasus yang membutuhkan digest lebih panjang, misalnya skenario arsip atau alur kerja yang bersinggungan dengan keamanan.',
+          'Mode ini membantu saat bereksperimen dengan skema tanda tangan, penyimpanan jangka panjang, atau sistem yang menstandarkan SHA-512 sambil tetap memanfaatkan kenyamanan Tulkit di browser.'
+        ]
+      },
       decode: {
         default: [
           'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
@@ -1493,6 +1596,14 @@ const id: Translation = {
         'Gunakan Tulkit untuk memadatkan snippet JavaScript sepenuhnya di browser, menyingkirkan whitespace dan kode mati dari skrip kecil sebelum dipublikasikan.',
       json:
         'Ratakan payload JSON menjadi satu baris ringkas dengan minifier Tulkit—pas untuk parameter query, atribut data, atau konfigurasi yang harus hemat byte.'
+    },
+    hashMetaDescription: {
+      sha1:
+        'Buat hash SHA-1 langsung di browser Anda dengan generator hash Tulkit ketika masih perlu kompatibilitas dengan sistem lama. Tempel teks untuk menghitung digest hex yang konsisten memakai Web Crypto API.',
+      sha256:
+        'Buat hash SHA-256 langsung di browser Anda dengan generator hash Tulkit. Tempel teks untuk menghitung digest hex deterministik yang cocok dengan banyak CLI dan library populer.',
+      sha512:
+        'Hitung hash SHA-512 di browser menggunakan generator hash Tulkit, ideal untuk sidik jari panjang pada skenario arsip atau alur kerja yang bersinggungan dengan keamanan. Perhitungan digest berlangsung lokal memakai Web Crypto API.'
     },
     decodeBase64MetaDescription:
       'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
@@ -1652,6 +1763,14 @@ const id: Translation = {
         'Kadang Anda hanya perlu mengecilkan snippet sebelum dikirim—entah itu blok CSS dalam CMS, JavaScript inline untuk email, atau include HTML yang dibagikan ke tim lain. Minifier Tulkit dibuat untuk alur tersebut dengan membiarkan Anda menempel kode, memilih tab bahasa, lalu memadatkannya seketika di browser.',
         'Minifikasi HTML dan XML menjaga struktur tag tetap valid sembari memangkas atribut serta whitespace. CSS menggunakan csso agar selector tetap aman tanpa karakter berlebih. JavaScript memanfaatkan build Terser untuk memadatkan script inline tanpa harus membuka tooling Node.js. JSON cukup diubah menjadi satu baris sehingga payload tetap valid tetapi lebih ringan.',
         'Karena semua proses berjalan lokal, Anda bisa meminify snippet yang mengandung data sensitif tanpa khawatir keluar dari perangkat. Setelah selesai, salin atau unduh hasilnya dan tempelkan langsung ke proyek Anda.'
+      ]
+    },
+    hash: {
+      heading: 'Ikhtisar Generator Hash — Tulkit',
+      paragraphs: [
+        'Fungsi hash seperti SHA-1, SHA-256, dan SHA-512 mengubah teks apa pun menjadi sidik jari berdimensi tetap yang mudah dibandingkan namun sulit dibalik. Developer mengandalkan digest ini untuk checksum, kunci cache, dan fixture pengujian di berbagai alat dan bahasa.',
+        'Generator hash Tulkit dibuat untuk alur sehari-hari itu: tempel potongan teks, pilih algoritma, lalu hitung digest hex deterministik sepenuhnya di browser Anda. Karena berjalan di atas Web Crypto API, input tidak pernah keluar dari perangkat dan hasilnya selaras dengan CLI atau library umum.',
+        'Gunakan alat ini untuk memverifikasi unduhan, membuat ID stabil untuk blok konfigurasi, atau sekadar melihat bagaimana sebuah nilai akan direpresentasikan di log dan kolom database tanpa meninggalkan browser.'
       ]
     },
     decode: {
