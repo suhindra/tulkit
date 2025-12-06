@@ -264,6 +264,9 @@ footer{
 .page-overview{
   border-top:1px solid var(--border);
   background:#fff;
+  margin-top:24px;
+  padding:24px 0 32px;
+  min-height:260px;
 }
 
 .page-overview h2{
