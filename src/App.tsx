@@ -139,7 +139,10 @@ export default function App(){
 
   const seoHeading = useMemo(()=>{
     if(view === 'uuid'){
-      return `${appCopy.seoTitles.uuid} ${uuidVersion.toUpperCase()}`
+      if(uuidVersion === 'v1') return appCopy.seoTitles.uuidV1 || `${appCopy.seoTitles.uuid} V1`
+      if(uuidVersion === 'v4') return appCopy.seoTitles.uuidV4 || `${appCopy.seoTitles.uuid} V4`
+      if(uuidVersion === 'v7') return appCopy.seoTitles.uuidV7 || `${appCopy.seoTitles.uuid} V7`
+      return appCopy.seoTitles.uuid
     }
     if(view === 'epoch'){
       return appCopy.seoTitles.epoch
@@ -159,6 +162,11 @@ export default function App(){
       return appCopy.seoTitles.decode
     }
     if(view === 'minify'){
+      if(activeMinifyTab === 'html') return appCopy.seoTitles.minifyHtml || appCopy.seoTitles.minify
+      if(activeMinifyTab === 'xml') return appCopy.seoTitles.minifyXml || appCopy.seoTitles.minify
+      if(activeMinifyTab === 'css') return appCopy.seoTitles.minifyCss || appCopy.seoTitles.minify
+      if(activeMinifyTab === 'js') return appCopy.seoTitles.minifyJs || appCopy.seoTitles.minify
+      if(activeMinifyTab === 'json') return appCopy.seoTitles.minifyJson || appCopy.seoTitles.minify
       return appCopy.seoTitles.minify
     }
     if(view === 'lorem'){
@@ -170,8 +178,16 @@ export default function App(){
     if(activeTab === 'auto'){
       return appCopy.seoTitles.formatterDefault
     }
-    return `${headingByTab[activeTab as Exclude<ActiveTab,'auto'>]} — Tulkit`
-  },[view, uuidVersion, appCopy, activeTab, headingByTab, encodeSlug, decodeSlug])
+    if(activeTab === 'html') return appCopy.seoTitles.formatterHtml || `${headingByTab.html} — Tulkit`
+    if(activeTab === 'xml') return appCopy.seoTitles.formatterXml || `${headingByTab.xml} — Tulkit`
+    if(activeTab === 'yaml') return appCopy.seoTitles.formatterYaml || `${headingByTab.yaml} — Tulkit`
+    if(activeTab === 'css') return appCopy.seoTitles.formatterCss || `${headingByTab.css} — Tulkit`
+    if(activeTab === 'js') return appCopy.seoTitles.formatterJs || `${headingByTab.js} — Tulkit`
+    if(activeTab === 'json') return appCopy.seoTitles.formatterJson || `${headingByTab.json} — Tulkit`
+    if(activeTab === 'sql') return appCopy.seoTitles.formatterSql || `${headingByTab.sql} — Tulkit`
+    if(activeTab === 'php') return appCopy.seoTitles.formatterPhp || `${headingByTab.php} — Tulkit`
+    return appCopy.seoTitles.formatterDefault
+  },[view, uuidVersion, appCopy, activeTab, headingByTab, encodeSlug, decodeSlug, activeMinifyTab])
 
   const metaDescription = useMemo(()=>{
     if(view === 'uuid'){

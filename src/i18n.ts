@@ -135,10 +135,26 @@ type AppCopy = {
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
+    formatterHtml: string
+    formatterXml: string
+    formatterYaml: string
+    formatterCss: string
+    formatterJs: string
+    formatterJson: string
+    formatterSql: string
+    formatterPhp: string
+    minify: string
+    minifyHtml: string
+    minifyXml: string
+    minifyCss: string
+    minifyJs: string
+    minifyJson: string
     uuid: string
+    uuidV1: string
+    uuidV4: string
+    uuidV7: string
     epoch: string
     encode: string
-    minify: string
     decode: string
     encodeBase64: string
     encodeBase32: string
@@ -535,7 +551,7 @@ const en: Translation = {
   app: {
     logoAlt: 'Tulkit Online logo',
     brandHeading: 'Web Tools — Tulkit',
-    brandSubheading: 'Quick tools for HTML / CSS / JS / JSON / SQL / UUIDs',
+    brandSubheading: 'Small browser tools for everyday development tasks',
     brandNote: 'All formatting and generation happens in your browser only; your code never leaves your device.',
     navFormatter: 'Formatter',
     navUuid: 'UUID Generator',
@@ -547,10 +563,26 @@ const en: Translation = {
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
-      uuid: 'UUID Generator — Tulkit',
-      epoch: 'Epoch Converter — Tulkit',
+      formatterHtml: 'HTML Formatter — Tulkit',
+      formatterXml: 'XML Formatter — Tulkit',
+      formatterYaml: 'YAML Formatter — Tulkit',
+      formatterCss: 'CSS Formatter — Tulkit',
+    formatterJs: 'JavaScript Formatter — Tulkit',
+    formatterJson: 'JSON Formatter — Tulkit',
+    formatterSql: 'SQL Formatter — Tulkit',
+    formatterPhp: 'PHP Formatter — Tulkit',
+    minify: 'Minifier — Tulkit',
+    minifyHtml: 'HTML Minifier — Tulkit',
+    minifyXml: 'XML Minifier — Tulkit',
+    minifyCss: 'CSS Minifier — Tulkit',
+    minifyJs: 'JavaScript Minifier — Tulkit',
+    minifyJson: 'JSON Minifier — Tulkit',
+    uuid: 'UUID Generator — Tulkit',
+      uuidV1: 'UUID v1 Generator — Tulkit',
+      uuidV4: 'UUID v4 Generator — Tulkit',
+      uuidV7: 'UUID v7 Generator — Tulkit',
+      epoch: 'Epoch Converter - Unix Timestamp Converter — Tulkit',
       encode: 'Encoder — Tulkit',
-      minify: 'Minifier — Tulkit',
       decode: 'Decoder — Tulkit',
       encodeBase64: 'Base64 Encoder — Tulkit',
       encodeBase32: 'Base32 Encoder — Tulkit',
@@ -1255,7 +1287,7 @@ const id: Translation = {
   app: {
     logoAlt: 'Logo Tulkit Online',
     brandHeading: 'Peralatan Web — Tulkit',
-    brandSubheading: 'Alat cepat untuk HTML / CSS / JS / JSON / SQL / UUID',
+    brandSubheading: 'Kumpulan alat web ringan untuk kebutuhan developer sehari-hari',
     brandNote: 'Semua pemformatan dan pembuatan berjalan di browser Anda saja; kode tidak pernah keluar dari perangkat.',
     navFormatter: 'Pemformat',
     navUuid: 'Generator UUID',
@@ -1267,10 +1299,26 @@ const id: Translation = {
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
-      uuid: 'Generator UUID — Tulkit',
+      formatterHtml: 'Pemformat HTML — Tulkit',
+      formatterXml: 'Pemformat XML — Tulkit',
+      formatterYaml: 'Pemformat YAML — Tulkit',
+      formatterCss: 'Pemformat CSS — Tulkit',
+    formatterJs: 'Pemformat JavaScript — Tulkit',
+    formatterJson: 'Pemformat JSON — Tulkit',
+    formatterSql: 'Pemformat SQL — Tulkit',
+    formatterPhp: 'Pemformat PHP — Tulkit',
+    minify: 'Minifier — Tulkit',
+    minifyHtml: 'HTML Minifier — Tulkit',
+    minifyXml: 'XML Minifier — Tulkit',
+    minifyCss: 'CSS Minifier — Tulkit',
+    minifyJs: 'JavaScript Minifier — Tulkit',
+    minifyJson: 'JSON Minifier — Tulkit',
+    uuid: 'Generator UUID — Tulkit',
+      uuidV1: 'Generator UUID v1 — Tulkit',
+      uuidV4: 'Generator UUID v4 — Tulkit',
+      uuidV7: 'Generator UUID v7 — Tulkit',
       epoch: 'Konverter Epoch — Tulkit',
       encode: 'Encoder — Tulkit',
-      minify: 'Minifier — Tulkit',
       decode: 'Decoder — Tulkit',
       encodeBase64: 'Encoder Base64 — Tulkit',
       encodeBase32: 'Encoder Base32 — Tulkit',
