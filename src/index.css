@@ -893,4 +893,42 @@ footer{
     min-height:260px;
     max-height:260px;
   }
+
+  .epoch-card{
+    padding:12px 12px 14px;
+  }
+
+  .epoch-current{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .epoch-current-badge{
+    width:100%;
+    text-align:left;
+    word-break:break-all;
+  }
+
+  .epoch-modes{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .epoch-now{
+    margin-left:0;
+    width:100%;
+  }
+
+  .epoch-grid{
+    flex-direction:column;
+  }
+
+  .epoch-column{
+    flex:1 1 auto;
+  }
+
+  .epoch-output .toolbar-button{
+    width:auto;
+    text-align:center;
+  }
 }
