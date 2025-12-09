@@ -7,14 +7,16 @@ const LoremIpsumGenerator = React.lazy(()=>import('./components/LoremIpsumGenera
 const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
 const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
+const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
+const Navbar = React.lazy(()=>import('./components/Navbar'))
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview } from './pageOverviewContent'
-import { getTranslations, languageNames } from './i18n'
+import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview, getCaseOverview } from './pageOverviewContent'
+import { getTranslations } from './i18n'
 import type { ActiveTab, CodecSubtool, LanguageCode, MinifyTab, UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
-type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'notfound'
+type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'case' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -29,6 +31,9 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/generator/hash') || normalized.startsWith('/hash')){
     return 'hash'
+  }
+  if(normalized.startsWith('/generator/case') || normalized.startsWith('/case')){
+    return 'case'
   }
   if(normalized.startsWith('/encode')){
     return 'encode'
@@ -112,7 +117,7 @@ export default function App(){
   useEffect(()=>{
     const detected = detectLanguageFromPath(location.pathname)
     if(detected !== 'en'){
-      setLanguage(prev=>prev === detected ? prev : detected)
+      setLanguage((prev: LanguageCode)=>prev === detected ? prev : detected)
     }
   },[location.pathname])
 
@@ -146,6 +151,7 @@ export default function App(){
   const minifyOverview = translations.overviews.minify
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
+  const caseOverview = getCaseOverview(language)
   const encodeOverview = translations.overviews.encode[encodeSlug]
   const decodeOverview = translations.overviews.decode[decodeSlug]
   const loremOverview = translations.overviews.lorem
@@ -186,7 +192,6 @@ export default function App(){
     }
     if(view === 'minify'){
       if(activeMinifyTab === 'html') return appCopy.seoTitles.minifyHtml || appCopy.seoTitles.minify
-      if(activeMinifyTab === 'xml') return appCopy.seoTitles.minifyXml || appCopy.seoTitles.minify
       if(activeMinifyTab === 'css') return appCopy.seoTitles.minifyCss || appCopy.seoTitles.minify
       if(activeMinifyTab === 'js') return appCopy.seoTitles.minifyJs || appCopy.seoTitles.minify
       if(activeMinifyTab === 'json') return appCopy.seoTitles.minifyJson || appCopy.seoTitles.minify
@@ -194,6 +199,9 @@ export default function App(){
     }
     if(view === 'lorem'){
       return appCopy.seoTitles.lorem
+    }
+    if(view === 'case'){
+      return appCopy.seoTitles.case
     }
     if(view === 'notfound'){
       return appCopy.seoTitles.notFound
@@ -214,7 +222,7 @@ export default function App(){
 
   const metaDescription = useMemo(()=>{
     if(view === 'uuid'){
-      return uuidDescriptionByVersion[uuidVersion]
+      return uuidDescriptionByVersion[uuidVersion as UuidVersion]
     }
     if(view === 'epoch'){
       return appCopy.epochMetaDescription
@@ -236,15 +244,16 @@ export default function App(){
       return selected
     }
     if(view === 'minify'){
-      const map = appCopy.minifyMetaDescription
-      return map[activeMinifyTab] || map.auto
+      return appCopy.minifyMetaDescription[activeMinifyTab] || appCopy.minifyMetaDescription.auto
     }
     if(view === 'hash'){
-      const map = appCopy.hashMetaDescription
-      return map[hashSlug] || map.sha256
+      return appCopy.hashMetaDescription[hashSlug] || appCopy.hashMetaDescription.sha256
     }
     if(view === 'lorem'){
       return appCopy.loremMetaDescription
+    }
+    if(view === 'case'){
+      return appCopy.caseMetaDescription
     }
     if(view === 'notfound'){
       return appCopy.notFoundMetaDescription
@@ -341,6 +350,8 @@ export default function App(){
       pageName = appCopy.navHash
     }else if(view === 'lorem'){
       pageName = appCopy.navLorem
+    }else if(view === 'case'){
+      pageName = appCopy.navCase
     }
 
     const jsonLd = {
@@ -372,41 +383,8 @@ export default function App(){
     script.textContent = JSON.stringify(jsonLd)
   },[view, language, seoHeading, appCopy, uuidVersion, relativePath])
 
-  const appendSearch = (path: string)=>{
-    const basePath = buildPathWithLanguage(path, language)
-    return location.search ? `${basePath}${location.search}` : basePath
-  }
-
   function goToFormatter(){
-    navigate(appendSearch('/formatter'))
-  }
-
-  function goToUuid(){
-    navigate(appendSearch('/generator/uuid'))
-  }
-
-  function goToEpoch(){
-    navigate(appendSearch('/converter/epoch'))
-  }
-
-  function goToEncode(){
-    navigate(appendSearch('/encode'))
-  }
-
-  function goToDecode(){
-    navigate(appendSearch('/decode'))
-  }
-
-  function goToMinify(){
-    navigate(appendSearch('/minify'))
-  }
-
-  function goToHash(){
-    navigate(appendSearch('/generator/hash'))
-  }
-
-  function goToLorem(){
-    navigate(appendSearch('/generator/lorem'))
+    navigate('/formatter')
   }
 
   return (
@@ -415,6 +393,14 @@ export default function App(){
         <title>{seoHeading}</title>
         <meta name="description" content={metaDescription} />
       </Helmet>
+      <React.Suspense fallback={null}>
+        <Navbar
+          currentView={view}
+          language={language}
+          onNavigate={(path: string) => navigate(path)}
+          onLanguageChange={setLanguage}
+        />
+      </React.Suspense>
       <header>
         <div className="container">
           <div className="brand">
@@ -429,101 +415,6 @@ export default function App(){
               </p>
             </div>
           </div>
-          <div className="header-actions">
-            <nav className="top-nav">
-              <a
-                href={buildPathWithLanguage('/formatter', language)}
-                className={`top-nav-item ${view === 'formatter' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToFormatter()
-                }}
-              >
-                {appCopy.navFormatter}
-              </a>
-              <a
-                href={buildPathWithLanguage('/minify', language)}
-                className={`top-nav-item ${view === 'minify' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToMinify()
-                }}
-              >
-                {appCopy.navMinify}
-              </a>
-              <a
-                href={buildPathWithLanguage('/generator/uuid', language)}
-                className={`top-nav-item ${view === 'uuid' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToUuid()
-                }}
-              >
-                {appCopy.navUuid}
-              </a>
-              <a
-                href={buildPathWithLanguage('/converter/epoch', language)}
-                className={`top-nav-item ${view === 'epoch' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToEpoch()
-                }}
-              >
-                {appCopy.navEpoch}
-              </a>
-              <a
-                href={buildPathWithLanguage('/encode', language)}
-                className={`top-nav-item ${view === 'encode' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToEncode()
-                }}
-              >
-                {appCopy.navEncode}
-              </a>
-              <a
-                href={buildPathWithLanguage('/decode', language)}
-                className={`top-nav-item ${view === 'decode' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToDecode()
-                }}
-              >
-                {appCopy.navDecode}
-              </a>
-              <a
-                href={buildPathWithLanguage('/generator/hash', language)}
-                className={`top-nav-item ${view === 'hash' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToHash()
-                }}
-              >
-                {appCopy.navHash}
-              </a>
-              <a
-                href={buildPathWithLanguage('/generator/lorem', language)}
-                className={`top-nav-item ${view === 'lorem' ? 'active' : ''}`}
-                onClick={e=>{
-                  e.preventDefault()
-                  goToLorem()
-                }}
-              >
-                {appCopy.navLorem}
-              </a>
-            </nav>
-            <label className="language-switcher">
-              <span>{appCopy.languageSwitcherLabel}</span>
-              <select
-                value={language}
-                onChange={e=>setLanguage(e.target.value as LanguageCode)}
-              >
-                {Object.entries(languageNames).map(([code, label])=>(
-                  <option key={code} value={code}>{label}</option>
-                ))}
-              </select>
-            </label>
-          </div>
         </div>
       </header>
       {view !== 'notfound' && (
@@ -532,56 +423,63 @@ export default function App(){
             <h2>{seoHeading}</h2>
             {view === 'formatter' && (
               <>
-                {formatterSeoBlurb.map(text=>(
+                {formatterSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'uuid' && (
               <>
-                {uuidSeoBlurb.map(text=>(
+                {uuidSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'epoch' && (
               <>
-                {appCopy.seoBlurb.epoch.map(text=>(
+                {appCopy.seoBlurb.epoch.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'encode' && (
               <>
-                {encodeSeoBlurb.map(text=>(
+                {encodeSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'minify' && (
               <>
-                {minifySeoBlurb.map(text=>(
+                {minifySeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'hash' && (
               <>
-                {hashSeoBlurb.map(text=>(
+                {hashSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'decode' && (
               <>
-                {decodeSeoBlurb.map(text=>(
+                {decodeSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
             {view === 'lorem' && (
               <>
-                {appCopy.seoBlurb.lorem.map(text=>(
+                {appCopy.seoBlurb.lorem.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'case' && (
+              <>
+                {appCopy.seoBlurb.case.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -628,6 +526,11 @@ export default function App(){
         {view === 'lorem' && (
           <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
             <LoremIpsumGenerator language={language} />
+          </React.Suspense>
+        )}
+        {view === 'case' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <CaseConverter language={language} />
           </React.Suspense>
         )}
         {view === 'notfound' && (
@@ -703,6 +606,14 @@ export default function App(){
               <>
                 <h2>{loremOverview.heading}</h2>
                 {loremOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'case' && (
+              <>
+                <h2>{caseOverview.heading}</h2>
+                {caseOverview.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

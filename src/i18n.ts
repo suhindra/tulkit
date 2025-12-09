@@ -150,6 +150,7 @@ type AppCopy = {
   navDecode: string
   navLorem: string
   navHash: string
+  navCase: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
@@ -184,6 +185,7 @@ type AppCopy = {
     decodeHex: string
     lorem: string
     hash: string
+    case: string
     notFound: string
   }
   seoBlurb: {
@@ -195,6 +197,7 @@ type AppCopy = {
     decode: Record<CodecSubtool,string[]>
     lorem: string[]
     hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
+    case: string[]
   }
   notFoundHeading: string
   notFoundBody: string
@@ -214,6 +217,7 @@ type AppCopy = {
   decodeHexMetaDescription: string
   loremMetaDescription: string
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
+  caseMetaDescription: string
   notFoundMetaDescription: string
 }
 
@@ -226,6 +230,7 @@ type OverviewCopy = {
   decode: Record<CodecSubtool,OverviewContent>
   lorem: OverviewContent
   hash: OverviewContent
+  case: OverviewContent
 }
 
 type Translation = {
@@ -600,6 +605,7 @@ const en: Translation = {
     navDecode: 'Decoder',
     navLorem: 'Lorem Ipsum',
     navHash: 'Hash Generator',
+    navCase: 'Case Converter',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
@@ -634,6 +640,7 @@ const en: Translation = {
       decodeHex: 'Hex Decoder — Tulkit',
       lorem: 'Lorem Ipsum Generator — Tulkit',
       hash: 'Hash Generator — Tulkit',
+      case: 'Case Converter — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
@@ -780,6 +787,10 @@ const en: Translation = {
       lorem: [
         'Generate reusable lorem ipsum placeholder text directly in your browser. Adjust the number of paragraphs and sentence length so your mockups and design drafts feel realistic without writing copy by hand.',
         'Tulkit keeps all lorem generation in your browser, making it a quick helper when building wireframes, UI components, or content layouts.'
+      ],
+      case: [
+        'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and other conventions directly in your browser. Paste any identifier and see instant transformations across all formats without uploading anything to a server.',
+        'Helpful when refactoring codebases, adapting API responses to match your naming style, preparing code examples, or integrating systems that follow different naming conventions.'
       ]
     },
     notFoundHeading: 'Page not found',
@@ -831,6 +842,8 @@ const en: Translation = {
       'Turn hex strings back into readable text and raw bytes with Tulkit’s hex decoder. Useful for examining keys, binary blobs, or protocol messages without leaving your browser.',
     loremMetaDescription:
       'Generate lorem ipsum placeholder paragraphs in your browser with Tulkit. Control paragraph count and sentence length for design mockups, UI components, and content layouts.',
+    caseMetaDescription:
+      'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and more using Tulkit\'s case converter. Paste any identifier and see instant transformations across all naming conventions directly in your browser.',
     notFoundMetaDescription:
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
@@ -1033,6 +1046,15 @@ const en: Translation = {
         'People rely on lorem ipsum because its letters and word lengths resemble natural English, so layouts look realistic without inviting readers to focus on the wording itself. That makes it easier to judge spacing, hierarchy, and visual balance instead of getting distracted by “content here, content here” placeholders.',
         'Although it can look random, the traditional lorem ipsum block is based on passages from Cicero’s “De Finibus Bonorum et Malorum”, trimmed and jumbled over time. Modern generators remix those Latin roots into chunks that feel familiar while avoiding embarrassing or out‑of‑place phrases.',
         'Tulkit’s lorem ipsum generator follows that spirit: it assembles sensible paragraphs from a pool of sentences, lets you pick how much text you need, and keeps a classic “Lorem ipsum dolor sit amet…” opening when you want it. Everything runs locally in your browser so you can use it freely in mockups, prototypes, and client work.'
+      ]
+    },
+    case: {
+      heading: 'Case Converter — Tulkit overview',
+      paragraphs: [
+        'Variable names, function names, and identifiers follow different naming conventions depending on the language, framework, or team style guide. camelCase is common in JavaScript and Java, snake_case is standard in Python and SQL, while PascalCase appears in class names across many languages.',
+        'When you refactor code, integrate systems that use different conventions, or prepare examples for documentation, converting between these cases quickly becomes essential. Rather than manually rewriting each identifier, Tulkit\'s case converter lets you paste text and instantly see it transformed into camelCase, snake_case, PascalCase, kebab-case, and more.',
+        'The tool handles multi-word inputs intelligently, respects existing delimiters and boundaries, and produces clean output ready to paste back into your editor. All transformations happen locally in your browser, so you can safely convert identifiers from private repositories, configuration files, or internal systems without uploading anything to a server.',
+        'Use it when refactoring variable names across a codebase, adapting API responses to match your naming style, preparing code examples for documentation, or simply experimenting with how a new identifier would look in different conventions.'
       ]
     }
   }
@@ -1384,6 +1406,7 @@ const id: Translation = {
     navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
     navHash: 'Generator Hash',
+    navCase: 'Konverter Kasus',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
@@ -1418,6 +1441,7 @@ const id: Translation = {
       decodeHex: 'Decoder Hex — Tulkit',
       lorem: 'Generator Lorem Ipsum — Tulkit',
       hash: 'Generator Hash — Tulkit',
+      case: 'Konverter Kasus — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
@@ -1564,6 +1588,10 @@ const id: Translation = {
       lorem: [
         'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
         'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
+      ],
+      case: [
+        'Konversikan nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
+        'Berguna saat refaktor codebase, menyesuaikan respons API agar cocok gaya penamaan Anda, menyiapkan contoh kode, atau mengintegrasikan sistem yang pakai konvensi penamaan berbeda.'
       ]
     },
     notFoundHeading: 'Halaman tidak ditemukan',
@@ -1615,6 +1643,8 @@ const id: Translation = {
       'Ubah string hex kembali menjadi teks dan byte mentah dengan decoder hex Tulkit. Cocok untuk menelusuri kunci, blob biner, atau pesan protokol tanpa meninggalkan browser.',
     loremMetaDescription:
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
+    caseMetaDescription:
+      'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
     notFoundMetaDescription:
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },
@@ -1817,6 +1847,15 @@ const id: Translation = {
         'Alasan lorem ipsum populer adalah karena pola huruf dan panjang katanya mirip bahasa nyata, sehingga layout tampak realistis tanpa membuat pembaca terpaku pada kalimatnya. Ini membantu desainer menilai spasi, hirarki, dan komposisi visual tanpa terdistraksi oleh placeholder generik seperti “content here, content here”.',
         'Meski terlihat acak, blok lorem ipsum standar sebenarnya disusun dari potongan teks Cicero di “De Finibus Bonorum et Malorum” yang dipotong dan diacak seiring waktu. Generator modern mengambil akar Latin tersebut dan merangkainya kembali agar tetap terasa familiar sekaligus aman dipakai di beragam konteks.',
         'Generator lorem ipsum Tulkit mengikuti semangat itu: ia menyusun paragraf yang wajar dari kumpulan kalimat, memungkinkan Anda memilih jumlah paragraf dan panjang kalimat, serta tetap menyediakan pembuka klasik “Lorem ipsum dolor sit amet…” bila diinginkan. Semua berjalan lokal di browser sehingga aman digunakan untuk mockup, prototipe, maupun proyek klien.'
+      ]
+    },
+    case: {
+      heading: 'Ikhtisar Konverter Kasus — Tulkit',
+      paragraphs: [
+        'Nama variabel, nama fungsi, dan identifier mengikuti konvensi penamaan yang berbeda tergantung bahasa pemrograman, framework, atau panduan gaya tim. camelCase umum dalam JavaScript dan Java, snake_case adalah standar Python dan SQL, sementara PascalCase muncul di nama kelas di banyak bahasa.',
+        'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, konverter kasus Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
+        'Alat ini menangani input multi-kata secara cerdas, menghormati delimiter dan batasan yang sudah ada, serta menghasilkan output bersih siap dipaste ulang ke editor Anda. Semua transformasi terjadi lokal di browser, sehingga aman mengkonversi identifier dari repo pribadi, file konfigurasi, atau sistem internal tanpa mengupload apa pun ke server.',
+        'Gunakan saat refaktor nama variabel di seluruh codebase, menyesuaikan respons API agar cocok dengan gaya penamaan Anda, menyiapkan contoh kode untuk dokumentasi, atau sekadar bereksperimen melihat bagaimana identifier baru akan terlihat di berbagai konvensi.'
       ]
     }
   }

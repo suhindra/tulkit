@@ -14,3 +14,7 @@ export function getUuidOverviewByVersion(language: LanguageCode): Record<UuidVer
 export function getEpochOverview(language: LanguageCode): OverviewContent{
   return getTranslations(language).overviews.epoch
 }
+
+export function getCaseOverview(language: LanguageCode): OverviewContent{
+  return getTranslations(language).overviews.case
+}
