@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
-const Formatter = React.lazy(()=>import('./components/Formatter'))
+import Navbar from './components/Navbar'
+import Formatter from './components/Formatter'
 const Minifier = React.lazy(()=>import('./components/Minifier'))
 const UuidGenerator = React.lazy(()=>import('./components/UuidGenerator'))
 const EpochConverter = React.lazy(()=>import('./components/EpochConverter'))
@@ -8,11 +9,10 @@ const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
 const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
-const Navbar = React.lazy(()=>import('./components/Navbar'))
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview, getCaseOverview } from './pageOverviewContent'
 import { getTranslations } from './i18n'
-import type { ActiveTab, CodecSubtool, LanguageCode, MinifyTab, UuidVersion } from './types'
+import { formatterLangs, type ActiveTab, type CodecSubtool, type LanguageCode, type MinifyTab, type UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
@@ -68,6 +68,195 @@ function getCodecSlugFromPath(path: string): CodecSubtool{
 
 type HashAlgorithmKey = 'sha1' | 'sha256' | 'sha512'
 
+type FormatterDetailTab = Exclude<ActiveTab,'auto'>
+type MinifyDetailTab = Exclude<MinifyTab,'auto'>
+type Translations = ReturnType<typeof getTranslations>
+type AppCopy = Translations['app']
+type MinifierInfo = Translations['minifierLangInfo']
+type UuidCopy = Translations['uuid']
+type HashCopy = Translations['hash']
+type BreadcrumbItem = { name: string; url: string }
+
+const FORMATTER_SETTINGS_KEY = 'tulkit-formatter-settings'
+const MINIFIER_SETTINGS_KEY = 'tulkit-minifier-settings'
+
+const formatterSlugToTabMap: Record<string,FormatterDetailTab> = {
+  html: 'html',
+  xml: 'xml',
+  yaml: 'yaml',
+  css: 'css',
+  javascript: 'js',
+  js: 'js',
+  json: 'json',
+  sql: 'sql',
+  php: 'php',
+  yml: 'yaml'
+}
+
+const minifySlugToTabMap: Record<string,MinifyDetailTab> = {
+  html: 'html',
+  css: 'css',
+  javascript: 'js',
+  js: 'js',
+  json: 'json'
+}
+
+function getFormatterTabFromPath(path: string): FormatterDetailTab | null{
+  const trimmed = path.replace(/\/+$/,'').toLowerCase()
+  const match = trimmed.match(/^\/formatter\/(.+)/)
+  if(!match) return null
+  const slug = match[1]
+  return formatterSlugToTabMap[slug] || null
+}
+
+function getMinifyTabFromPath(path: string): MinifyDetailTab | null{
+  const trimmed = path.replace(/\/+$/,'').toLowerCase()
+  const match = trimmed.match(/^\/minify\/(.+)/)
+  if(!match) return null
+  const slug = match[1]
+  return minifySlugToTabMap[slug] || null
+}
+
+function getUuidVersionFromPath(path: string): UuidVersion{
+  const trimmed = path.replace(/\/+$/,'').toLowerCase()
+  const match = trimmed.match(/^\/(?:generator\/)?uuid(?:\/(.+))?/)
+  const slug = match && match[1]
+  if(slug === 'uuid-v1') return 'v1'
+  if(slug === 'uuid-v7') return 'v7'
+  return 'v4'
+}
+
+function stripTulkitSuffix(value: string): string{
+  return value.replace(/\s+—\s+Tulkit$/,'').trim()
+}
+
+function getCodecDetailName(type: 'encode' | 'decode', slug: CodecSubtool, appCopy: AppCopy): string | null{
+  if(slug === 'default') return null
+  if(type === 'encode'){
+    if(slug === 'base64') return stripTulkitSuffix(appCopy.seoTitles.encodeBase64)
+    if(slug === 'base32') return stripTulkitSuffix(appCopy.seoTitles.encodeBase32)
+    if(slug === 'base58') return stripTulkitSuffix(appCopy.seoTitles.encodeBase58)
+    if(slug === 'hex') return stripTulkitSuffix(appCopy.seoTitles.encodeHex)
+    return null
+  }
+  if(slug === 'base64') return stripTulkitSuffix(appCopy.seoTitles.decodeBase64)
+  if(slug === 'base32') return stripTulkitSuffix(appCopy.seoTitles.decodeBase32)
+  if(slug === 'base58') return stripTulkitSuffix(appCopy.seoTitles.decodeBase58)
+  if(slug === 'hex') return stripTulkitSuffix(appCopy.seoTitles.decodeHex)
+  return null
+}
+
+function getBasePathForView(view: View, relativePath: string): string | null{
+  switch(view){
+    case 'formatter':
+      return relativePath === '/' ? '/' : '/formatter'
+    case 'minify':
+      return '/minify'
+    case 'uuid':
+      return relativePath.startsWith('/uuid') ? '/uuid' : '/generator/uuid'
+    case 'epoch':
+      return '/converter/epoch'
+    case 'encode':
+      return '/encode'
+    case 'decode':
+      return '/decode'
+    case 'lorem':
+      return '/generator/lorem'
+    case 'hash':
+      return relativePath.startsWith('/hash') ? '/hash' : '/generator/hash'
+    case 'case':
+      return relativePath.startsWith('/case') ? '/case' : '/generator/case'
+    default:
+      return null
+  }
+}
+
+function getBaseLabelForView(view: View, appCopy: AppCopy): string {
+  switch(view){
+    case 'formatter': return appCopy.navFormatter
+    case 'minify': return appCopy.navMinify
+    case 'uuid': return appCopy.navUuid
+    case 'epoch': return appCopy.navEpoch
+    case 'encode': return appCopy.navEncode
+    case 'decode': return appCopy.navDecode
+    case 'lorem': return appCopy.navLorem
+    case 'hash': return appCopy.navHash
+    case 'case': return appCopy.navCase
+    default: return ''
+  }
+}
+
+type BreadcrumbArgs = {
+  view: View
+  relativePath: string
+  currentUrl: string
+  appCopy: AppCopy
+  headingByTab: Record<FormatterDetailTab,string>
+  minifierLangInfo: MinifierInfo
+  uuidCopy: UuidCopy
+  hashCopy: HashCopy
+  encodeSlug: CodecSubtool
+  decodeSlug: CodecSubtool
+  hashSlug: HashAlgorithmKey
+}
+
+function buildDetailBreadcrumb({
+  view,
+  relativePath,
+  currentUrl,
+  appCopy,
+  headingByTab,
+  minifierLangInfo,
+  uuidCopy,
+  hashCopy,
+  encodeSlug,
+  decodeSlug,
+  hashSlug
+}: BreadcrumbArgs): BreadcrumbItem | null{
+  if(view === 'formatter'){
+    const tab = getFormatterTabFromPath(relativePath)
+    if(tab){
+      return { name: headingByTab[tab], url: currentUrl }
+    }
+    return null
+  }
+  if(view === 'minify'){
+    const tab = getMinifyTabFromPath(relativePath)
+    if(tab){
+      const info = minifierLangInfo[tab]
+      if(info){
+        return { name: info.title, url: currentUrl }
+      }
+    }
+    return null
+  }
+  if(view === 'uuid'){
+    const version = getUuidVersionFromPath(relativePath)
+    return { name: uuidCopy.tabLabels[version], url: currentUrl }
+  }
+  if(view === 'hash'){
+    const labels: Record<HashAlgorithmKey,string> = {
+      sha1: hashCopy.algorithmSha1,
+      sha256: hashCopy.algorithmSha256,
+      sha512: hashCopy.algorithmSha512
+    }
+    const algo = labels[hashSlug]
+    if(algo){
+      return { name: `${appCopy.navHash}: ${algo}`, url: currentUrl }
+    }
+    return null
+  }
+  if(view === 'encode'){
+    const name = getCodecDetailName('encode', encodeSlug, appCopy)
+    return name ? { name, url: currentUrl } : null
+  }
+  if(view === 'decode'){
+    const name = getCodecDetailName('decode', decodeSlug, appCopy)
+    return name ? { name, url: currentUrl } : null
+  }
+  return null
+}
+
 function getHashSlugFromPath(path: string): HashAlgorithmKey{
   const normalized = path.toLowerCase()
   const segments = normalized.split('/')
@@ -79,11 +268,56 @@ function getHashSlugFromPath(path: string): HashAlgorithmKey{
   return 'sha256'
 }
 
-function minifyTabFromActive(tab: ActiveTab): MinifyTab{
-  if(tab === 'html' || tab === 'css' || tab === 'js' || tab === 'json'){
-    return tab
+function isFormatterTabValue(value: unknown): value is ActiveTab{
+  return value === 'auto' || formatterLangs.includes(value as (typeof formatterLangs)[number])
+}
+
+function isMinifyTabValue(value: unknown): value is MinifyTab{
+  return value === 'auto' || value === 'html' || value === 'css' || value === 'js' || value === 'json'
+}
+
+function readStoredFormatterTab(): ActiveTab | null{
+  if(typeof window === 'undefined') return null
+  try{
+    const raw = window.localStorage.getItem(FORMATTER_SETTINGS_KEY)
+    if(!raw) return null
+    const data = JSON.parse(raw)
+    const candidate = data?.activeTab
+    return isFormatterTabValue(candidate) ? candidate : null
+  }catch{
+    return null
   }
-  return 'auto'
+}
+
+function readStoredMinifyTab(): MinifyTab | null{
+  if(typeof window === 'undefined') return null
+  try{
+    const raw = window.localStorage.getItem(MINIFIER_SETTINGS_KEY)
+    if(!raw) return null
+    const data = JSON.parse(raw)
+    const candidate = data?.tab
+    return isMinifyTabValue(candidate) ? candidate : null
+  }catch{
+    return null
+  }
+}
+
+function getInitialFormatterTab(): ActiveTab{
+  if(typeof window === 'undefined') return 'auto'
+  const relative = stripLanguagePrefix(window.location.pathname) || '/'
+  const pathTab = getFormatterTabFromPath(relative)
+  if(pathTab) return pathTab
+  const stored = readStoredFormatterTab()
+  return stored || 'auto'
+}
+
+function getInitialMinifierTab(): MinifyTab{
+  if(typeof window === 'undefined') return 'auto'
+  const relative = stripLanguagePrefix(window.location.pathname) || '/'
+  const pathTab = getMinifyTabFromPath(relative)
+  if(pathTab) return pathTab
+  const stored = readStoredMinifyTab()
+  return stored || 'auto'
 }
 
 export default function App(){
@@ -106,13 +340,32 @@ export default function App(){
     }
     return 'en'
   })
-  const [activeTab, setActiveTab] = useState<ActiveTab>('auto')
+  const [formatterTab, setFormatterTab] = useState<ActiveTab>(()=>getInitialFormatterTab())
+  const [minifierTab, setMinifierTab] = useState<MinifyTab>(()=>getInitialMinifierTab())
   const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
   const relativePath = useMemo(()=>stripLanguagePrefix(location.pathname) || '/', [location.pathname])
   const view = useMemo(()=>getViewFromPath(relativePath), [relativePath])
   const encodeSlug = useMemo<CodecSubtool>(()=> (view === 'encode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const decodeSlug = useMemo<CodecSubtool>(()=> (view === 'decode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const hashSlug = useMemo<HashAlgorithmKey>(()=> (view === 'hash' ? getHashSlugFromPath(relativePath) : 'sha256'), [view, relativePath])
+  const effectiveFormatterTab = useMemo<ActiveTab>(()=> (view === 'formatter' ? formatterTab : 'auto'), [view, formatterTab])
+  const effectiveMinifyTab = useMemo<MinifyTab>(()=> (view === 'minify' ? minifierTab : 'auto'), [view, minifierTab])
+
+  useEffect(()=>{
+    if(view !== 'formatter') return
+    const pathTab = getFormatterTabFromPath(relativePath)
+    if(pathTab && pathTab !== formatterTab){
+      setFormatterTab(pathTab)
+    }
+  },[view, relativePath, formatterTab])
+
+  useEffect(()=>{
+    if(view !== 'minify') return
+    const pathTab = getMinifyTabFromPath(relativePath)
+    if(pathTab && pathTab !== minifierTab){
+      setMinifierTab(pathTab)
+    }
+  },[view, relativePath, minifierTab])
 
   useEffect(()=>{
     const detected = detectLanguageFromPath(location.pathname)
@@ -144,10 +397,17 @@ export default function App(){
   },[language])
 
   const translations = getTranslations(language)
-  const { app: appCopy, headingByTab, descriptionByTab, uuidDescriptionByVersion } = translations
+  const {
+    app: appCopy,
+    headingByTab,
+    descriptionByTab,
+    uuidDescriptionByVersion,
+    minifierLangInfo,
+    uuid: uuidCopy,
+    hash: hashCopy
+  } = translations
 
-  const activeMinifyTab = useMemo(()=>minifyTabFromActive(activeTab), [activeTab])
-  const formatterOverview = getFormatterOverviewByTab(language)[activeTab]
+  const formatterOverview = getFormatterOverviewByTab(language)[effectiveFormatterTab]
   const minifyOverview = translations.overviews.minify
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
@@ -159,8 +419,8 @@ export default function App(){
   const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
   const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
   const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
-  const formatterSeoBlurb = appCopy.seoBlurb.formatter[activeTab] || appCopy.seoBlurb.formatter.auto
-  const minifySeoBlurb = appCopy.seoBlurb.minify[activeMinifyTab] || appCopy.seoBlurb.minify.auto
+  const formatterSeoBlurb = appCopy.seoBlurb.formatter[effectiveFormatterTab] || appCopy.seoBlurb.formatter.auto
+  const minifySeoBlurb = appCopy.seoBlurb.minify[effectiveMinifyTab] || appCopy.seoBlurb.minify.auto
   const hashSeoBlurb = appCopy.seoBlurb.hash[hashSlug]
 
   const seoHeading = useMemo(()=>{
@@ -191,10 +451,10 @@ export default function App(){
       return appCopy.seoTitles.decode
     }
     if(view === 'minify'){
-      if(activeMinifyTab === 'html') return appCopy.seoTitles.minifyHtml || appCopy.seoTitles.minify
-      if(activeMinifyTab === 'css') return appCopy.seoTitles.minifyCss || appCopy.seoTitles.minify
-      if(activeMinifyTab === 'js') return appCopy.seoTitles.minifyJs || appCopy.seoTitles.minify
-      if(activeMinifyTab === 'json') return appCopy.seoTitles.minifyJson || appCopy.seoTitles.minify
+      if(effectiveMinifyTab === 'html') return appCopy.seoTitles.minifyHtml || appCopy.seoTitles.minify
+      if(effectiveMinifyTab === 'css') return appCopy.seoTitles.minifyCss || appCopy.seoTitles.minify
+      if(effectiveMinifyTab === 'js') return appCopy.seoTitles.minifyJs || appCopy.seoTitles.minify
+      if(effectiveMinifyTab === 'json') return appCopy.seoTitles.minifyJson || appCopy.seoTitles.minify
       return appCopy.seoTitles.minify
     }
     if(view === 'lorem'){
@@ -206,19 +466,19 @@ export default function App(){
     if(view === 'notfound'){
       return appCopy.seoTitles.notFound
     }
-    if(activeTab === 'auto'){
+    if(effectiveFormatterTab === 'auto'){
       return appCopy.seoTitles.formatterDefault
     }
-    if(activeTab === 'html') return appCopy.seoTitles.formatterHtml || `${headingByTab.html} — Tulkit`
-    if(activeTab === 'xml') return appCopy.seoTitles.formatterXml || `${headingByTab.xml} — Tulkit`
-    if(activeTab === 'yaml') return appCopy.seoTitles.formatterYaml || `${headingByTab.yaml} — Tulkit`
-    if(activeTab === 'css') return appCopy.seoTitles.formatterCss || `${headingByTab.css} — Tulkit`
-    if(activeTab === 'js') return appCopy.seoTitles.formatterJs || `${headingByTab.js} — Tulkit`
-    if(activeTab === 'json') return appCopy.seoTitles.formatterJson || `${headingByTab.json} — Tulkit`
-    if(activeTab === 'sql') return appCopy.seoTitles.formatterSql || `${headingByTab.sql} — Tulkit`
-    if(activeTab === 'php') return appCopy.seoTitles.formatterPhp || `${headingByTab.php} — Tulkit`
+    if(effectiveFormatterTab === 'html') return appCopy.seoTitles.formatterHtml || `${headingByTab.html} — Tulkit`
+    if(effectiveFormatterTab === 'xml') return appCopy.seoTitles.formatterXml || `${headingByTab.xml} — Tulkit`
+    if(effectiveFormatterTab === 'yaml') return appCopy.seoTitles.formatterYaml || `${headingByTab.yaml} — Tulkit`
+    if(effectiveFormatterTab === 'css') return appCopy.seoTitles.formatterCss || `${headingByTab.css} — Tulkit`
+    if(effectiveFormatterTab === 'js') return appCopy.seoTitles.formatterJs || `${headingByTab.js} — Tulkit`
+    if(effectiveFormatterTab === 'json') return appCopy.seoTitles.formatterJson || `${headingByTab.json} — Tulkit`
+    if(effectiveFormatterTab === 'sql') return appCopy.seoTitles.formatterSql || `${headingByTab.sql} — Tulkit`
+    if(effectiveFormatterTab === 'php') return appCopy.seoTitles.formatterPhp || `${headingByTab.php} — Tulkit`
     return appCopy.seoTitles.formatterDefault
-  },[view, uuidVersion, appCopy, activeTab, headingByTab, encodeSlug, decodeSlug, activeMinifyTab])
+  },[view, uuidVersion, appCopy, effectiveFormatterTab, headingByTab, encodeSlug, decodeSlug, effectiveMinifyTab])
 
   const metaDescription = useMemo(()=>{
     if(view === 'uuid'){
@@ -244,7 +504,7 @@ export default function App(){
       return selected
     }
     if(view === 'minify'){
-      return appCopy.minifyMetaDescription[activeMinifyTab] || appCopy.minifyMetaDescription.auto
+      return appCopy.minifyMetaDescription[effectiveMinifyTab] || appCopy.minifyMetaDescription.auto
     }
     if(view === 'hash'){
       return appCopy.hashMetaDescription[hashSlug] || appCopy.hashMetaDescription.sha256
@@ -258,9 +518,9 @@ export default function App(){
     if(view === 'notfound'){
       return appCopy.notFoundMetaDescription
     }
-    const key: ActiveTab = activeTab || 'auto'
+    const key: ActiveTab = effectiveFormatterTab || 'auto'
     return descriptionByTab[key]
-  },[view, uuidVersion, appCopy, activeTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, activeMinifyTab, hashSlug])
+  },[view, uuidVersion, appCopy, effectiveFormatterTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, effectiveMinifyTab, hashSlug])
 
   useEffect(()=>{
     if(typeof document === 'undefined') return
@@ -296,7 +556,7 @@ export default function App(){
       }
       link.href = href
     })
-  },[relativePath, view, activeTab, uuidVersion, language])
+  },[relativePath, view, uuidVersion, language])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
@@ -311,7 +571,7 @@ export default function App(){
       document.head.appendChild(canonical)
     }
     canonical.href = canonicalHref
-  },[relativePath, view, activeTab, uuidVersion, language])
+  },[relativePath, view, uuidVersion, language])
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
@@ -326,7 +586,8 @@ export default function App(){
 
     const origin = window.location.origin.replace(/\/+$/,'')
     const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
-    const currentPath = buildPathWithLanguage(ensureSlash(relativePath || '/'), language)
+    const normalizedRelative = relativePath || '/'
+    const currentPath = buildPathWithLanguage(ensureSlash(normalizedRelative), language)
     const currentUrl = `${origin}${currentPath}`
     const homePath = buildPathWithLanguage('/', language)
     const homeUrl = `${origin}${homePath}`
@@ -354,23 +615,50 @@ export default function App(){
       pageName = appCopy.navCase
     }
 
+    const breadcrumbs: BreadcrumbItem[] = [
+      { name: homeName, url: homeUrl }
+    ]
+
+    const basePath = getBasePathForView(view, normalizedRelative)
+    if(basePath){
+      const baseUrl = `${origin}${buildPathWithLanguage(basePath, language)}`
+      if(baseUrl !== homeUrl && baseUrl !== currentUrl){
+        const baseLabel = getBaseLabelForView(view, appCopy) || pageName
+        breadcrumbs.push({ name: baseLabel, url: baseUrl })
+      }
+    }
+
+    const detailItem = buildDetailBreadcrumb({
+      view,
+      relativePath: normalizedRelative,
+      currentUrl,
+      appCopy,
+      headingByTab,
+      minifierLangInfo,
+      uuidCopy,
+      hashCopy,
+      encodeSlug,
+      decodeSlug,
+      hashSlug
+    })
+
+    const finalItem = detailItem || { name: pageName, url: currentUrl }
+    const duplicateIndex = breadcrumbs.findIndex(item => item.url === finalItem.url)
+    if(duplicateIndex === -1){
+      breadcrumbs.push(finalItem)
+    }else{
+      breadcrumbs[duplicateIndex] = finalItem
+    }
+
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: homeName,
-          item: homeUrl
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: pageName,
-          item: currentUrl
-        }
-      ]
+      itemListElement: breadcrumbs.map((item, index)=>({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: item.url
+      }))
     }
 
     let script = existing as HTMLScriptElement | null
@@ -381,7 +669,21 @@ export default function App(){
       document.head.appendChild(script)
     }
     script.textContent = JSON.stringify(jsonLd)
-  },[view, language, seoHeading, appCopy, uuidVersion, relativePath])
+  },[
+    view,
+    language,
+    seoHeading,
+    appCopy,
+    uuidVersion,
+    relativePath,
+    headingByTab,
+    minifierLangInfo,
+    uuidCopy,
+    hashCopy,
+    encodeSlug,
+    decodeSlug,
+    hashSlug
+  ])
 
   function goToFormatter(){
     navigate('/formatter')
@@ -489,13 +791,11 @@ export default function App(){
       )}
       <main className="container">
         {view === 'formatter' && (
-          <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
-            <Formatter onTabChange={setActiveTab} language={language} />
-          </React.Suspense>
+          <Formatter onTabChange={setFormatterTab} language={language} />
         )}
         {view === 'minify' && (
           <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
-            <Minifier language={language} onTabChange={setActiveTab} />
+            <Minifier language={language} onTabChange={setMinifierTab} />
           </React.Suspense>
         )}
         {view === 'uuid' && (
