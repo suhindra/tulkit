@@ -9,14 +9,15 @@ const Encoder = React.lazy(()=>import('./components/Encoder'))
 const Decoder = React.lazy(()=>import('./components/Decoder'))
 const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
+const UrlEncoder = React.lazy(()=>import('./components/UrlEncoder'))
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview, getCaseOverview } from './pageOverviewContent'
+import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview, getCaseOverview, getUrlOverview } from './pageOverviewContent'
 import { getTranslations } from './i18n'
 import { formatterLangs, type ActiveTab, type CodecSubtool, type LanguageCode, type MinifyTab, type UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
-type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -61,6 +62,9 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/converter/epoch')){
     return 'epoch'
+  }
+  if(normalized.startsWith('/converter/url')){
+    return 'url'
   }
   if(normalized.startsWith('/minify')){
     return 'minify'
@@ -198,6 +202,8 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return '/generator/lorem'
     case 'hash':
       return relativePath.startsWith('/hash') ? '/hash' : '/generator/hash'
+    case 'url':
+      return '/converter'
     default:
       return null
   }
@@ -221,6 +227,7 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'lorem': return appCopy.navLorem
     case 'hash': return appCopy.navHash
     case 'case': return appCopy.navCase
+    case 'url': return appCopy.navUrl
     default: return ''
   }
 }
@@ -292,6 +299,9 @@ function buildDetailBreadcrumb({
   if(view === 'decode'){
     const name = getCodecDetailName('decode', decodeSlug, appCopy)
     return name ? { name, url: currentUrl } : null
+  }
+  if(view === 'url'){
+    return { name: appCopy.navUrl, url: currentUrl }
   }
   return null
 }
@@ -458,6 +468,7 @@ export default function App(){
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
   const epochOverview = getEpochOverview(language)
   const caseOverview = getCaseOverview(language)
+  const urlOverview = getUrlOverview(language)
   const encodeOverview = translations.overviews.encode[encodeSlug]
   const decodeOverview = translations.overviews.decode[decodeSlug]
   const loremOverview = translations.overviews.lorem
@@ -534,6 +545,9 @@ export default function App(){
     }
     if(view === 'case'){
       return appCopy.seoTitles.case
+    }
+    if(view === 'url'){
+      return appCopy.seoTitles.url
     }
     if(view === 'notfound'){
       return appCopy.seoTitles.notFound
@@ -723,7 +737,7 @@ export default function App(){
     }
     
     // Add parent breadcrumb for converter sub-pages
-    if(basePath && (view === 'epoch' || view === 'case')){
+    if(basePath && (view === 'epoch' || view === 'case' || view === 'url')){
       const converterUrl = `${origin}${buildPathWithLanguage('/converter', language)}`
       if(converterUrl !== homeUrl && converterUrl !== currentUrl){
         breadcrumbs.push({ name: appCopy.navConverters, url: converterUrl })
@@ -892,6 +906,13 @@ export default function App(){
             {view === 'case' && (
               <>
                 {appCopy.seoBlurb.case.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'url' && (
+              <>
+                {appCopy.seoBlurb.url.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -1157,6 +1178,11 @@ export default function App(){
             <CaseConverter language={language} />
           </React.Suspense>
         )}
+        {view === 'url' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <UrlEncoder language={language} />
+          </React.Suspense>
+        )}
         {view === 'notfound' && (
           <div className="not-found-card">
             <h2>{appCopy.notFoundHeading}</h2>
@@ -1238,6 +1264,14 @@ export default function App(){
               <>
                 <h2>{caseOverview.heading}</h2>
                 {caseOverview.paragraphs.map(text=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'url' && (
+              <>
+                <h2>{urlOverview.heading}</h2>
+                {urlOverview.paragraphs.map(text=>(
                   <p key={text}>{text}</p>
                 ))}
               </>

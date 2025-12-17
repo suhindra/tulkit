@@ -71,6 +71,31 @@ type EpochCopy = {
   copyErrorPrefix: string
 }
 
+type UrlEncoderCopy = {
+  heading: string
+  subheading: string
+  placeholder: string
+  encode: string
+  decode: string
+  clear: string
+  clearTooltip: string
+  copy: string
+  copied: string
+  copyTooltip: string
+  swap: string
+  swapTooltip: string
+  error: string
+  info: {
+    title: string
+    description: string
+    tips?: string[]
+  }
+  overview?: {
+    useCases: string[]
+    benefits: string[]
+  }
+}
+
 type LoremCopy = {
   paragraphCountLabel: string
   classicPrefixLabel: string
@@ -151,6 +176,7 @@ type AppCopy = {
   navLorem: string
   navHash: string
   navCase: string
+  navUrl: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
@@ -186,6 +212,7 @@ type AppCopy = {
     lorem: string
     hash: string
     case: string
+    url: string
     notFound: string
   }
   seoBlurb: {
@@ -204,6 +231,7 @@ type AppCopy = {
     lorem: string[]
     hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
     case: string[]
+    url: string[]
   }
   notFoundHeading: string
   notFoundBody: string
@@ -232,6 +260,7 @@ type AppCopy = {
   loremMetaDescription: string
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
   caseMetaDescription: string
+  urlMetaDescription: string
   notFoundMetaDescription: string
 }
 
@@ -276,6 +305,7 @@ type Translation = {
   minifierLangInfo: Record<MinifyTab,LangInfo>
   uuid: UuidCopy
   epoch: EpochCopy
+  urlEncoder: UrlEncoderCopy
   lorem: LoremCopy
   encoder: EncoderCopy
   hash: HashCopy
@@ -551,6 +581,45 @@ const en: Translation = {
     copySuccess: 'Copied to clipboard',
     copyErrorPrefix: 'Clipboard failed: '
   },
+  urlEncoder: {
+    heading: 'URL Encoder',
+    subheading: 'Encode and decode URL parameters and special characters for safe transmission',
+    placeholder: 'Paste text or a URL to encode, or an encoded URL to decode',
+    encode: 'Encode',
+    decode: 'Decode',
+    clear: 'Clear',
+    clearTooltip: 'Clear the input',
+    copy: 'Copy',
+    copied: 'Copied!',
+    copyTooltip: 'Copy the result to clipboard',
+    swap: 'Swap',
+    swapTooltip: 'Use result as input and reverse the operation',
+    error: 'Invalid input for decoding',
+    info: {
+      title: 'About URL Encoding',
+      description: 'URL encoding (percent-encoding) converts special characters into a format that is safe for transmission in URLs and query strings. Spaces become %20, and other reserved characters like & ? # are encoded to prevent conflicts with URL syntax.',
+      tips: [
+        'Use Encode to prepare text for URLs, query parameters, or API requests',
+        'Use Decode to inspect encoded URLs from your browser logs or API responses',
+        'Common encoded characters: %20 (space), %26 (&), %3F (?), %23 (#), %2F (/)',
+        'Invalid percent sequences like %GG will trigger an error—fix them before decoding'
+      ]
+    },
+    overview: {
+      useCases: [
+        'Building URLs with dynamic parameters for APIs and web services',
+        'Preparing form data and query strings for web requests',
+        'Debugging and inspecting encoded URLs from browser logs',
+        'Embedding special characters safely in URLs and hyperlinks'
+      ],
+      benefits: [
+        'Prevents URL syntax conflicts by encoding reserved characters',
+        'Supports international characters and special symbols in URLs',
+        'Works entirely in your browser with no data uploaded',
+        'Standards-compliant encoding using RFC 3986 specifications'
+      ]
+    }
+  },
   encoder: {
     inputEncodingLabel: 'Input encoding',
     inputEncodingUtf8: 'Text (UTF-8)',
@@ -641,6 +710,7 @@ const en: Translation = {
     navLorem: 'Lorem Ipsum',
     navHash: 'Hash Generator',
     navCase: 'Case Converter',
+    navUrl: 'URL Encoder',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
@@ -676,6 +746,7 @@ const en: Translation = {
       lorem: 'Lorem Ipsum Generator — Tulkit',
       hash: 'Hash Generator — Tulkit',
       case: 'Case Converter — Tulkit',
+      url: 'URL Encoder — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
@@ -856,6 +927,10 @@ const en: Translation = {
       case: [
         'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and other conventions directly in your browser. Paste any identifier and see instant transformations across all formats without uploading anything to a server.',
         'Helpful when refactoring codebases, adapting API responses to match your naming style, preparing code examples, or integrating systems that follow different naming conventions.'
+      ],
+      url: [
+        'Encode URL parameters and special characters for use in web addresses, API calls, and query strings. Paste regular text or a full URL to encode it safely for transmission, or paste an encoded URL to decode it back to readable form instantly.',
+        'Tulkit handles encoding and decoding entirely in your browser using the native URL encoding standard. Perfect for debugging API requests, preparing parameters for web forms, embedding data in URLs, or inspecting query strings from logs and analytics.'
       ]
     },
     notFoundHeading: 'Page not found',
@@ -884,7 +959,8 @@ const en: Translation = {
       ],
       conversion: [
         { label: 'Epoch Converter', path: '/converter/epoch' },
-        { label: 'Case Converter', path: '/converter/case' }
+        { label: 'Case Converter', path: '/converter/case' },
+        { label: 'URL Encoder', path: '/converter/url' }
       ],
       encoding: [
         { label: 'Encoder', path: '/encode' },
@@ -958,6 +1034,8 @@ const en: Translation = {
       'Generate lorem ipsum placeholder paragraphs in your browser with Tulkit. Control paragraph count and sentence length for design mockups, UI components, and content layouts.',
     caseMetaDescription:
       'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and more using Tulkit\'s case converter. Paste any identifier and see instant transformations across all naming conventions directly in your browser.',
+    urlMetaDescription:
+      'Encode and decode URL parameters, query strings, and special characters directly in your browser with Tulkit\'s URL encoder. Perfect for debugging API requests, preparing form data, and inspecting encoded URLs without leaving your desktop.',
     notFoundMetaDescription:
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
@@ -1027,6 +1105,13 @@ const en: Translation = {
           description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
           path: '/converter/case',
           icon: '🔤',
+          category: 'conversion'
+        },
+        {
+          title: 'URL Encoder',
+          description: 'Encode and decode URL parameters, handling special characters and percent-encoding.',
+          path: '/converter/url',
+          icon: '🔗',
           category: 'conversion'
         }
       ]
@@ -1101,6 +1186,13 @@ const en: Translation = {
           description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
           path: '/converter/case',
           icon: '🔤',
+          category: 'conversion'
+        },
+        {
+          title: 'URL Encoder',
+          description: 'Encode and decode URL parameters and special characters for safe transmission in web addresses.',
+          path: '/converter/url',
+          icon: '🔗',
           category: 'conversion'
         }
       ]
@@ -1408,6 +1500,15 @@ const en: Translation = {
         'The tool handles multi-word inputs intelligently, respects existing delimiters and boundaries, and produces clean output ready to paste back into your editor. All transformations happen locally in your browser, so you can safely convert identifiers from private repositories, configuration files, or internal systems without uploading anything to a server.',
         'Use it when refactoring variable names across a codebase, adapting API responses to match your naming style, preparing code examples for documentation, or simply experimenting with how a new identifier would look in different conventions.'
       ]
+    },
+    url: {
+      heading: 'URL Encoder — Tulkit overview',
+      paragraphs: [
+        'URLs can only contain unreserved characters (alphanumeric, hyphen, underscore, period, and tilde) and reserved characters in specific contexts. When you need to include spaces, special characters, or international text in URLs or query parameters, they must be percent-encoded (URL encoded) to ensure safe transmission and correct interpretation by servers and applications.',
+        'Common characters like spaces, ampersands, question marks, and hashes have special meaning in URLs. For example, spaces become %20, ampersands separate parameters with &, and question marks introduce query strings. When these characters appear in user-provided data—like search terms, form values, or message content—they must be encoded to prevent syntax conflicts and misinterpretation.',
+        'Tulkit\'s URL encoder lets you quickly convert plain text to percent-encoded format and decode encoded URLs back to readable text. Whether you\'re building dynamic URLs for API calls, preparing form submissions, debugging encoded query strings from logs, or embedding special characters in hyperlinks, the tool handles encoding and decoding without uploading data to any server.',
+        'The encoder supports the full range of UTF-8 characters, respects RFC 3986 standards, and provides instant feedback. Use it when constructing URLs programmatically, inspecting encoded parameters from browser consoles, troubleshooting 404 errors from encoding mismatches, or preparing safe URLs that contain user-generated content or international text.'
+      ]
     }
   }
 }
@@ -1669,6 +1770,45 @@ const id: Translation = {
     copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: '
   },
+  urlEncoder: {
+    heading: 'URL Encoder',
+    subheading: 'Enkode dan dekode parameter URL serta karakter khusus untuk transmisi yang aman',
+    placeholder: 'Tempel teks atau URL untuk dienkode, atau URL yang dienkode untuk didekode',
+    encode: 'Enkode',
+    decode: 'Dekode',
+    clear: 'Hapus',
+    clearTooltip: 'Hapus input',
+    copy: 'Salin',
+    copied: 'Berhasil disalin!',
+    copyTooltip: 'Salin hasil ke clipboard',
+    swap: 'Tukar',
+    swapTooltip: 'Gunakan hasil sebagai input dan balikkan operasi',
+    error: 'Input tidak valid untuk dekoding',
+    info: {
+      title: 'Tentang URL Encoding',
+      description: 'URL encoding (percent-encoding) mengonversi karakter khusus ke format yang aman untuk transmisi dalam URL dan query string. Spasi menjadi %20, dan karakter cadangan lainnya seperti & ? # dikode untuk mencegah konflik dengan sintaks URL.',
+      tips: [
+        'Gunakan Enkode untuk menyiapkan teks untuk URL, parameter query, atau permintaan API',
+        'Gunakan Dekode untuk memeriksa URL yang dienkode dari log browser atau respons API Anda',
+        'Karakter yang umum dienkode: %20 (spasi), %26 (&), %3F (?), %23 (#), %2F (/)',
+        'Urutan persen yang tidak valid seperti %GG akan memicu kesalahan—perbaiki sebelum mendekode'
+      ]
+    },
+    overview: {
+      useCases: [
+        'Membangun URL dengan parameter dinamis untuk API dan layanan web',
+        'Menyiapkan data form dan query string untuk permintaan web',
+        'Men-debug dan memeriksa URL yang dikodekan dari log browser',
+        'Menyematkan karakter khusus dengan aman di URL dan hyperlink'
+      ],
+      benefits: [
+        'Mencegah konflik sintaks URL dengan mengenkode karakter yang dicadangkan',
+        'Mendukung karakter internasional dan simbol khusus di URL',
+        'Bekerja sepenuhnya di browser Anda tanpa mengunggah data',
+        'Enkoding sesuai standar menggunakan spesifikasi RFC 3986'
+      ]
+    }
+  },
   encoder: {
     inputEncodingLabel: 'Encoding input',
     inputEncodingUtf8: 'Teks (UTF-8)',
@@ -1759,6 +1899,7 @@ const id: Translation = {
     navLorem: 'Generator Lorem Ipsum',
     navHash: 'Generator Hash',
     navCase: 'Konverter Kasus',
+    navUrl: 'Encoder URL',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
@@ -1794,6 +1935,7 @@ const id: Translation = {
       lorem: 'Generator Lorem Ipsum — Tulkit',
       hash: 'Generator Hash — Tulkit',
       case: 'Konverter Kasus — Tulkit',
+      url: 'Encoder URL — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
@@ -1974,6 +2116,10 @@ const id: Translation = {
       case: [
         'Konversikan nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
         'Berguna saat refaktor codebase, menyesuaikan respons API agar cocok gaya penamaan Anda, menyiapkan contoh kode, atau mengintegrasikan sistem yang pakai konvensi penamaan berbeda.'
+      ],
+      url: [
+        'Enkode parameter URL dan karakter khusus untuk dipakai di alamat web, panggilan API, dan string query. Tempel teks biasa atau URL lengkap untuk mengenkodinya dengan aman untuk transmisi, atau tempel URL yang sudah dienkode untuk mendekodinya kembali menjadi bentuk yang bisa dibaca secara instan.',
+        'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
       ]
     },
     notFoundHeading: 'Halaman tidak ditemukan',
@@ -2002,7 +2148,8 @@ const id: Translation = {
       ],
       conversion: [
         { label: 'Konverter Epoch', path: '/converter/epoch' },
-        { label: 'Konverter Case', path: '/converter/case' }
+        { label: 'Konverter Case', path: '/converter/case' },
+        { label: 'Penyandi URL', path: '/converter/url' }
       ],
       encoding: [
         { label: 'Encoder', path: '/encode' },
@@ -2076,6 +2223,8 @@ const id: Translation = {
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     caseMetaDescription:
       'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
+    urlMetaDescription:
+      'Enkode dan dekode parameter URL serta karakter khusus langsung di browser dengan encoder URL Tulkit. Sempurna untuk men-debug permintaan API, menyiapkan data form, dan memeriksa URL terenkode tanpa meninggalkan desktop.',
     notFoundMetaDescription:
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },
@@ -2146,6 +2295,13 @@ const id: Translation = {
           path: '/converter/case',
           icon: '🔤',
           category: 'conversion'
+        },
+        {
+          title: 'Penyandi URL',
+          description: 'Enkode dan dekode parameter URL serta karakter khusus langsung di browser.',
+          path: '/converter/url',
+          icon: '🔗',
+          category: 'conversion'
         }
       ]
     },
@@ -2192,6 +2348,13 @@ const id: Translation = {
           description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
           path: '/converter/case',
           icon: '🔤',
+          category: 'conversion'
+        },
+        {
+          title: 'Encoder URL',
+          description: 'Enkode dan dekode parameter URL serta karakter khusus untuk transmisi yang aman di alamat web.',
+          path: '/converter/url',
+          icon: '🔗',
           category: 'conversion'
         }
       ]
@@ -2498,6 +2661,15 @@ const id: Translation = {
         'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, konverter kasus Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
         'Alat ini menangani input multi-kata secara cerdas, menghormati delimiter dan batasan yang sudah ada, serta menghasilkan output bersih siap dipaste ulang ke editor Anda. Semua transformasi terjadi lokal di browser, sehingga aman mengkonversi identifier dari repo pribadi, file konfigurasi, atau sistem internal tanpa mengupload apa pun ke server.',
         'Gunakan saat refaktor nama variabel di seluruh codebase, menyesuaikan respons API agar cocok dengan gaya penamaan Anda, menyiapkan contoh kode untuk dokumentasi, atau sekadar bereksperimen melihat bagaimana identifier baru akan terlihat di berbagai konvensi.'
+      ]
+    },
+    url: {
+      heading: 'Ikhtisar Penyandi URL — Tulkit',
+      paragraphs: [
+        'URL hanya dapat berisi karakter tak tercadang (huruf, angka, dan tanda "-", "_", ".", "~") di sebagian besar bagiannya. Karakter lain—termasuk spasi, titik koma, dan simbol khusus—harus dikodekan menjadi representasi persen (disebut "URL encoded" atau "percent-encoded") sebelum dapat digunakan dalam URL. Misalnya, spasi menjadi %20, "?" menjadi %3F, dan "&" menjadi %26.',
+        'Banyak karakter membawa makna khusus dalam URL: "&" memisahkan parameter, "?" memulai string query, "#" menandai fragment. Ketika karakter tersebut muncul sebagai data yang seharusnya dikodekan, bukan delimitator, maka harus diproduksi dalam bentuk persen-encoded agar parser URL membacanya dengan benar dan tidak salah tafsir struktur URL.',
+        'Penyandi URL Tulkit memungkinkan Anda mengkonversi teks biasa ke bentuk terenkripsi URL dengan cepat, dan sebaliknya mendekodekan URL yang sudah dikodekan kembali ke teks yang dapat dibaca—tanpa perlu mengunggah data apa pun ke server eksternal. Semua pengolahan terjadi secara lokal di browser Anda.',
+        'Gunakan untuk mengkodekan parameter dalam query string, mendekodekan URL dari log atau database, membangun URL secara terprogram, atau menyiapkan contoh dokumentasi API. Penyandi ini mendukung seluruh rentang karakter UTF-8 dan sesuai dengan standar RFC 3986 untuk pengkodean URL.'
       ]
     }
   }

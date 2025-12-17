@@ -68,6 +68,13 @@ export const navItems: NavItem[] = [
     category: 'converters',
     icon: '⏱️'
   },
+  {
+    label: 'URL Encoder',
+    labelId: 'navUrl',
+    path: '/converter/url',
+    category: 'converters',
+    icon: '🔗'
+  },
   // Codecs
   {
     label: 'Encode',

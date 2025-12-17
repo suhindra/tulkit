@@ -18,3 +18,6 @@ export function getEpochOverview(language: LanguageCode): OverviewContent{
 export function getCaseOverview(language: LanguageCode): OverviewContent{
   return getTranslations(language).overviews.case
 }
+export function getUrlOverview(language: LanguageCode): OverviewContent{
+  return getTranslations(language).overviews.url
+}
