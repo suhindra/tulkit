@@ -7,6 +7,69 @@ import criticalStyles from './index.css?inline'
 import './analytics'
 const asyncStylesHref = new URL('./async-styles.css', import.meta.url).href
 
+type ViewPreload = {
+  match: (path: string) => boolean
+  href: string
+}
+
+const viewPreloads: ViewPreload[] = [
+  {
+    match: path => path.startsWith('/formatter'),
+    href: new URL('./components/Formatter.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/minify'),
+    href: new URL('./components/Minifier.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/encode'),
+    href: new URL('./components/Encoder.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/decode'),
+    href: new URL('./components/Decoder.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/generator/uuid') || path.startsWith('/uuid'),
+    href: new URL('./components/UuidGenerator.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/generator/lorem'),
+    href: new URL('./components/LoremIpsumGenerator.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/generator/hash') || path.startsWith('/hash'),
+    href: new URL('./components/HashGenerator.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/converter/epoch'),
+    href: new URL('./components/EpochConverter.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/converter/case'),
+    href: new URL('./components/CaseConverter.tsx', import.meta.url).href
+  },
+  {
+    match: path => path.startsWith('/converter/url'),
+    href: new URL('./components/UrlEncoder.tsx', import.meta.url).href
+  }
+]
+
+function preloadModulesForPath(path: string){
+  if(typeof document === 'undefined') return
+  const normalized = path.toLowerCase()
+  viewPreloads.forEach(({ match, href }) => {
+    if(match(normalized)){
+      if(document.querySelector(`link[data-preloaded-module="${href}"]`)) return
+      const link = document.createElement('link')
+      link.rel = 'modulepreload'
+      link.href = href
+      link.setAttribute('data-preloaded-module', href)
+      document.head.appendChild(link)
+    }
+  })
+}
+
 function injectCriticalStyles(){
   if(typeof document === 'undefined') return
   if(document.getElementById('tulkit-critical-styles')) return
@@ -38,6 +101,7 @@ function loadDeferredStyles(){
   }
 }
 
+preloadModulesForPath(window.location.pathname || '/')
 injectCriticalStyles()
 loadDeferredStyles()
 

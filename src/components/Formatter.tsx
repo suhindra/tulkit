@@ -86,6 +86,14 @@ let sqlFormatterPromise: Promise<SqlFormatterModule> | null = null
 let highlightCorePromise: Promise<any> | null = null
 const registeredHighlightLanguages = new Set<string>()
 
+if(typeof window !== 'undefined'){
+  // Warm up the heavier formatter dependencies as soon as the formatter
+  // chunk is evaluated so users landing directly on /formatter don't need to
+  // wait for a second network round trip before formatting SQL.
+  loadSqlFormatterModule().catch(()=>{})
+  loadBeautifyModule().catch(()=>{})
+}
+
 const highlightLanguageLoaders: Record<string, () => Promise<any>> = {
   xml: ()=>import('highlight.js/lib/languages/xml'),
   yaml: ()=>import('highlight.js/lib/languages/yaml'),
