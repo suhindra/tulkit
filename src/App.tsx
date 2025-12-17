@@ -16,36 +16,54 @@ import { formatterLangs, type ActiveTab, type CodecSubtool, type LanguageCode, t
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
 
-type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'case' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
   if(normalized === '/' || normalized === ''){
-    return 'formatter'
+    return 'home'
   }
-  if(normalized.startsWith('/converter/epoch')){
-    return 'epoch'
+  if(normalized === '/generator'){
+    return 'generator'
+  }
+  if(normalized === '/generator/uuid'){
+    return 'uuid-overview'
   }
   if(normalized.startsWith('/generator/uuid') || normalized.startsWith('/uuid')){
     return 'uuid'
   }
+  if(normalized === '/generator/hash'){
+    return 'hash-overview'
+  }
   if(normalized.startsWith('/generator/hash') || normalized.startsWith('/hash')){
     return 'hash'
   }
-  if(normalized.startsWith('/generator/case') || normalized.startsWith('/case')){
+  if(normalized.startsWith('/converter/case')){
     return 'case'
+  }
+  if(normalized.startsWith('/generator/lorem')){
+    return 'lorem'
+  }
+  if(normalized === '/encode'){
+    return 'encode-overview'
   }
   if(normalized.startsWith('/encode')){
     return 'encode'
   }
+  if(normalized === '/decode'){
+    return 'decode-overview'
+  }
   if(normalized.startsWith('/decode')){
     return 'decode'
   }
+  if(normalized === '/converter'){
+    return 'converter-overview'
+  }
+  if(normalized.startsWith('/converter/epoch')){
+    return 'epoch'
+  }
   if(normalized.startsWith('/minify')){
     return 'minify'
-  }
-  if(normalized.startsWith('/generator/lorem')){
-    return 'lorem'
   }
   if(normalized.startsWith('/formatter')){
     return 'formatter'
@@ -148,6 +166,20 @@ function getCodecDetailName(type: 'encode' | 'decode', slug: CodecSubtool, appCo
 
 function getBasePathForView(view: View, relativePath: string): string | null{
   switch(view){
+    case 'home':
+      return null
+    case 'generator':
+      return null
+    case 'uuid-overview':
+      return null
+    case 'hash-overview':
+      return null
+    case 'encode-overview':
+      return null
+    case 'decode-overview':
+      return null
+    case 'converter-overview':
+      return null
     case 'formatter':
       return relativePath === '/' ? '/' : '/formatter'
     case 'minify':
@@ -155,7 +187,9 @@ function getBasePathForView(view: View, relativePath: string): string | null{
     case 'uuid':
       return relativePath.startsWith('/uuid') ? '/uuid' : '/generator/uuid'
     case 'epoch':
-      return '/converter/epoch'
+      return '/converter'
+    case 'case':
+      return '/converter'
     case 'encode':
       return '/encode'
     case 'decode':
@@ -164,8 +198,6 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return '/generator/lorem'
     case 'hash':
       return relativePath.startsWith('/hash') ? '/hash' : '/generator/hash'
-    case 'case':
-      return relativePath.startsWith('/case') ? '/case' : '/generator/case'
     default:
       return null
   }
@@ -173,6 +205,13 @@ function getBasePathForView(view: View, relativePath: string): string | null{
 
 function getBaseLabelForView(view: View, appCopy: AppCopy): string {
   switch(view){
+    case 'home': return ''
+    case 'generator': return ''
+    case 'uuid-overview': return ''
+    case 'hash-overview': return ''
+    case 'encode-overview': return ''
+    case 'decode-overview': return ''
+    case 'converter-overview': return ''
     case 'formatter': return appCopy.navFormatter
     case 'minify': return appCopy.navMinify
     case 'uuid': return appCopy.navUuid
@@ -407,6 +446,13 @@ export default function App(){
     hash: hashCopy
   } = translations
 
+  const homeOverview = translations.overviews.home
+  const generatorOverview = translations.overviews.generator
+  const uuidOverviewContent = translations.overviews.uuidOverview
+  const converterOverviewContent = translations.overviews.converterOverview
+  const hashOverviewContent = translations.overviews.hashOverview
+  const encodeOverviewContent = translations.overviews.encodeOverview
+  const decodeOverviewContent = translations.overviews.decodeOverview
   const formatterOverview = getFormatterOverviewByTab(language)[effectiveFormatterTab]
   const minifyOverview = translations.overviews.minify
   const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
@@ -416,14 +462,40 @@ export default function App(){
   const decodeOverview = translations.overviews.decode[decodeSlug]
   const loremOverview = translations.overviews.lorem
   const hashOverview = translations.overviews.hash
+  const generatorSeoBlurb = appCopy.seoBlurb.generator
+  const uuidOverviewSeoBlurb = appCopy.seoBlurb.uuidOverview
+  const hashOverviewSeoBlurb = appCopy.seoBlurb.hashOverview
+  const encodeOverviewSeoBlurb = appCopy.seoBlurb.encodeOverview
+  const decodeOverviewSeoBlurb = appCopy.seoBlurb.decodeOverview
+  const converterOverviewSeoBlurb = appCopy.seoBlurb.converterOverview
   const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
   const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
   const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
   const formatterSeoBlurb = appCopy.seoBlurb.formatter[effectiveFormatterTab] || appCopy.seoBlurb.formatter.auto
   const minifySeoBlurb = appCopy.seoBlurb.minify[effectiveMinifyTab] || appCopy.seoBlurb.minify.auto
   const hashSeoBlurb = appCopy.seoBlurb.hash[hashSlug]
-
   const seoHeading = useMemo(()=>{
+    if(view === 'home'){
+      return 'Tulkit — Web Tools for Developers'
+    }
+    if(view === 'generator'){
+      return 'Generator Tools — Tulkit'
+    }
+    if(view === 'uuid-overview'){
+      return 'UUID Generator — Tulkit'
+    }
+    if(view === 'converter-overview'){
+      return 'Converter Tools — Tulkit'
+    }
+    if(view === 'hash-overview'){
+      return 'Hash Generator — Tulkit'
+    }
+    if(view === 'encode-overview'){
+      return 'Encoder — Tulkit'
+    }
+    if(view === 'decode-overview'){
+      return 'Decoder — Tulkit'
+    }
     if(view === 'uuid'){
       if(uuidVersion === 'v1') return appCopy.seoTitles.uuidV1 || `${appCopy.seoTitles.uuid} V1`
       if(uuidVersion === 'v4') return appCopy.seoTitles.uuidV4 || `${appCopy.seoTitles.uuid} V4`
@@ -481,6 +553,27 @@ export default function App(){
   },[view, uuidVersion, appCopy, effectiveFormatterTab, headingByTab, encodeSlug, decodeSlug, effectiveMinifyTab])
 
   const metaDescription = useMemo(()=>{
+    if(view === 'home'){
+      return 'Fast, privacy-first web tools for developers. Format code, generate UUIDs, convert timestamps, encode/decode, create hashes, and more - all in your browser.'
+    }
+    if(view === 'generator'){
+      return 'Collection of generator tools for developers: UUID, Lorem Ipsum, Hash Generator, and Case Converter - all in your browser.'
+    }
+    if(view === 'uuid-overview'){
+      return 'UUID Generator with v1 (time-based), v4 (random), and v7 (ordered by time) versions. Generate unique identifiers directly in your browser.'
+    }
+    if(view === 'converter-overview'){
+      return 'Collection of converter tools for developers: Convert Unix timestamps to readable dates, adjust time zones, and work with epoch times instantly.'
+    }
+    if(view === 'hash-overview'){
+      return 'Hash Generator with SHA-1, SHA-256, and SHA-512 algorithms. Create cryptographic hashes and checksums directly in your browser.'
+    }
+    if(view === 'encode-overview'){
+      return 'Encode text to Base64, Base32, Base58, or hexadecimal. Perfect for data transmission, MIME attachments, and cryptographic applications.'
+    }
+    if(view === 'decode-overview'){
+      return 'Decode Base64, Base32, Base58, or hexadecimal back to readable text. Inspect encoded data instantly in your browser.'
+    }
     if(view === 'uuid'){
       return uuidDescriptionByVersion[uuidVersion as UuidVersion]
     }
@@ -577,7 +670,7 @@ export default function App(){
     if(typeof window === 'undefined') return
 
     const existing = document.getElementById('tulkit-breadcrumb-schema')
-    if(view === 'notfound'){
+    if(view === 'notfound' || view === 'home'){
       if(existing){
         existing.remove()
       }
@@ -620,6 +713,23 @@ export default function App(){
     ]
 
     const basePath = getBasePathForView(view, normalizedRelative)
+    
+    // Add parent breadcrumb for generator sub-pages
+    if(basePath && (view === 'uuid' || view === 'hash' || view === 'lorem')){
+      const generatorUrl = `${origin}${buildPathWithLanguage('/generator', language)}`
+      if(generatorUrl !== homeUrl && generatorUrl !== currentUrl){
+        breadcrumbs.push({ name: appCopy.navGenerator, url: generatorUrl })
+      }
+    }
+    
+    // Add parent breadcrumb for converter sub-pages
+    if(basePath && (view === 'epoch' || view === 'case')){
+      const converterUrl = `${origin}${buildPathWithLanguage('/converter', language)}`
+      if(converterUrl !== homeUrl && converterUrl !== currentUrl){
+        breadcrumbs.push({ name: appCopy.navConverters, url: converterUrl })
+      }
+    }
+    
     if(basePath){
       const baseUrl = `${origin}${buildPathWithLanguage(basePath, language)}`
       if(baseUrl !== homeUrl && baseUrl !== currentUrl){
@@ -719,7 +829,7 @@ export default function App(){
           </div>
         </div>
       </header>
-      {view !== 'notfound' && (
+      {view !== 'notfound' && view !== 'home' && view !== 'uuid-overview' && view !== 'converter-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && (
         <section className="seo-blurb">
           <div className="container">
             <h2>{seoHeading}</h2>
@@ -786,10 +896,224 @@ export default function App(){
                 ))}
               </>
             )}
+            {view === 'generator' && (
+              <>
+                {generatorSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+          </div>
+        </section>
+      )}
+      {view === 'hash-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {hashOverviewSeoBlurb.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
+          </div>
+        </section>
+      )}
+      {view === 'uuid-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {uuidOverviewSeoBlurb[0]?.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
+            <div style={{marginTop: '20px'}}>
+              <>
+                {uuidOverviewSeoBlurb[1]?.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            </div>
+          </div>
+        </section>
+      )}
+      {view === 'converter-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {converterOverviewSeoBlurb.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
+          </div>
+        </section>
+      )}
+      {view === 'encode-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {encodeOverviewSeoBlurb.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
+          </div>
+        </section>
+      )}
+      {view === 'decode-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {decodeOverviewSeoBlurb.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
           </div>
         </section>
       )}
       <main className="container">
+        {view === 'home' && (
+          <section className="home-overview">
+            <h1>{homeOverview.heading}</h1>
+            <p className="subheading">{homeOverview.subheading}</p>
+            <div className="tools-grid">
+              {homeOverview.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'generator' && (
+          <section className="home-overview">
+            <h1>{generatorOverview.heading}</h1>
+            <p className="subheading">{generatorOverview.subheading}</p>
+            <div className="tools-grid">
+              {generatorOverview.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'uuid-overview' && (
+          <section className="home-overview">
+            <h1>{uuidOverviewContent.heading}</h1>
+            <p className="subheading">{uuidOverviewContent.subheading}</p>
+            <div className="tools-grid">
+              {uuidOverviewContent.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'converter-overview' && (
+          <section className="home-overview">
+            <h1>{converterOverviewContent.heading}</h1>
+            <p className="subheading">{converterOverviewContent.subheading}</p>
+            <div className="tools-grid">
+              {converterOverviewContent.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'hash-overview' && (
+          <section className="home-overview">
+            <h1>{hashOverviewContent.heading}</h1>
+            <p className="subheading">{hashOverviewContent.subheading}</p>
+            <div className="tools-grid">
+              {hashOverviewContent.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'encode-overview' && (
+          <section className="home-overview">
+            <h1>{encodeOverviewContent.heading}</h1>
+            <p className="subheading">{encodeOverviewContent.subheading}</p>
+            <div className="tools-grid">
+              {encodeOverviewContent.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+        {view === 'decode-overview' && (
+          <section className="home-overview">
+            <h1>{decodeOverviewContent.heading}</h1>
+            <p className="subheading">{decodeOverviewContent.subheading}</p>
+            <div className="tools-grid">
+              {decodeOverviewContent.tools.map(tool => (
+                <a 
+                  key={tool.path}
+                  href={buildPathWithLanguage(tool.path, language)}
+                  className="tool-card"
+                >
+                  <div className="tool-icon">{tool.icon}</div>
+                  <div className="tool-badge">{tool.category}</div>
+                  <h3>{tool.title}</h3>
+                  <p>{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
         {view === 'formatter' && (
           <Formatter onTabChange={setFormatterTab} language={language} />
         )}
@@ -843,7 +1167,7 @@ export default function App(){
           </div>
         )}
       </main>
-      {view !== 'notfound' && (
+      {view !== 'notfound' && view !== 'home' && view !== 'generator' && view !== 'uuid-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && (
         <section className="page-overview">
           <div className="container">
             {view === 'formatter' && (
@@ -922,7 +1246,36 @@ export default function App(){
         </section>
       )}
       <footer>
-        <div className="container"><small>{appCopy.footerNote}</small></div>
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-links-grid">
+              {Object.entries(appCopy.footerLinks).map(([category, links]) => (
+                <div key={category} className="footer-column">
+                  <h4 className="footer-heading">
+                    {category === 'formatting' && 'Formatting'}
+                    {category === 'optimization' && 'Optimization'}
+                    {category === 'conversion' && 'Conversion'}
+                    {category === 'encoding' && 'Encoding'}
+                    {category === 'generation' && 'Generation'}
+                    {category === 'security' && 'Security'}
+                  </h4>
+                  <ul className="footer-link-list">
+                    {links.map(link => (
+                      <li key={link.path}>
+                        <a href={buildPathWithLanguage(link.path, language)}>
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="footer-note">
+              <small>{appCopy.footerNote}</small>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   )

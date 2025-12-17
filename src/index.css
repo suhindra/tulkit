@@ -255,10 +255,80 @@ code{
 }
 
 footer{
-  padding:12px 16px 20px;
-  text-align:center;
+  padding:40px 16px 24px;
+  background:#f9fafb;
+  border-top:1px solid var(--border);
   color:#4b5563;
   font-size:12px;
+}
+
+.footer-content{
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+}
+
+.footer-links-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:24px;
+}
+
+.footer-column{
+  display:flex;
+  flex-direction:column;
+}
+
+.footer-heading{
+  margin:0 0 12px;
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  color:#111827;
+}
+
+.footer-link-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.footer-link-list a{
+  font-size:13px;
+  color:#6b7280;
+  text-decoration:none;
+  transition:color 0.2s ease;
+}
+
+.footer-link-list a:hover{
+  color:var(--accent);
+}
+
+.footer-note{
+  text-align:center;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:#9ca3af;
+}
+
+@media (max-width:768px){
+  .footer-links-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+
+  .footer-heading{
+    font-size:12px;
+  }
+
+  .footer-link-list a{
+    font-size:12px;
+  }
 }
 
 .page-overview{
@@ -321,6 +391,26 @@ footer{
   transition:all 0.2s ease;
   text-decoration:none;
   white-space:nowrap;
+}
+
+.navbar-home{
+  background:linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  color:#6b21a8;
+  font-weight:600;
+  border-color:#c4b5fd;
+}
+
+.navbar-home:hover{
+  background:linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+  color:#4c1d95;
+  border-color:#7c3aed;
+  transform:translateY(-1px);
+}
+
+.navbar-home.active{
+  background:linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color:#ffffff;
+  border-color:#7c3aed;
 }
 
 .navbar-link:hover,
@@ -480,7 +570,119 @@ footer{
     min-width:140px;
   }
 
+
   .navbar-lang-code{
     display:none;
   }
+}
+
+.home-overview{
+  padding:60px 0;
+}
+
+.home-overview h1{
+  margin:0 0 12px;
+  font-size:40px;
+  font-weight:800;
+  background:linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.home-overview .subheading{
+  margin:0 0 50px;
+  font-size:18px;
+  color:#6b7280;
+  line-height:1.6;
+  max-width:700px;
+  font-weight:500;
+}
+
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:24px;
+  margin:0;
+}
+
+.tool-card{
+  display:flex;
+  flex-direction:column;
+  padding:28px;
+  background:linear-gradient(135deg, #ffffff 0%, #fafaf9 100%);
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  text-decoration:none;
+  color:inherit;
+  transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position:relative;
+  overflow:hidden;
+}
+
+.tool-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(90deg, #7c3aed, #6d28d9);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+
+.tool-card:hover::before{
+  transform:scaleX(1);
+}
+
+.tool-card:hover{
+  border-color:#7c3aed;
+  box-shadow:0 12px 28px rgba(124,58,237,0.15);
+  transform:translateY(-4px);
+}
+
+.tool-icon{
+  font-size:40px;
+  margin-bottom:12px;
+  display:inline-block;
+  width:56px;
+  height:56px;
+  background:linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+}
+
+.tool-badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  padding:4px 10px;
+  background:#f3e8ff;
+  color:#6b21a8;
+  border-radius:4px;
+  margin-bottom:12px;
+  width:fit-content;
+}
+
+.tool-card h3{
+  margin:0 0 10px;
+  font-size:20px;
+  font-weight:700;
+  color:#111827;
+  line-height:1.3;
+}
+
+.tool-card p{
+  margin:0;
+  font-size:14px;
+  color:#6b7280;
+  line-height:1.6;
+  flex-grow:1;
 }

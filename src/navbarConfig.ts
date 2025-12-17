@@ -56,8 +56,8 @@ export const navItems: NavItem[] = [
   {
     label: 'Case Converter',
     labelId: 'navCase',
-    path: '/generator/case',
-    category: 'generators',
+    path: '/converter/case',
+    category: 'converters',
     icon: '🔤'
   },
   // Converters

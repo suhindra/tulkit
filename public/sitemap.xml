@@ -218,6 +218,38 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/minify/json"/>
   </url>
   <url>
+    <loc>https://tulkit.online/generator</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/generator/hash</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/generator/hash</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/hash"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/hash"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/generator/uuid</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
@@ -502,6 +534,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/hash/sha512"/>
   </url>
   <url>
+    <loc>https://tulkit.online/converter</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/converter"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/converter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/converter</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/converter"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/converter"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/converter/epoch</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
@@ -518,19 +566,19 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter/epoch"/>
   </url>
   <url>
-    <loc>https://tulkit.online/generator/case</loc>
+    <loc>https://tulkit.online/converter/case</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/case"/>
-    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/case"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/case"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/converter/case"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/converter/case"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter/case"/>
   </url>
   <url>
-    <loc>https://tulkit.online/id-ID/generator/case</loc>
+    <loc>https://tulkit.online/id-ID/converter/case</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/generator/case"/>
-    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/generator/case"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/generator/case"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/converter/case"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/converter/case"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter/case"/>
   </url>
 </urlset>

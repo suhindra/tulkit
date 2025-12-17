@@ -189,6 +189,12 @@ type AppCopy = {
     notFound: string
   }
   seoBlurb: {
+    generator: string[]
+    uuidOverview: string[][]
+    converterOverview: string[]
+    hashOverview: string[]
+    encodeOverview: string[]
+    decodeOverview: string[]
     formatter: Record<ActiveTab,string[]>
     uuid: Record<UuidVersion,string[]>
     epoch: string[]
@@ -203,6 +209,14 @@ type AppCopy = {
   notFoundBody: string
   goToFormatterCta: string
   footerNote: string
+  footerLinks: {
+    formatting: Array<{ label: string; path: string }>
+    optimization: Array<{ label: string; path: string }>
+    conversion: Array<{ label: string; path: string }>
+    encoding: Array<{ label: string; path: string }>
+    generation: Array<{ label: string; path: string }>
+    security: Array<{ label: string; path: string }>
+  }
   epochMetaDescription: string
   encodeMetaDescription: string
   decodeMetaDescription: string
@@ -221,7 +235,28 @@ type AppCopy = {
   notFoundMetaDescription: string
 }
 
+type HomeTool = {
+  title: string
+  description: string
+  path: string
+  icon: string
+  category: string
+}
+
+type HomeContent = {
+  heading: string
+  subheading: string
+  tools: HomeTool[]
+}
+
 type OverviewCopy = {
+  home: HomeContent
+  generator: HomeContent
+  uuidOverview: HomeContent
+  converterOverview: HomeContent
+  hashOverview: HomeContent
+  encodeOverview: HomeContent
+  decodeOverview: HomeContent
   formatter: Record<ActiveTab,OverviewContent>
   uuid: Record<UuidVersion,OverviewContent>
   epoch: OverviewContent
@@ -644,6 +679,36 @@ const en: Translation = {
       notFound: 'Page not found — Tulkit'
     },
     seoBlurb: {
+      generator: [
+        'Collection of four powerful generator tools to streamline your development workflow: UUID Generator for creating unique identifiers, Lorem Ipsum Generator for placeholder content, Hash Generator for checksums and fingerprints, and Case Converter for transforming naming conventions.',
+        'All tools run entirely in your browser with no data uploads or server dependencies. Perfect for rapid prototyping, testing, design mockups, and everyday development tasks that require quick text generation and transformation.'
+      ],
+      uuidOverview: [
+        [
+          'Choose from three UUID versions: v1 for time-based IDs that embed creation order, v4 for high-entropy random identifiers, or v7 for sortable time-ordered values. Generate single or bulk UUIDs directly in your browser with control over formatting.',
+          'All UUID generation uses the Web Crypto API for maximum security and quality. No server uploads, no external dependencies—just privacy-first UUID creation that runs entirely on your machine for databases, APIs, and microservice architectures.'
+        ],
+        [
+          'UUID v1 is ideal for logs, background jobs, and import batches where creation-order sorting provides value. UUID v4 works well for public IDs, database keys, and anywhere you need pure randomness.',
+          'UUID v7 combines timestamp ordering with strong randomness—perfect for analytics pipelines, append-only databases, and write-heavy tables where monotonic IDs improve performance without leaking hardware metadata.'
+        ]
+      ],
+      converterOverview: [
+        'Convert Unix epoch timestamps to human-readable dates and back again instantly. Paste a Unix value in seconds or milliseconds to see when it happens in UTC, GMT, and your local time zone.',
+        'Tulkit\'s epoch converter runs entirely in your browser using the built-in JavaScript date APIs. No data uploads, no external dependencies—just fast, accurate conversion for debugging logs, syncing events, and understanding when things happened across time zones.'
+      ],
+      hashOverview: [
+        'Choose between three cryptographic hash algorithms—SHA-1, SHA-256, and SHA-512—to generate checksums, fingerprints, and digests for your data. Each algorithm offers different security levels and output sizes to match your specific use case.',
+        'All hashing happens in your browser using the Web Crypto API, so your data never leaves your machine. Ideal for verifying file integrity, creating cache keys, generating test fixtures, or debugging how values appear in logs and databases.'
+      ],
+      encodeOverview: [
+        'Convert text to four different encoding formats: Base64 for MIME attachments and APIs, Base32 for case-insensitive systems and TOTP seeds, Base58 for Bitcoin addresses and short IDs, or hexadecimal for protocols and checksums.',
+        'All encoding runs locally in your browser without uploading data to any server. Perfect for preparing payloads for APIs, creating secure URLs, embedding binary data, or transforming strings for storage and transmission.'
+      ],
+      decodeOverview: [
+        'Reverse the encoding process instantly: convert Base64, Base32, Base58, or hexadecimal strings back to readable text. Inspect API responses, debug encoded payloads, verify blockchain transactions, or recover original data from any encoded format.',
+        'Decoding happens entirely in your browser for maximum privacy. No server uploads, no external dependencies—just fast, reliable conversion that helps you understand and work with encoded data directly.'
+      ],
       formatter: {
         auto: [
           'A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.',
@@ -798,6 +863,55 @@ const en: Translation = {
       'The link you followed does not match any Tulkit tools. You can jump back to the formatter, UUID generator, or epoch converter using the buttons above.',
     goToFormatterCta: 'Go to Web Formatter',
     footerNote: 'Prototype — Tulkit Web Tools',
+    footerLinks: {
+      formatting: [
+        { label: 'Web Formatter', path: '/formatter' },
+        { label: 'HTML Formatter', path: '/formatter/html' },
+        { label: 'CSS Formatter', path: '/formatter/css' },
+        { label: 'JavaScript Formatter', path: '/formatter/javascript' },
+        { label: 'JSON Formatter', path: '/formatter/json' },
+        { label: 'SQL Formatter', path: '/formatter/sql' },
+        { label: 'PHP Formatter', path: '/formatter/php' },
+        { label: 'XML Formatter', path: '/formatter/xml' },
+        { label: 'YAML Formatter', path: '/formatter/yaml' }
+      ],
+      optimization: [
+        { label: 'Minifier', path: '/minify' },
+        { label: 'HTML Minifier', path: '/minify/html' },
+        { label: 'CSS Minifier', path: '/minify/css' },
+        { label: 'JavaScript Minifier', path: '/minify/javascript' },
+        { label: 'JSON Minifier', path: '/minify/json' }
+      ],
+      conversion: [
+        { label: 'Epoch Converter', path: '/converter/epoch' },
+        { label: 'Case Converter', path: '/converter/case' }
+      ],
+      encoding: [
+        { label: 'Encoder', path: '/encode' },
+        { label: 'Base64 Encoder', path: '/encode/base64' },
+        { label: 'Base32 Encoder', path: '/encode/base32' },
+        { label: 'Base58 Encoder', path: '/encode/base58' },
+        { label: 'Hex Encoder', path: '/encode/hex' },
+        { label: 'Decoder', path: '/decode' },
+        { label: 'Base64 Decoder', path: '/decode/base64' },
+        { label: 'Base32 Decoder', path: '/decode/base32' },
+        { label: 'Base58 Decoder', path: '/decode/base58' },
+        { label: 'Hex Decoder', path: '/decode/hex' }
+      ],
+      generation: [
+        { label: 'UUID Generator', path: '/generator/uuid' },
+        { label: 'UUID v1', path: '/generator/uuid/uuid-v1' },
+        { label: 'UUID v4', path: '/generator/uuid/uuid-v4' },
+        { label: 'UUID v7', path: '/generator/uuid/uuid-v7' },
+        { label: 'Lorem Ipsum', path: '/generator/lorem' }
+      ],
+      security: [
+        { label: 'Hash Generator', path: '/generator/hash' },
+        { label: 'SHA-1', path: '/generator/hash/sha1' },
+        { label: 'SHA-256', path: '/generator/hash/sha256' },
+        { label: 'SHA-512', path: '/generator/hash/sha512' }
+      ]
+    },
     epochMetaDescription:
       'Convert Unix epoch timestamps to readable dates and back again with Tulkit. Quickly switch between seconds, milliseconds, UTC, and local time directly in your browser.',
     encodeMetaDescription:
@@ -848,6 +962,244 @@ const en: Translation = {
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
   overviews: {
+    home: {
+      heading: 'Tulkit Web Tools',
+      subheading: 'A collection of fast, privacy-first web utilities for developers, writers, and designers',
+      tools: [
+        {
+          title: 'Web Formatter',
+          description: 'Format HTML, CSS, JavaScript, JSON, SQL, YAML, XML, or PHP in your browser with automatic language detection.',
+          path: '/formatter',
+          icon: '✨',
+          category: 'formatting'
+        },
+        {
+          title: 'Minifier',
+          description: 'Compress HTML, CSS, JavaScript, or JSON snippets directly in your browser without build tools.',
+          path: '/minify',
+          icon: '📦',
+          category: 'optimization'
+        },
+        {
+          title: 'UUID Generator',
+          description: 'Generate v1, v4, or v7 UUIDs in bulk with customizable formatting and casing options.',
+          path: '/generator/uuid',
+          icon: '🎲',
+          category: 'generation'
+        },
+        {
+          title: 'Epoch Converter',
+          description: 'Convert between Unix timestamps and readable dates in any timezone instantly.',
+          path: '/converter/epoch',
+          icon: '⏰',
+          category: 'conversion'
+        },
+        {
+          title: 'Encoder',
+          description: 'Encode text to Base64, Base32, Base58, or hex in your browser.',
+          path: '/encode',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Decoder',
+          description: 'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser.',
+          path: '/decode',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Hash Generator',
+          description: 'Generate SHA-1, SHA-256, or SHA-512 hashes for any text using the Web Crypto API.',
+          path: '/generator/hash',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'Lorem Ipsum Generator',
+          description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
+          path: '/generator/lorem',
+          icon: '📝',
+          category: 'generation'
+        },
+        {
+          title: 'Case Converter',
+          description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
+          path: '/converter/case',
+          icon: '🔤',
+          category: 'conversion'
+        }
+      ]
+    },
+    generator: {
+      heading: 'Generator Tools',
+      subheading: 'Create unique identifiers, placeholder content, hashes, and convert naming conventions',
+      tools: [
+        {
+          title: 'UUID Generator',
+          description: 'Generate v1, v4, or v7 UUIDs in bulk with customizable formatting and casing options.',
+          path: '/generator/uuid',
+          icon: '🎲',
+          category: 'generation'
+        },
+        {
+          title: 'Lorem Ipsum Generator',
+          description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
+          path: '/generator/lorem',
+          icon: '📝',
+          category: 'generation'
+        },
+        {
+          title: 'Hash Generator',
+          description: 'Generate SHA-1, SHA-256, or SHA-512 hashes for any text using the Web Crypto API.',
+          path: '/generator/hash',
+          icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    uuidOverview: {
+      heading: 'UUID Generator',
+      subheading: 'Generate UUID v1 (time-based), v4 (random), or v7 (ordered by time) identifiers',
+      tools: [
+        {
+          title: 'UUID v1 — Time-based',
+          description: 'Generate time-based UUIDs that embed a timestamp and node hint for creation-order sorting.',
+          path: '/generator/uuid/uuid-v1',
+          icon: '🆔',
+          category: 'generator'
+        },
+        {
+          title: 'UUID v4 — Random',
+          description: 'Create high-entropy random UUIDs with 122 bits of cryptographic randomness.',
+          path: '/generator/uuid/uuid-v4',
+          icon: '🆔',
+          category: 'generator'
+        },
+        {
+          title: 'UUID v7 — Ordered by Time',
+          description: 'Generate sortable UUIDs combining timestamp prefix with random bits for databases.',
+          path: '/generator/uuid/uuid-v7',
+          icon: '🆔',
+          category: 'generator'
+        }
+      ]
+    },
+    converterOverview: {
+      heading: 'Converter Tools',
+      subheading: 'Convert between naming conventions, transform Unix timestamps, and adjust time zones instantly',
+      tools: [
+        {
+          title: 'Epoch Converter',
+          description: 'Convert Unix timestamps to readable dates and back again. Inspect epoch times in seconds, milliseconds, and multiple time zones.',
+          path: '/converter/epoch',
+          icon: '⏱️',
+          category: 'conversion'
+        },
+        {
+          title: 'Case Converter',
+          description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
+          path: '/converter/case',
+          icon: '🔤',
+          category: 'conversion'
+        }
+      ]
+    },
+    hashOverview: {
+      heading: 'Hash Generator',
+      subheading: 'Generate SHA-1, SHA-256, or SHA-512 hashes for checksums, fingerprints, and cryptographic purposes',
+      tools: [
+        {
+          title: 'SHA-1 Hash',
+          description: 'Generate 40-character SHA-1 hashes for any text input. Use for legacy systems and compatibility.',
+          path: '/generator/hash/sha1',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'SHA-256 Hash',
+          description: 'Create 64-character SHA-256 hashes, the industry standard for security and checksums.',
+          path: '/generator/hash/sha256',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'SHA-512 Hash',
+          description: 'Generate 128-character SHA-512 hashes for maximum security and collision resistance.',
+          path: '/generator/hash/sha512',
+          icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    encodeOverview: {
+      heading: 'Encoder',
+      subheading: 'Convert text to Base64, Base32, Base58, or hexadecimal for transport and storage',
+      tools: [
+        {
+          title: 'Base64 Encoder',
+          description: 'Encode text to Base64, the most common encoding for data transmission and MIME attachments.',
+          path: '/encode/base64',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Base32 Encoder',
+          description: 'Encode to Base32 for case-insensitive systems, DNS labels, and TOTP seeds.',
+          path: '/encode/base32',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Base58 Encoder',
+          description: 'Create human-friendly Base58 encoded strings for Bitcoin addresses and short IDs.',
+          path: '/encode/base58',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Hex Encoder',
+          description: 'Convert text to hexadecimal for protocols, checksums, and deterministic ASCII output.',
+          path: '/encode/hex',
+          icon: '🔐',
+          category: 'encoding'
+        }
+      ]
+    },
+    decodeOverview: {
+      heading: 'Decoder',
+      subheading: 'Decode Base64, Base32, Base58, or hexadecimal back into readable text',
+      tools: [
+        {
+          title: 'Base64 Decoder',
+          description: 'Decode Base64 strings to recover original text, perfect for inspecting encoded data.',
+          path: '/decode/base64',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Base32 Decoder',
+          description: 'Decode Base32 encoded values back to plain text, useful for TOTP and DNS entries.',
+          path: '/decode/base32',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Base58 Decoder',
+          description: 'Convert Base58 strings back to text for blockchain and short ID verification.',
+          path: '/decode/base58',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Hex Decoder',
+          description: 'Translate hexadecimal values back to readable text quickly and accurately.',
+          path: '/decode/hex',
+          icon: '🔓',
+          category: 'encoding'
+        }
+      ]
+    },
     formatter: {
       auto: {
         heading: 'Web Formatter — Tulkit overview',
@@ -1445,6 +1797,36 @@ const id: Translation = {
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     seoBlurb: {
+      generator: [
+        'Koleksi empat alat generator yang ampuh untuk memperlancar alur kerja pengembangan Anda: UUID Generator untuk membuat pengenal unik, Lorem Ipsum Generator untuk konten placeholder, Hash Generator untuk checksum dan sidik jari, serta Case Converter untuk mengubah konvensi penamaan.',
+        'Semua alat berjalan sepenuhnya di browser Anda tanpa unggah data atau bergantung server. Sempurna untuk prototipe cepat, pengujian, mockup desain, dan tugas pengembangan harian yang memerlukan pembuatan teks dan transformasi cepat.'
+      ],
+      uuidOverview: [
+        [
+          'Pilih dari tiga versi UUID: v1 untuk ID berbasis waktu yang menyertakan urutan pembuatan, v4 untuk pengenal acak dengan entropi tinggi, atau v7 untuk nilai berurutan waktu yang dapat diurutkan. Hasilkan UUID tunggal atau massal langsung di browser dengan kontrol pemformatan penuh.',
+          'Semua pembuatan UUID menggunakan Web Crypto API untuk keamanan dan kualitas maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya pembuatan UUID yang mengutamakan privasi dan berjalan sepenuhnya di mesin Anda untuk arsitektur database, API, dan microservice.'
+        ],
+        [
+          'UUID v1 ideal untuk log, job latar belakang, dan proses impor yang mendapat nilai dari penyortiran berdasarkan urutan pembuatan. UUID v4 bekerja dengan baik untuk ID publik, kunci database, dan di mana pun Anda memerlukan keacakan murni.',
+          'UUID v7 menggabungkan pengurutan timestamp dengan keacakan kuat—sempurna untuk pipeline analitik, database append-only, dan tabel write-heavy di mana ID monotonic meningkatkan performa tanpa membocorkan metadata perangkat keras.'
+        ]
+      ],
+      converterOverview: [
+        'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya secara instan. Tempel nilai Unix dalam detik atau milidetik untuk melihat kapan itu terjadi di UTC, GMT, dan zona waktu lokal Anda.',
+        'Konverter epoch Tulkit berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan. Tidak ada unggah data, tidak ada dependensi eksternal—hanya konversi cepat dan akurat untuk debugging log, menyinkronkan event, dan memahami kapan terjadi sesuatu di berbagai zona waktu.'
+      ],
+      hashOverview: [
+        'Pilih di antara tiga algoritma hash kriptografi—SHA-1, SHA-256, dan SHA-512—untuk menghasilkan checksum, sidik jari, dan digest untuk data Anda. Setiap algoritma menawarkan tingkat keamanan dan ukuran output yang berbeda untuk cocok dengan kasus penggunaan spesifik.',
+        'Semua hashing terjadi di browser Anda menggunakan Web Crypto API, jadi data Anda tidak pernah meninggalkan mesin. Ideal untuk memverifikasi integritas berkas, membuat cache key, menghasilkan test fixture, atau debug bagaimana nilai muncul di log dan database.'
+      ],
+      encodeOverview: [
+        'Konversi teks ke empat format enkoding berbeda: Base64 untuk lampiran MIME dan API, Base32 untuk sistem tak sensitif huruf dan seed TOTP, Base58 untuk alamat Bitcoin dan ID pendek, atau heksadesimal untuk protokol dan checksum.',
+        'Semua enkoding berjalan lokal di browser tanpa mengunggah data ke server apa pun. Sempurna untuk menyiapkan payload untuk API, membuat URL aman, menyematkan data biner, atau mengubah string untuk penyimpanan dan transmisi.'
+      ],
+      decodeOverview: [
+        'Balikkan proses enkoding secara instan: konversi string Base64, Base32, Base58, atau heksadesimal kembali ke teks yang mudah dibaca. Periksa respons API, debug payload terenkode, verifikasi transaksi blockchain, atau pulihkan data asli dari format terenkode apa pun.',
+        'Dekoding terjadi sepenuhnya di browser Anda untuk privasi maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya konversi cepat dan dapat diandalkan yang membantu Anda memahami dan bekerja dengan data terenkode secara langsung.'
+      ],
       formatter: {
         auto: [
           'Alternatif WebFormatter yang cepat untuk HTML, CSS, JavaScript, SQL, JSON, dan PHP. Tulkit membantu developer, penulis teknis, dan tim QA merapikan kode langsung di browser tanpa memasang alat tambahan. Tempel potongan dari editor atau seret berkas, lalu dapatkan hasil bersih yang siap untuk dokumentasi, pull request, atau sesi debugging.',
@@ -1599,6 +1981,55 @@ const id: Translation = {
       'Tautan yang Anda ikuti tidak cocok dengan alat Tulkit mana pun. Gunakan tombol di atas untuk kembali ke pemformat, generator UUID, atau konverter epoch.',
     goToFormatterCta: 'Buka Pemformat Web',
     footerNote: 'Prototype — Tulkit Web Tools',
+    footerLinks: {
+      formatting: [
+        { label: 'Pemformat Web', path: '/formatter' },
+        { label: 'Pemformat HTML', path: '/formatter/html' },
+        { label: 'Pemformat CSS', path: '/formatter/css' },
+        { label: 'Pemformat JavaScript', path: '/formatter/javascript' },
+        { label: 'Pemformat JSON', path: '/formatter/json' },
+        { label: 'Pemformat SQL', path: '/formatter/sql' },
+        { label: 'Pemformat PHP', path: '/formatter/php' },
+        { label: 'Pemformat XML', path: '/formatter/xml' },
+        { label: 'Pemformat YAML', path: '/formatter/yaml' }
+      ],
+      optimization: [
+        { label: 'Minifier', path: '/minify' },
+        { label: 'Minifier HTML', path: '/minify/html' },
+        { label: 'Minifier CSS', path: '/minify/css' },
+        { label: 'Minifier JavaScript', path: '/minify/javascript' },
+        { label: 'Minifier JSON', path: '/minify/json' }
+      ],
+      conversion: [
+        { label: 'Konverter Epoch', path: '/converter/epoch' },
+        { label: 'Konverter Case', path: '/converter/case' }
+      ],
+      encoding: [
+        { label: 'Encoder', path: '/encode' },
+        { label: 'Encoder Base64', path: '/encode/base64' },
+        { label: 'Encoder Base32', path: '/encode/base32' },
+        { label: 'Encoder Base58', path: '/encode/base58' },
+        { label: 'Encoder Hex', path: '/encode/hex' },
+        { label: 'Decoder', path: '/decode' },
+        { label: 'Decoder Base64', path: '/decode/base64' },
+        { label: 'Decoder Base32', path: '/decode/base32' },
+        { label: 'Decoder Base58', path: '/decode/base58' },
+        { label: 'Decoder Hex', path: '/decode/hex' }
+      ],
+      generation: [
+        { label: 'Generator UUID', path: '/generator/uuid' },
+        { label: 'UUID v1', path: '/generator/uuid/uuid-v1' },
+        { label: 'UUID v4', path: '/generator/uuid/uuid-v4' },
+        { label: 'UUID v7', path: '/generator/uuid/uuid-v7' },
+        { label: 'Generator Lorem Ipsum', path: '/generator/lorem' }
+      ],
+      security: [
+        { label: 'Generator Hash', path: '/generator/hash' },
+        { label: 'SHA-1', path: '/generator/hash/sha1' },
+        { label: 'SHA-256', path: '/generator/hash/sha256' },
+        { label: 'SHA-512', path: '/generator/hash/sha512' }
+      ]
+    },
     epochMetaDescription:
       'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
     encodeMetaDescription:
@@ -1649,6 +2080,217 @@ const id: Translation = {
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },
   overviews: {
+    home: {
+      heading: 'Tulkit Web Tools',
+      subheading: 'Kumpulan utilitas web cepat dan privat untuk developer, penulis, dan desainer',
+      tools: [
+        {
+          title: 'Pemformat Web',
+          description: 'Format HTML, CSS, JavaScript, JSON, SQL, YAML, XML, atau PHP di browser dengan deteksi bahasa otomatis.',
+          path: '/formatter',
+          icon: '✨',
+          category: 'formatting'
+        },
+        {
+          title: 'Minifier',
+          description: 'Padatkan HTML, CSS, JavaScript, atau JSON langsung di browser tanpa perlu build tools.',
+          path: '/minify',
+          icon: '📦',
+          category: 'optimization'
+        },
+        {
+          title: 'Generator UUID',
+          description: 'Hasilkan UUID v1, v4, atau v7 dalam jumlah banyak dengan opsi format dan huruf besar yang dapat disesuaikan.',
+          path: '/generator/uuid',
+          icon: '🎲',
+          category: 'generation'
+        },
+        {
+          title: 'Konverter Epoch',
+          description: 'Konversi antara Unix timestamp dan tanggal yang mudah dibaca di zona waktu apa pun secara instan.',
+          path: '/converter/epoch',
+          icon: '⏰',
+          category: 'conversion'
+        },
+        {
+          title: 'Encoder',
+          description: 'Enkode teks ke Base64, Base32, Base58, atau hex di browser Anda.',
+          path: '/encode',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Decoder',
+          description: 'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang mudah dibaca tanpa meninggalkan browser.',
+          path: '/decode',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Generator Hash',
+          description: 'Buat hash SHA-1, SHA-256, atau SHA-512 untuk teks apa pun menggunakan Web Crypto API.',
+          path: '/generator/hash',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'Generator Lorem Ipsum',
+          description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
+          path: '/generator/lorem',
+          icon: '📝',
+          category: 'generation'
+        },
+        {
+          title: 'Konverter Case',
+          description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
+          path: '/converter/case',
+          icon: '🔤',
+          category: 'conversion'
+        }
+      ]
+    },
+    generator: {
+      heading: 'Tools Generator',
+      subheading: 'Buat pengenal unik, konten placeholder, hash, dan konversi konvensi penamaan',
+      tools: [
+        {
+          title: 'Generator UUID',
+          description: 'Hasilkan UUID v1, v4, atau v7 dalam jumlah banyak dengan opsi format dan huruf besar yang dapat disesuaikan.',
+          path: '/generator/uuid',
+          icon: '🎲',
+          category: 'generation'
+        },
+        {
+          title: 'Generator Lorem Ipsum',
+          description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
+          path: '/generator/lorem',
+          icon: '📝',
+          category: 'generation'
+        },
+        {
+          title: 'Generator Hash',
+          description: 'Buat hash SHA-1, SHA-256, atau SHA-512 untuk teks apa pun menggunakan Web Crypto API.',
+          path: '/generator/hash',
+          icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    converterOverview: {
+      heading: 'Tools Converter',
+      subheading: 'Konversi antara konvensi penamaan, ubah stempel Unix, dan sesuaikan zona waktu secara instan',
+      tools: [
+        {
+          title: 'Konverter Epoch',
+          description: 'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya. Periksa waktu epoch dalam detik, milidetik, dan berbagai zona waktu.',
+          path: '/converter/epoch',
+          icon: '⏱️',
+          category: 'conversion'
+        },
+        {
+          title: 'Konverter Case',
+          description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
+          path: '/converter/case',
+          icon: '🔤',
+          category: 'conversion'
+        }
+      ]
+    },
+    hashOverview: {
+      heading: 'Hash Generator',
+      subheading: 'Buat SHA-1, SHA-256, atau SHA-512 hash untuk checksum, sidik jari, dan kebutuhan kriptografi',
+      tools: [
+        {
+          title: 'SHA-1 Hash',
+          description: 'Hasilkan hash SHA-1 berkarakter 40 untuk input teks apa pun. Gunakan untuk sistem legacy dan kompatibilitas.',
+          path: '/generator/hash/sha1',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'SHA-256 Hash',
+          description: 'Buat hash SHA-256 berkarakter 64, standar industri untuk keamanan dan checksum.',
+          path: '/generator/hash/sha256',
+          icon: '#️⃣',
+          category: 'security'
+        },
+        {
+          title: 'SHA-512 Hash',
+          description: 'Hasilkan hash SHA-512 berkarakter 128 untuk keamanan maksimal dan ketahanan kolisi.',
+          path: '/generator/hash/sha512',
+          icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    encodeOverview: {
+      heading: 'Encoder',
+      subheading: 'Konversi teks ke Base64, Base32, Base58, atau heksadesimal untuk transportasi dan penyimpanan',
+      tools: [
+        {
+          title: 'Encoder Base64',
+          description: 'Enkode teks ke Base64, enkoding paling umum untuk transmisi data dan lampiran MIME.',
+          path: '/encode/base64',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Encoder Base32',
+          description: 'Enkode ke Base32 untuk sistem tak sensitif huruf, label DNS, dan seed TOTP.',
+          path: '/encode/base32',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Encoder Base58',
+          description: 'Buat string Base58 yang ramah-manusia untuk alamat Bitcoin dan ID pendek.',
+          path: '/encode/base58',
+          icon: '🔐',
+          category: 'encoding'
+        },
+        {
+          title: 'Encoder Hex',
+          description: 'Konversi teks ke heksadesimal untuk protokol, checksum, dan output ASCII deterministik.',
+          path: '/encode/hex',
+          icon: '🔐',
+          category: 'encoding'
+        }
+      ]
+    },
+    decodeOverview: {
+      heading: 'Decoder',
+      subheading: 'Dekode Base64, Base32, Base58, atau heksadesimal kembali ke teks yang mudah dibaca',
+      tools: [
+        {
+          title: 'Decoder Base64',
+          description: 'Dekode string Base64 untuk memulihkan teks asli, sempurna untuk memeriksa data terenkode.',
+          path: '/decode/base64',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Decoder Base32',
+          description: 'Dekode nilai Base32 kembali ke teks biasa, berguna untuk TOTP dan entri DNS.',
+          path: '/decode/base32',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Decoder Base58',
+          description: 'Konversi string Base58 kembali ke teks untuk verifikasi blockchain dan ID pendek.',
+          path: '/decode/base58',
+          icon: '🔓',
+          category: 'encoding'
+        },
+        {
+          title: 'Decoder Hex',
+          description: 'Terjemahkan nilai heksadesimal kembali ke teks yang mudah dibaca dengan cepat dan akurat.',
+          path: '/decode/hex',
+          icon: '🔓',
+          category: 'encoding'
+        }
+      ]
+    },
     formatter: {
       auto: {
         heading: 'Ikhtisar Pemformat Web — Tulkit',

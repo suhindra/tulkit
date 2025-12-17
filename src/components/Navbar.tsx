@@ -39,13 +39,13 @@ export default function Navbar({
     const current = navItems.find(item => {
       if (currentView === 'formatter') return item.category === 'formatter'
       if (currentView === 'minify') return item.category === 'minify'
-      if (currentView === 'uuid') return item.path.includes('uuid')
+      if (currentView === 'uuid' || currentView === 'uuid-overview') return item.path.includes('uuid')
       if (currentView === 'lorem') return item.path.includes('lorem')
-      if (currentView === 'hash') return item.path.includes('hash')
+      if (currentView === 'hash' || currentView === 'hash-overview') return item.path.includes('hash')
       if (currentView === 'case') return item.path.includes('case')
       if (currentView === 'epoch') return item.category === 'converters'
-      if (currentView === 'encode') return item.path.includes('encode')
-      if (currentView === 'decode') return item.path.includes('decode')
+      if (currentView === 'encode' || currentView === 'encode-overview') return item.path.includes('encode')
+      if (currentView === 'decode' || currentView === 'decode-overview') return item.path.includes('decode')
       return false
     })
     return current?.category || null
@@ -74,6 +74,19 @@ export default function Navbar({
   return (
     <nav className="navbar" ref={navRef}>
       <div className="navbar-container">
+        {/* Home link */}
+        <div className="navbar-items">
+          <a
+            href={buildPathWithLanguage('/', language)}
+            className={`navbar-link navbar-home ${currentView === 'home' ? 'active' : ''}`}
+            onClick={e => handleNavClick(e, '/')}
+            title="Home"
+          >
+            <span className="navbar-icon">🏠</span>
+            <span className="navbar-label">Home</span>
+          </a>
+        </div>
+
         {/* Direct navigation items */}
         <div className="navbar-items">
           {directItems.map(item => (
@@ -114,13 +127,13 @@ export default function Navbar({
                         key={item.path}
                         href={buildPathWithLanguage(item.path, language)}
                         className={`navbar-dropdown-item ${
-                          (currentView === 'uuid' && item.path.includes('uuid')) ||
+                          (currentView === 'uuid' || currentView === 'uuid-overview') && item.path.includes('uuid') ||
                           (currentView === 'lorem' && item.path.includes('lorem')) ||
-                          (currentView === 'hash' && item.path.includes('hash')) ||
+                          (currentView === 'hash' || currentView === 'hash-overview') && item.path.includes('hash') ||
                           (currentView === 'case' && item.path.includes('case')) ||
                           (currentView === 'epoch' && item.path.includes('epoch')) ||
-                          (currentView === 'encode' && item.path.includes('encode')) ||
-                          (currentView === 'decode' && item.path.includes('decode'))
+                          (currentView === 'encode' || currentView === 'encode-overview') && item.path.includes('encode') ||
+                          (currentView === 'decode' || currentView === 'decode-overview') && item.path.includes('decode')
                             ? 'active'
                             : ''
                         }`}
