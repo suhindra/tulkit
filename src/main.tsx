@@ -3,8 +3,18 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
-import './index.css'
+import criticalStyles from './index.css?inline'
+import './analytics'
 const asyncStylesHref = new URL('./async-styles.css', import.meta.url).href
+
+function injectCriticalStyles(){
+  if(typeof document === 'undefined') return
+  if(document.getElementById('tulkit-critical-styles')) return
+  const style = document.createElement('style')
+  style.id = 'tulkit-critical-styles'
+  style.textContent = criticalStyles
+  document.head.appendChild(style)
+}
 
 function loadDeferredStyles(){
   if(typeof document === 'undefined') return
@@ -28,6 +38,7 @@ function loadDeferredStyles(){
   }
 }
 
+injectCriticalStyles()
 loadDeferredStyles()
 
 const container = document.getElementById('root')!

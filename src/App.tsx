@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import Navbar from './components/Navbar'
-import Formatter from './components/Formatter'
+const Formatter = React.lazy(()=>import('./components/Formatter'))
 const Minifier = React.lazy(()=>import('./components/Minifier'))
 const UuidGenerator = React.lazy(()=>import('./components/UuidGenerator'))
 const EpochConverter = React.lazy(()=>import('./components/EpochConverter'))
@@ -11,11 +11,13 @@ const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
 const UrlEncoder = React.lazy(()=>import('./components/UrlEncoder'))
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getFormatterOverviewByTab, getUuidOverviewByVersion, getEpochOverview, getCaseOverview, getUrlOverview } from './pageOverviewContent'
-import { getTranslations } from './i18n'
+import { loadOverviewContent, type OverviewCopy } from './pageOverviewContent'
+import { loadSeoBlurbs } from './seoBlurbs'
+import { getTranslations, type SeoBlurbCopy } from './i18n'
 import { formatterLangs, type ActiveTab, type CodecSubtool, type LanguageCode, type MinifyTab, type UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
 import { Helmet } from 'react-helmet-async'
+import './components/Breadcrumb.css'
 
 type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'notfound'
 
@@ -101,6 +103,38 @@ type BreadcrumbItem = { name: string; url: string }
 
 const FORMATTER_SETTINGS_KEY = 'tulkit-formatter-settings'
 const MINIFIER_SETTINGS_KEY = 'tulkit-minifier-settings'
+const PLACEHOLDER_CARD_COUNT = 6
+
+function ToolsGridSkeleton(){
+  return (
+    <>
+      <div className="skeleton-heading" aria-hidden="true" />
+      <div className="skeleton-subheading" aria-hidden="true" />
+      <div className="tools-grid" aria-hidden="true">
+        {Array.from({ length: PLACEHOLDER_CARD_COUNT }).map((_, index)=>(
+          <div key={index} className="tool-card skeleton-card">
+            <div className="tool-icon placeholder-icon" />
+            <div className="tool-badge placeholder-badge" />
+            <div className="placeholder-line title" />
+            <div className="placeholder-line body" />
+            <div className="placeholder-line body short" />
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
+
+function ParagraphSkeleton({ lines = 3 }: { lines?: number }){
+  return (
+    <div className="paragraph-skeleton" aria-hidden="true">
+      <div className="skeleton-heading short" />
+      {Array.from({ length: lines }).map((_, index)=>(
+        <div key={index} className="placeholder-line paragraph" />
+      ))}
+    </div>
+  )
+}
 
 const formatterSlugToTabMap: Record<string,FormatterDetailTab> = {
   html: 'html',
@@ -148,24 +182,10 @@ function getUuidVersionFromPath(path: string): UuidVersion{
   return 'v4'
 }
 
-function stripTulkitSuffix(value: string): string{
-  return value.replace(/\s+—\s+Tulkit$/,'').trim()
-}
-
 function getCodecDetailName(type: 'encode' | 'decode', slug: CodecSubtool, appCopy: AppCopy): string | null{
   if(slug === 'default') return null
-  if(type === 'encode'){
-    if(slug === 'base64') return stripTulkitSuffix(appCopy.seoTitles.encodeBase64)
-    if(slug === 'base32') return stripTulkitSuffix(appCopy.seoTitles.encodeBase32)
-    if(slug === 'base58') return stripTulkitSuffix(appCopy.seoTitles.encodeBase58)
-    if(slug === 'hex') return stripTulkitSuffix(appCopy.seoTitles.encodeHex)
-    return null
-  }
-  if(slug === 'base64') return stripTulkitSuffix(appCopy.seoTitles.decodeBase64)
-  if(slug === 'base32') return stripTulkitSuffix(appCopy.seoTitles.decodeBase32)
-  if(slug === 'base58') return stripTulkitSuffix(appCopy.seoTitles.decodeBase58)
-  if(slug === 'hex') return stripTulkitSuffix(appCopy.seoTitles.decodeHex)
-  return null
+  const map = type === 'encode' ? appCopy.breadcrumbTitles.encode : appCopy.breadcrumbTitles.decode
+  return map[slug] || null
 }
 
 function getBasePathForView(view: View, relativePath: string): string | null{
@@ -221,13 +241,13 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'formatter': return appCopy.navFormatter
     case 'minify': return appCopy.navMinify
     case 'uuid': return appCopy.navUuid
-    case 'epoch': return appCopy.navEpoch
+    case 'epoch': return appCopy.navConverters
     case 'encode': return appCopy.navEncode
     case 'decode': return appCopy.navDecode
     case 'lorem': return appCopy.navLorem
     case 'hash': return appCopy.navHash
-    case 'case': return appCopy.navCase
-    case 'url': return appCopy.navUrl
+    case 'case': return appCopy.navConverters
+    case 'url': return appCopy.navConverters
     default: return ''
   }
 }
@@ -392,6 +412,9 @@ export default function App(){
   const [formatterTab, setFormatterTab] = useState<ActiveTab>(()=>getInitialFormatterTab())
   const [minifierTab, setMinifierTab] = useState<MinifyTab>(()=>getInitialMinifierTab())
   const [uuidVersion, setUuidVersion] = useState<UuidVersion>('v4')
+  const [overviews, setOverviews] = useState<OverviewCopy | null>(null)
+  const [seoBlurbs, setSeoBlurbs] = useState<SeoBlurbCopy | null>(null)
+  const [uiBreadcrumbs, setUiBreadcrumbs] = useState<BreadcrumbItem[]>([])
   const relativePath = useMemo(()=>stripLanguagePrefix(location.pathname) || '/', [location.pathname])
   const view = useMemo(()=>getViewFromPath(relativePath), [relativePath])
   const encodeSlug = useMemo<CodecSubtool>(()=> (view === 'encode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
@@ -445,6 +468,28 @@ export default function App(){
     }
   },[language])
 
+  useEffect(()=>{
+    let cancelled = false
+    setOverviews(null)
+    loadOverviewContent(language).then(copy=>{
+      if(!cancelled){
+        setOverviews(copy)
+      }
+    })
+    return ()=>{ cancelled = true }
+  },[language])
+
+  useEffect(()=>{
+    let cancelled = false
+    setSeoBlurbs(null)
+    loadSeoBlurbs(language).then(copy=>{
+      if(!cancelled){
+        setSeoBlurbs(copy)
+      }
+    })
+    return ()=>{ cancelled = true }
+  },[language])
+
   const translations = getTranslations(language)
   const {
     app: appCopy,
@@ -456,35 +501,39 @@ export default function App(){
     hash: hashCopy
   } = translations
 
-  const homeOverview = translations.overviews.home
-  const generatorOverview = translations.overviews.generator
-  const uuidOverviewContent = translations.overviews.uuidOverview
-  const converterOverviewContent = translations.overviews.converterOverview
-  const hashOverviewContent = translations.overviews.hashOverview
-  const encodeOverviewContent = translations.overviews.encodeOverview
-  const decodeOverviewContent = translations.overviews.decodeOverview
-  const formatterOverview = getFormatterOverviewByTab(language)[effectiveFormatterTab]
-  const minifyOverview = translations.overviews.minify
-  const uuidOverview = getUuidOverviewByVersion(language)[uuidVersion]
-  const epochOverview = getEpochOverview(language)
-  const caseOverview = getCaseOverview(language)
-  const urlOverview = getUrlOverview(language)
-  const encodeOverview = translations.overviews.encode[encodeSlug]
-  const decodeOverview = translations.overviews.decode[decodeSlug]
-  const loremOverview = translations.overviews.lorem
-  const hashOverview = translations.overviews.hash
-  const generatorSeoBlurb = appCopy.seoBlurb.generator
-  const uuidOverviewSeoBlurb = appCopy.seoBlurb.uuidOverview
-  const hashOverviewSeoBlurb = appCopy.seoBlurb.hashOverview
-  const encodeOverviewSeoBlurb = appCopy.seoBlurb.encodeOverview
-  const decodeOverviewSeoBlurb = appCopy.seoBlurb.decodeOverview
-  const converterOverviewSeoBlurb = appCopy.seoBlurb.converterOverview
-  const encodeSeoBlurb = appCopy.seoBlurb.encode[encodeSlug]
-  const decodeSeoBlurb = appCopy.seoBlurb.decode[decodeSlug]
-  const uuidSeoBlurb = appCopy.seoBlurb.uuid[uuidVersion]
-  const formatterSeoBlurb = appCopy.seoBlurb.formatter[effectiveFormatterTab] || appCopy.seoBlurb.formatter.auto
-  const minifySeoBlurb = appCopy.seoBlurb.minify[effectiveMinifyTab] || appCopy.seoBlurb.minify.auto
-  const hashSeoBlurb = appCopy.seoBlurb.hash[hashSlug]
+  const homeOverview = overviews?.home
+  const generatorOverview = overviews?.generator
+  const uuidOverviewContent = overviews?.uuidOverview
+  const converterOverviewContent = overviews?.converterOverview
+  const hashOverviewContent = overviews?.hashOverview
+  const encodeOverviewContent = overviews?.encodeOverview
+  const decodeOverviewContent = overviews?.decodeOverview
+  const formatterOverview = overviews?.formatter[effectiveFormatterTab]
+  const minifyOverview = overviews?.minify
+  const uuidOverview = overviews?.uuid[uuidVersion]
+  const epochOverview = overviews?.epoch
+  const caseOverview = overviews?.case
+  const urlOverview = overviews?.url
+  const encodeOverview = overviews?.encode[encodeSlug]
+  const decodeOverview = overviews?.decode[decodeSlug]
+  const loremOverview = overviews?.lorem
+  const hashOverview = overviews?.hash
+  const generatorSeoBlurb = seoBlurbs?.generator || []
+  const uuidOverviewSeoBlurb = seoBlurbs?.uuidOverview || []
+  const hashOverviewSeoBlurb = seoBlurbs?.hashOverview || []
+  const encodeOverviewSeoBlurb = seoBlurbs?.encodeOverview || []
+  const decodeOverviewSeoBlurb = seoBlurbs?.decodeOverview || []
+  const converterOverviewSeoBlurb = seoBlurbs?.converterOverview || []
+  const encodeSeoBlurb = (seoBlurbs?.encode && seoBlurbs.encode[encodeSlug]) || []
+  const decodeSeoBlurb = (seoBlurbs?.decode && seoBlurbs.decode[decodeSlug]) || []
+  const uuidSeoBlurb = (seoBlurbs?.uuid && seoBlurbs.uuid[uuidVersion]) || []
+  const formatterSeoBlurb = (seoBlurbs?.formatter && (seoBlurbs.formatter[effectiveFormatterTab] || seoBlurbs.formatter.auto)) || []
+  const minifySeoBlurb = (seoBlurbs?.minify && (seoBlurbs.minify[effectiveMinifyTab] || seoBlurbs.minify.auto)) || []
+  const hashSeoBlurb = (seoBlurbs?.hash && seoBlurbs.hash[hashSlug]) || []
+  const epochSeoBlurb = seoBlurbs?.epoch || []
+  const loremSeoBlurb = seoBlurbs?.lorem || []
+  const caseSeoBlurb = seoBlurbs?.case || []
+  const urlSeoBlurb = seoBlurbs?.url || []
   const seoHeading = useMemo(()=>{
     if(view === 'home'){
       return 'Tulkit — Web Tools for Developers'
@@ -688,6 +737,7 @@ export default function App(){
       if(existing){
         existing.remove()
       }
+      setUiBreadcrumbs([])
       return
     }
 
@@ -708,13 +758,25 @@ export default function App(){
       pageName = appCopy.navMinify
     }else if(view === 'uuid'){
       pageName = `${appCopy.navUuid} ${uuidVersion.toUpperCase()}`
+    }else if(view === 'uuid-overview'){
+      pageName = appCopy.navUuid
+    }else if(view === 'generator'){
+      pageName = appCopy.navGenerator
     }else if(view === 'epoch'){
       pageName = appCopy.navEpoch
+    }else if(view === 'converter-overview'){
+      pageName = appCopy.navConverters
     }else if(view === 'encode'){
+      pageName = appCopy.navEncode
+    }else if(view === 'encode-overview'){
       pageName = appCopy.navEncode
     }else if(view === 'decode'){
       pageName = appCopy.navDecode
+    }else if(view === 'decode-overview'){
+      pageName = appCopy.navDecode
     }else if(view === 'hash'){
+      pageName = appCopy.navHash
+    }else if(view === 'hash-overview'){
       pageName = appCopy.navHash
     }else if(view === 'lorem'){
       pageName = appCopy.navLorem
@@ -736,19 +798,13 @@ export default function App(){
       }
     }
     
-    // Add parent breadcrumb for converter sub-pages
-    if(basePath && (view === 'epoch' || view === 'case' || view === 'url')){
-      const converterUrl = `${origin}${buildPathWithLanguage('/converter', language)}`
-      if(converterUrl !== homeUrl && converterUrl !== currentUrl){
-        breadcrumbs.push({ name: appCopy.navConverters, url: converterUrl })
-      }
-    }
-    
     if(basePath){
       const baseUrl = `${origin}${buildPathWithLanguage(basePath, language)}`
       if(baseUrl !== homeUrl && baseUrl !== currentUrl){
-        const baseLabel = getBaseLabelForView(view, appCopy) || pageName
-        breadcrumbs.push({ name: baseLabel, url: baseUrl })
+        const baseLabel = (getBaseLabelForView(view, appCopy) || pageName || '').trim()
+        if(baseLabel){
+          breadcrumbs.push({ name: baseLabel, url: baseUrl })
+        }
       }
     }
 
@@ -773,6 +829,8 @@ export default function App(){
     }else{
       breadcrumbs[duplicateIndex] = finalItem
     }
+
+    setUiBreadcrumbs(breadcrumbs)
 
     const jsonLd = {
       '@context': 'https://schema.org',
@@ -813,6 +871,19 @@ export default function App(){
     navigate('/formatter')
   }
 
+  function handleBreadcrumbClick(url: string){
+    if(typeof window !== 'undefined'){
+      try{
+        const parsed = new URL(url)
+        navigate(parsed.pathname + (parsed.search || ''))
+        return
+      }catch{
+        // fall through
+      }
+    }
+    navigate(url)
+  }
+
   return (
     <div className="app">
       <Helmet>
@@ -827,6 +898,35 @@ export default function App(){
           onLanguageChange={setLanguage}
         />
       </React.Suspense>
+      {uiBreadcrumbs.length > 1 && (
+        <nav className="breadcrumb" aria-label="Breadcrumb">
+          <div>
+            <ol className="breadcrumb-list">
+              {uiBreadcrumbs.map((item, index)=>{
+                const isLast = index === uiBreadcrumbs.length - 1
+                return (
+                  <li key={item.url} className="breadcrumb-item">
+                    {!isLast ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={()=>handleBreadcrumbClick(item.url)}
+                          className="breadcrumb-link"
+                        >
+                          {item.name}
+                        </button>
+                        <span className="breadcrumb-separator">/</span>
+                      </>
+                    ) : (
+                      <span className="breadcrumb-current">{item.name}</span>
+                    )}
+                  </li>
+                )
+              })}
+            </ol>
+          </div>
+        </nav>
+      )}
       <header>
         <div className="container">
           <div className="brand">
@@ -861,9 +961,9 @@ export default function App(){
                 ))}
               </>
             )}
-            {view === 'epoch' && (
+            {view === 'epoch' && epochSeoBlurb.length > 0 && (
               <>
-                {appCopy.seoBlurb.epoch.map((text: string)=>(
+                {epochSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -896,23 +996,23 @@ export default function App(){
                 ))}
               </>
             )}
-            {view === 'lorem' && (
+            {view === 'lorem' && loremSeoBlurb.length > 0 && (
               <>
-                {appCopy.seoBlurb.lorem.map((text: string)=>(
+                {loremSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
-            {view === 'case' && (
+            {view === 'case' && caseSeoBlurb.length > 0 && (
               <>
-                {appCopy.seoBlurb.case.map((text: string)=>(
+                {caseSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
             )}
-            {view === 'url' && (
+            {view === 'url' && urlSeoBlurb.length > 0 && (
               <>
-                {appCopy.seoBlurb.url.map((text: string)=>(
+                {urlSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -997,146 +1097,190 @@ export default function App(){
       <main className="container">
         {view === 'home' && (
           <section className="home-overview">
-            <h1>{homeOverview.heading}</h1>
-            <p className="subheading">{homeOverview.subheading}</p>
-            <div className="tools-grid">
-              {homeOverview.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {homeOverview ? (
+              <>
+                <h1>{homeOverview.heading}</h1>
+                <p className="subheading">{homeOverview.subheading}</p>
+                <div className="tools-grid">
+                  {homeOverview.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'generator' && (
           <section className="home-overview">
-            <h1>{generatorOverview.heading}</h1>
-            <p className="subheading">{generatorOverview.subheading}</p>
-            <div className="tools-grid">
-              {generatorOverview.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {generatorOverview ? (
+              <>
+                <h1>{generatorOverview.heading}</h1>
+                <p className="subheading">{generatorOverview.subheading}</p>
+                <div className="tools-grid">
+                  {generatorOverview.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'uuid-overview' && (
           <section className="home-overview">
-            <h1>{uuidOverviewContent.heading}</h1>
-            <p className="subheading">{uuidOverviewContent.subheading}</p>
-            <div className="tools-grid">
-              {uuidOverviewContent.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {uuidOverviewContent ? (
+              <>
+                <h1>{uuidOverviewContent.heading}</h1>
+                <p className="subheading">{uuidOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {uuidOverviewContent.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'converter-overview' && (
           <section className="home-overview">
-            <h1>{converterOverviewContent.heading}</h1>
-            <p className="subheading">{converterOverviewContent.subheading}</p>
-            <div className="tools-grid">
-              {converterOverviewContent.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {converterOverviewContent ? (
+              <>
+                <h1>{converterOverviewContent.heading}</h1>
+                <p className="subheading">{converterOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {converterOverviewContent.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'hash-overview' && (
           <section className="home-overview">
-            <h1>{hashOverviewContent.heading}</h1>
-            <p className="subheading">{hashOverviewContent.subheading}</p>
-            <div className="tools-grid">
-              {hashOverviewContent.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {hashOverviewContent ? (
+              <>
+                <h1>{hashOverviewContent.heading}</h1>
+                <p className="subheading">{hashOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {hashOverviewContent.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'encode-overview' && (
           <section className="home-overview">
-            <h1>{encodeOverviewContent.heading}</h1>
-            <p className="subheading">{encodeOverviewContent.subheading}</p>
-            <div className="tools-grid">
-              {encodeOverviewContent.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {encodeOverviewContent ? (
+              <>
+                <h1>{encodeOverviewContent.heading}</h1>
+                <p className="subheading">{encodeOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {encodeOverviewContent.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'decode-overview' && (
           <section className="home-overview">
-            <h1>{decodeOverviewContent.heading}</h1>
-            <p className="subheading">{decodeOverviewContent.subheading}</p>
-            <div className="tools-grid">
-              {decodeOverviewContent.tools.map(tool => (
-                <a 
-                  key={tool.path}
-                  href={buildPathWithLanguage(tool.path, language)}
-                  className="tool-card"
-                >
-                  <div className="tool-icon">{tool.icon}</div>
-                  <div className="tool-badge">{tool.category}</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.description}</p>
-                </a>
-              ))}
-            </div>
+            {decodeOverviewContent ? (
+              <>
+                <h1>{decodeOverviewContent.heading}</h1>
+                <p className="subheading">{decodeOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {decodeOverviewContent.tools.map(tool => (
+                    <a 
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
           </section>
         )}
         {view === 'formatter' && (
-          <Formatter onTabChange={setFormatterTab} language={language} />
+          <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
+            <Formatter onTabChange={setFormatterTab} language={language} />
+          </React.Suspense>
         )}
         {view === 'minify' && (
           <React.Suspense fallback={<div className="formatter">{'Loading…'}</div>}>
@@ -1197,84 +1341,104 @@ export default function App(){
         <section className="page-overview">
           <div className="container">
             {view === 'formatter' && (
-              <>
-                <h2>{formatterOverview.heading}</h2>
-                {formatterOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              formatterOverview ? (
+                <>
+                  <h2>{formatterOverview.heading}</h2>
+                  {formatterOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'uuid' && (
-              <>
-                <h2>{uuidOverview.heading}</h2>
-                {uuidOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              uuidOverview ? (
+                <>
+                  <h2>{uuidOverview.heading}</h2>
+                  {uuidOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'epoch' && (
-              <>
-                <h2>{epochOverview.heading}</h2>
-                {epochOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              epochOverview ? (
+                <>
+                  <h2>{epochOverview.heading}</h2>
+                  {epochOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'encode' && (
-              <>
-                <h2>{encodeOverview.heading}</h2>
-                {encodeOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              encodeOverview ? (
+                <>
+                  <h2>{encodeOverview.heading}</h2>
+                  {encodeOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'minify' && (
-              <>
-                <h2>{minifyOverview.heading}</h2>
-                {minifyOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              minifyOverview ? (
+                <>
+                  <h2>{minifyOverview.heading}</h2>
+                  {minifyOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'decode' && (
-              <>
-                <h2>{decodeOverview.heading}</h2>
-                {decodeOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              decodeOverview ? (
+                <>
+                  <h2>{decodeOverview.heading}</h2>
+                  {decodeOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'hash' && (
-              <>
-                <h2>{hashOverview.heading}</h2>
-                {hashOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              hashOverview ? (
+                <>
+                  <h2>{hashOverview.heading}</h2>
+                  {hashOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'lorem' && (
-              <>
-                <h2>{loremOverview.heading}</h2>
-                {loremOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              loremOverview ? (
+                <>
+                  <h2>{loremOverview.heading}</h2>
+                  {loremOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'case' && (
-              <>
-                <h2>{caseOverview.heading}</h2>
-                {caseOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              caseOverview ? (
+                <>
+                  <h2>{caseOverview.heading}</h2>
+                  {caseOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'url' && (
-              <>
-                <h2>{urlOverview.heading}</h2>
-                {urlOverview.paragraphs.map(text=>(
-                  <p key={text}>{text}</p>
-                ))}
-              </>
+              urlOverview ? (
+                <>
+                  <h2>{urlOverview.heading}</h2>
+                  {urlOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
             )}
           </div>
         </section>
@@ -1285,14 +1449,14 @@ export default function App(){
             <div className="footer-links-grid">
               {Object.entries(appCopy.footerLinks).map(([category, links]) => (
                 <div key={category} className="footer-column">
-                  <h4 className="footer-heading">
+                  <p className="footer-heading">
                     {category === 'formatting' && 'Formatting'}
                     {category === 'optimization' && 'Optimization'}
                     {category === 'conversion' && 'Conversion'}
                     {category === 'encoding' && 'Encoding'}
                     {category === 'generation' && 'Generation'}
                     {category === 'security' && 'Security'}
-                  </h4>
+                  </p>
                   <ul className="footer-link-list">
                     {links.map(link => (
                       <li key={link.path}>

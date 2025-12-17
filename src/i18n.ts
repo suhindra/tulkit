@@ -96,7 +96,7 @@ type UrlEncoderCopy = {
   }
 }
 
-type LoremCopy = {
+export type LoremCopy = {
   paragraphCountLabel: string
   classicPrefixLabel: string
   lengthLabel: string
@@ -167,6 +167,8 @@ type AppCopy = {
   brandHeading: string
   brandSubheading: string
   brandNote: string
+  navGenerator: string
+  navConverters: string
   navFormatter: string
   navMinify: string
   navUuid: string
@@ -215,23 +217,9 @@ type AppCopy = {
     url: string
     notFound: string
   }
-  seoBlurb: {
-    generator: string[]
-    uuidOverview: string[][]
-    converterOverview: string[]
-    hashOverview: string[]
-    encodeOverview: string[]
-    decodeOverview: string[]
-    formatter: Record<ActiveTab,string[]>
-    uuid: Record<UuidVersion,string[]>
-    epoch: string[]
-    encode: Record<CodecSubtool,string[]>
-    minify: Record<ActiveTab,string[]>
-    decode: Record<CodecSubtool,string[]>
-    lorem: string[]
-    hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
-    case: string[]
-    url: string[]
+  breadcrumbTitles: {
+    encode: Record<CodecSubtool,string>
+    decode: Record<CodecSubtool,string>
   }
   notFoundHeading: string
   notFoundBody: string
@@ -264,6 +252,25 @@ type AppCopy = {
   notFoundMetaDescription: string
 }
 
+export type SeoBlurbCopy = {
+  generator: string[]
+  uuidOverview: string[][]
+  converterOverview: string[]
+  hashOverview: string[]
+  encodeOverview: string[]
+  decodeOverview: string[]
+  formatter: Record<ActiveTab,string[]>
+  uuid: Record<UuidVersion,string[]>
+  epoch: string[]
+  encode: Record<CodecSubtool,string[]>
+  minify: Record<ActiveTab,string[]>
+  decode: Record<CodecSubtool,string[]>
+  lorem: string[]
+  hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
+  case: string[]
+  url: string[]
+}
+
 type HomeTool = {
   title: string
   description: string
@@ -278,7 +285,7 @@ type HomeContent = {
   tools: HomeTool[]
 }
 
-type OverviewCopy = {
+export type OverviewCopy = {
   home: HomeContent
   generator: HomeContent
   uuidOverview: HomeContent
@@ -306,11 +313,9 @@ type Translation = {
   uuid: UuidCopy
   epoch: EpochCopy
   urlEncoder: UrlEncoderCopy
-  lorem: LoremCopy
   encoder: EncoderCopy
   hash: HashCopy
   app: AppCopy
-  overviews: OverviewCopy
 }
 
 const formatterLangLabelsBase: Record<FormatterLang,string> = {
@@ -668,39 +673,13 @@ const en: Translation = {
     copyErrorPrefix: 'Clipboard failed: ',
     inputErrorPrefix: 'Could not compute hash: '
   },
-  lorem: {
-    paragraphCountLabel: 'How many paragraphs?',
-    classicPrefixLabel: 'Start with “Lorem ipsum dolor sit amet…”',
-    lengthLabel: 'Sentence length',
-    lengthShort: 'Short',
-    lengthMedium: 'Medium',
-    lengthLong: 'Long',
-    generateLabel: 'Generate lorem ipsum',
-    copyLabel: 'Copy',
-    copySuccess: 'Lorem ipsum copied to clipboard',
-    copyErrorPrefix: 'Clipboard failed: ',
-    referencesHeading: 'Classic Lorem Ipsum sources',
-    standardHeading: 'The standard Lorem Ipsum passage, used since the 1500s',
-    standardBody:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    cicero1Heading: 'Section 1.10.32 of “De Finibus Bonorum et Malorum” (Cicero, 45 BC)',
-    cicero1Latin:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
-    cicero1TranslationHeading: '1914 English translation by H. Rackham',
-    cicero1Translation:
-      'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?',
-    cicero2Heading: 'Section 1.10.33 of “De Finibus Bonorum et Malorum” (Cicero, 45 BC)',
-    cicero2Latin:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
-    cicero2TranslationHeading: '1914 English translation by H. Rackham',
-    cicero2Translation:
-      'On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.'
-  },
   app: {
     logoAlt: 'Tulkit Online logo',
     brandHeading: 'Web Tools — Tulkit',
     brandSubheading: 'Small browser tools for everyday development tasks',
     brandNote: 'All formatting and generation happens in your browser only; your code never leaves your device.',
+    navGenerator: 'Generator',
+    navConverters: 'Converters',
     navFormatter: 'Formatter',
     navUuid: 'UUID Generator',
     navEpoch: 'Epoch Converter',
@@ -749,189 +728,21 @@ const en: Translation = {
       url: 'URL Encoder — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
-    seoBlurb: {
-      generator: [
-        'Collection of four powerful generator tools to streamline your development workflow: UUID Generator for creating unique identifiers, Lorem Ipsum Generator for placeholder content, Hash Generator for checksums and fingerprints, and Case Converter for transforming naming conventions.',
-        'All tools run entirely in your browser with no data uploads or server dependencies. Perfect for rapid prototyping, testing, design mockups, and everyday development tasks that require quick text generation and transformation.'
-      ],
-      uuidOverview: [
-        [
-          'Choose from three UUID versions: v1 for time-based IDs that embed creation order, v4 for high-entropy random identifiers, or v7 for sortable time-ordered values. Generate single or bulk UUIDs directly in your browser with control over formatting.',
-          'All UUID generation uses the Web Crypto API for maximum security and quality. No server uploads, no external dependencies—just privacy-first UUID creation that runs entirely on your machine for databases, APIs, and microservice architectures.'
-        ],
-        [
-          'UUID v1 is ideal for logs, background jobs, and import batches where creation-order sorting provides value. UUID v4 works well for public IDs, database keys, and anywhere you need pure randomness.',
-          'UUID v7 combines timestamp ordering with strong randomness—perfect for analytics pipelines, append-only databases, and write-heavy tables where monotonic IDs improve performance without leaking hardware metadata.'
-        ]
-      ],
-      converterOverview: [
-        'Convert Unix epoch timestamps to human-readable dates and back again instantly. Paste a Unix value in seconds or milliseconds to see when it happens in UTC, GMT, and your local time zone.',
-        'Tulkit\'s epoch converter runs entirely in your browser using the built-in JavaScript date APIs. No data uploads, no external dependencies—just fast, accurate conversion for debugging logs, syncing events, and understanding when things happened across time zones.'
-      ],
-      hashOverview: [
-        'Choose between three cryptographic hash algorithms—SHA-1, SHA-256, and SHA-512—to generate checksums, fingerprints, and digests for your data. Each algorithm offers different security levels and output sizes to match your specific use case.',
-        'All hashing happens in your browser using the Web Crypto API, so your data never leaves your machine. Ideal for verifying file integrity, creating cache keys, generating test fixtures, or debugging how values appear in logs and databases.'
-      ],
-      encodeOverview: [
-        'Convert text to four different encoding formats: Base64 for MIME attachments and APIs, Base32 for case-insensitive systems and TOTP seeds, Base58 for Bitcoin addresses and short IDs, or hexadecimal for protocols and checksums.',
-        'All encoding runs locally in your browser without uploading data to any server. Perfect for preparing payloads for APIs, creating secure URLs, embedding binary data, or transforming strings for storage and transmission.'
-      ],
-      decodeOverview: [
-        'Reverse the encoding process instantly: convert Base64, Base32, Base58, or hexadecimal strings back to readable text. Inspect API responses, debug encoded payloads, verify blockchain transactions, or recover original data from any encoded format.',
-        'Decoding happens entirely in your browser for maximum privacy. No server uploads, no external dependencies—just fast, reliable conversion that helps you understand and work with encoded data directly.'
-      ],
-      formatter: {
-        auto: [
-          'A fast WebFormatter alternative for HTML, CSS, JavaScript, SQL, JSON, and PHP. Tulkit lets developers, technical writers, and QA teams tidy up code directly in the browser without installing extra tools. Paste a snippet from your editor or drag a file, then get a clean result that is ready for documentation, pull requests, or debugging sessions.',
-          'The formatter includes syntax highlighting, tab width controls, and automatic language detection, so it is a handy companion whether you are polishing front-end assets or reviewing database queries. All formatting stays local in your browser for maximum privacy.'
-        ],
-        html: [
-          'Use Tulkit’s HTML formatter to clean up landing pages, email templates, or CMS snippets so nested tags stay readable when you paste them back into editors.',
-          'It is perfect for inline SVG or templated components when you just need consistent indentation without firing up a full IDE.'
-        ],
-        css: [
-          'Normalize selectors, utility classes, and component styles so spacing and braces line up before you share a stylesheet.',
-          'Tulkit respects your preferred tab width, making it easy to tidy SCSS, Tailwind blocks, or designer handoffs directly in the browser.'
-        ],
-        js: [
-          'Clean up JavaScript or TypeScript snippets copied from experiments, code pens, or log output in seconds.',
-          'The formatter handles modules, async functions, and arrow-heavy code so you can inspect logic without fighting indentation.'
-        ],
-        json: [
-          'Pretty-print JSON payloads, configs, or API responses while keeping the structure valid the entire time.',
-          'It is ideal for debugging webhook payloads, editing service configs, or sharing readable examples with teammates.'
-        ],
-        sql: [
-          'Reflow long SQL queries so SELECT, JOIN, and CTE clauses become easier to scan before handing them to reviewers.',
-          'Great for documenting analytics queries or inspecting ORM-generated statements without opening a database IDE.'
-        ],
-        php: [
-          'Tidy PHP snippets for WordPress, Laravel, or legacy projects without booting a local stack.',
-          'Tulkit streams the PHP formatter on demand so you can clean up Blade templates, controllers, or helpers entirely in the browser.'
-        ],
-        xml: [
-          'Format XML sitemaps, feeds, or config files so attributes and nested elements stay aligned.',
-          'Helpful when you review API responses, sitemap indexes, or system descriptors that become messy after multiple edits.'
-        ],
-        yaml: [
-          'Keep YAML manifests, CI configs, and infrastructure files safe to edit by enforcing consistent indentation.',
-          'Tulkit is useful for tidying snippets copied from docs or chat before you commit them back to the repo.'
-        ]
-      },
-      uuid: {
-        v1: [
-          'Generate UUID v1 identifiers that embed a timestamp and node hint so IDs roughly follow creation order right in your browser.',
-          'Great for log processors, background jobs, or import batches where chronological grouping matters more than total randomness.'
-        ],
-        v4: [
-          'Generate one or many RFC-4122 compliant UUID v4 values directly in your browser. Control casing and formatting to match how your application expects IDs.',
-          'UUIDs are generated using the Web Crypto API when available, so identifiers are high-quality and never sent to a server.'
-        ],
-        v7: [
-          'Create UUID v7 values that stay sortable by time while still providing strong randomness for safety.',
-          'Use them for analytics pipelines, append-only databases, or queues that benefit from monotonic IDs without leaking hardware metadata.'
-        ]
-      },
-      epoch: [
-        'Convert Unix epoch timestamps to readable dates and back again in seconds. Paste a value in seconds or milliseconds and see matching UTC, GMT, and time-zone aware local output.',
-        'You can also pick a date and time, copy the resulting Unix values for use in APIs or database queries, and adjust the time zone to see how the same instant appears around the world.'
-      ],
+    breadcrumbTitles: {
       encode: {
-        default: [
-          'Convert between text, hex, and Base64 directly in your browser. Paste any UTF-8 text, Base64 value, or hex string and Tulkit will normalize it into the format you need.',
-          'This encoder is handy when you are working with HTTP headers, JWT segments, configuration secrets, or binary blobs and need to quickly inspect or re-encode them without leaving the browser.'
-        ],
-        base64: [
-          'Convert UTF-8 text to standard or URL-safe Base64 instantly. Tulkit normalizes padding and strips stray whitespace so you can drop the output into Authorization headers, MIME attachments, or JWT claims without extra cleanup.',
-          'Use this when you want to double-check how secrets, certificates, or binary blobs will travel through systems that only accept ASCII characters.'
-        ],
-        base32: [
-          'Encode values with the RFC 4648 Base32 alphabet that is often used for DNS-safe identifiers, recovery codes, or TOTP seeds.',
-          'Tulkit keeps spacing consistent and avoids accidental padding so you can copy the result directly into provisioning flows or API payloads.'
-        ],
-        base58: [
-          'Produce Base58 strings that skip confusing characters like 0/O or I/l while still packing a lot of information into a short value.',
-          'Helpful for blockchain-style addresses, invite codes, or short IDs that humans need to read or dictate without mistakes.'
-        ],
-        hex: [
-          'Turn any text into lowercase hex pairs to mirror how binaries, hashes, or signatures are represented in most CLI tools.',
-          'Great for inspecting payloads, computing fixtures by hand, or sharing deterministic values with QA and back-end teammates.'
-        ]
-      },
-      minify: {
-        auto: [
-          'Minify HTML, XML, CSS, JavaScript, or JSON right in your browser. Paste the asset you plan to ship, click Minify, and Tulkit will strip whitespace, collapse attributes, and shrink payload size without sending code anywhere.',
-          'Useful when you need production-ready snippets for embeds, email templates, configuration blobs, or inline scripts and styles but do not want to wire up a full build step just to compress a quick fix.'
-        ],
-        html: [
-          'Compress landing pages, email templates, or embeds by stripping whitespace, comments, and redundant attributes while keeping HTML semantics intact.',
-          'Ideal when you need to hand off a small snippet to marketing or documentation teams and want it as light as possible.'
-        ],
-        xml: [
-          'Minify XML sitemaps, feeds, and configuration files without breaking tag casing or required closing tags.',
-          'Handy when you want to ship compact XML payloads to partners or CDNs and cannot rely on server-side tooling.'
-        ],
-        css: [
-          'Shrink CSS or SCSS output by removing whitespace and redundant tokens using csso’s browser build.',
-          'Great for inline style blocks in CMSs, email templates, or design systems where every byte counts.'
-        ],
-        js: [
-          'Use the built-in Terser bundle to minify inline JavaScript, feature flags, or widget snippets without leaving the browser.',
-          'Perfect when you are tweaking a small script inside a CMS or support reply and still want a compact production version.'
-        ],
-        json: [
-          'Flatten configuration files, API payloads, or localization bundles into the smallest possible JSON without introducing errors.',
-          'Helpful when you need to embed JSON in query parameters, data attributes, or migration files and want to save space.'
-        ]
-      },
-      hash: {
-        sha1: [
-          'Generate SHA-1 digests for any text directly in your browser. Tulkit uses the Web Crypto API so hashes are computed locally and never leave your device.',
-          'Use SHA-1 here only for compatibility with legacy systems that still expect it, such as old APIs or archival tools, while keeping the workflow quick and browser-based.'
-        ],
-        sha256: [
-          'Generate SHA-256 hashes for snippets, configuration blocks, or small files directly in your browser. Tulkit relies on the Web Crypto API so digests match common CLI tools and libraries.',
-          'Use the SHA-256 view when you want modern, widely supported fingerprints for downloads, fixtures, or cache keys without leaving the browser.'
-        ],
-        sha512: [
-          'Compute SHA-512 hashes entirely in your browser for cases where you prefer longer, more robust digests for archival or security-adjacent workflows.',
-          'This mode is useful when experimenting with signature schemes, long-term storage, or systems that standardize on SHA-512 while still benefiting from Tulkit’s in-browser convenience.'
-        ]
+        default: 'Encoder',
+        base64: 'Base64 Encoder',
+        base32: 'Base32 Encoder',
+        base58: 'Base58 Encoder',
+        hex: 'Hex Encoder'
       },
       decode: {
-        default: [
-          'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser. Paste any encoded value and Tulkit will show both the UTF-8 text and raw bytes.',
-          'This decoder is useful when inspecting tokens, payloads, or binary blobs that you receive from APIs and need to turn back into something human-friendly for debugging or documentation.'
-        ],
-        base64: [
-          'Paste Base64 or Base64URL strings and Tulkit will normalize padding, swap URL-safe characters, and show you the decoded text immediately.',
-          'Ideal for debugging JWT payloads, email attachments, or Authorization headers that hide their meaning behind Base64.'
-        ],
-        base32: [
-          'Quickly decode Base32 values that appear in provisioning URIs, backup codes, or DNS-friendly identifiers.',
-          'Tulkit uppercases everything for you and reveals the UTF-8 text or bytes so you can confirm what a device or API really stored.'
-        ],
-        base58: [
-          'Inspect Base58 strings that use the Bitcoin alphabet and avoid ambiguous characters. Tulkit converts them back into raw bytes and readable text in one click.',
-          'Helpful when you want to validate blockchain addresses, short invite codes, or shareable tokens without reaching for a CLI.'
-        ],
-        hex: [
-          'Turn long hex dumps back into words or binary data so you can see what was actually captured in a log, packet trace, or checksum.',
-          'Useful when double-checking keys, binary payloads, or signature material that engineers typically pass around as hex.'
-        ]
-      },
-      lorem: [
-        'Generate reusable lorem ipsum placeholder text directly in your browser. Adjust the number of paragraphs and sentence length so your mockups and design drafts feel realistic without writing copy by hand.',
-        'Tulkit keeps all lorem generation in your browser, making it a quick helper when building wireframes, UI components, or content layouts.'
-      ],
-      case: [
-        'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and other conventions directly in your browser. Paste any identifier and see instant transformations across all formats without uploading anything to a server.',
-        'Helpful when refactoring codebases, adapting API responses to match your naming style, preparing code examples, or integrating systems that follow different naming conventions.'
-      ],
-      url: [
-        'Encode URL parameters and special characters for use in web addresses, API calls, and query strings. Paste regular text or a full URL to encode it safely for transmission, or paste an encoded URL to decode it back to readable form instantly.',
-        'Tulkit handles encoding and decoding entirely in your browser using the native URL encoding standard. Perfect for debugging API requests, preparing parameters for web forms, embedding data in URLs, or inspecting query strings from logs and analytics.'
-      ]
+        default: 'Decoder',
+        base64: 'Base64 Decoder',
+        base32: 'Base32 Decoder',
+        base58: 'Base58 Decoder',
+        hex: 'Hex Decoder'
+      }
     },
     notFoundHeading: 'Page not found',
     notFoundBody:
@@ -1039,478 +850,7 @@ const en: Translation = {
     notFoundMetaDescription:
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
-  overviews: {
-    home: {
-      heading: 'Tulkit Web Tools',
-      subheading: 'A collection of fast, privacy-first web utilities for developers, writers, and designers',
-      tools: [
-        {
-          title: 'Web Formatter',
-          description: 'Format HTML, CSS, JavaScript, JSON, SQL, YAML, XML, or PHP in your browser with automatic language detection.',
-          path: '/formatter',
-          icon: '✨',
-          category: 'formatting'
-        },
-        {
-          title: 'Minifier',
-          description: 'Compress HTML, CSS, JavaScript, or JSON snippets directly in your browser without build tools.',
-          path: '/minify',
-          icon: '📦',
-          category: 'optimization'
-        },
-        {
-          title: 'UUID Generator',
-          description: 'Generate v1, v4, or v7 UUIDs in bulk with customizable formatting and casing options.',
-          path: '/generator/uuid',
-          icon: '🎲',
-          category: 'generation'
-        },
-        {
-          title: 'Epoch Converter',
-          description: 'Convert between Unix timestamps and readable dates in any timezone instantly.',
-          path: '/converter/epoch',
-          icon: '⏰',
-          category: 'conversion'
-        },
-        {
-          title: 'Encoder',
-          description: 'Encode text to Base64, Base32, Base58, or hex in your browser.',
-          path: '/encode',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Decoder',
-          description: 'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser.',
-          path: '/decode',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Hash Generator',
-          description: 'Generate SHA-1, SHA-256, or SHA-512 hashes for any text using the Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'Lorem Ipsum Generator',
-          description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Case Converter',
-          description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'URL Encoder',
-          description: 'Encode and decode URL parameters, handling special characters and percent-encoding.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        }
-      ]
-    },
-    generator: {
-      heading: 'Generator Tools',
-      subheading: 'Create unique identifiers, placeholder content, hashes, and convert naming conventions',
-      tools: [
-        {
-          title: 'UUID Generator',
-          description: 'Generate v1, v4, or v7 UUIDs in bulk with customizable formatting and casing options.',
-          path: '/generator/uuid',
-          icon: '🎲',
-          category: 'generation'
-        },
-        {
-          title: 'Lorem Ipsum Generator',
-          description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Hash Generator',
-          description: 'Generate SHA-1, SHA-256, or SHA-512 hashes for any text using the Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        }
-      ]
-    },
-    uuidOverview: {
-      heading: 'UUID Generator',
-      subheading: 'Generate UUID v1 (time-based), v4 (random), or v7 (ordered by time) identifiers',
-      tools: [
-        {
-          title: 'UUID v1 — Time-based',
-          description: 'Generate time-based UUIDs that embed a timestamp and node hint for creation-order sorting.',
-          path: '/generator/uuid/uuid-v1',
-          icon: '🆔',
-          category: 'generator'
-        },
-        {
-          title: 'UUID v4 — Random',
-          description: 'Create high-entropy random UUIDs with 122 bits of cryptographic randomness.',
-          path: '/generator/uuid/uuid-v4',
-          icon: '🆔',
-          category: 'generator'
-        },
-        {
-          title: 'UUID v7 — Ordered by Time',
-          description: 'Generate sortable UUIDs combining timestamp prefix with random bits for databases.',
-          path: '/generator/uuid/uuid-v7',
-          icon: '🆔',
-          category: 'generator'
-        }
-      ]
-    },
-    converterOverview: {
-      heading: 'Converter Tools',
-      subheading: 'Convert between naming conventions, transform Unix timestamps, and adjust time zones instantly',
-      tools: [
-        {
-          title: 'Epoch Converter',
-          description: 'Convert Unix timestamps to readable dates and back again. Inspect epoch times in seconds, milliseconds, and multiple time zones.',
-          path: '/converter/epoch',
-          icon: '⏱️',
-          category: 'conversion'
-        },
-        {
-          title: 'Case Converter',
-          description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'URL Encoder',
-          description: 'Encode and decode URL parameters and special characters for safe transmission in web addresses.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        }
-      ]
-    },
-    hashOverview: {
-      heading: 'Hash Generator',
-      subheading: 'Generate SHA-1, SHA-256, or SHA-512 hashes for checksums, fingerprints, and cryptographic purposes',
-      tools: [
-        {
-          title: 'SHA-1 Hash',
-          description: 'Generate 40-character SHA-1 hashes for any text input. Use for legacy systems and compatibility.',
-          path: '/generator/hash/sha1',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'SHA-256 Hash',
-          description: 'Create 64-character SHA-256 hashes, the industry standard for security and checksums.',
-          path: '/generator/hash/sha256',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'SHA-512 Hash',
-          description: 'Generate 128-character SHA-512 hashes for maximum security and collision resistance.',
-          path: '/generator/hash/sha512',
-          icon: '#️⃣',
-          category: 'security'
-        }
-      ]
-    },
-    encodeOverview: {
-      heading: 'Encoder',
-      subheading: 'Convert text to Base64, Base32, Base58, or hexadecimal for transport and storage',
-      tools: [
-        {
-          title: 'Base64 Encoder',
-          description: 'Encode text to Base64, the most common encoding for data transmission and MIME attachments.',
-          path: '/encode/base64',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Base32 Encoder',
-          description: 'Encode to Base32 for case-insensitive systems, DNS labels, and TOTP seeds.',
-          path: '/encode/base32',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Base58 Encoder',
-          description: 'Create human-friendly Base58 encoded strings for Bitcoin addresses and short IDs.',
-          path: '/encode/base58',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Hex Encoder',
-          description: 'Convert text to hexadecimal for protocols, checksums, and deterministic ASCII output.',
-          path: '/encode/hex',
-          icon: '🔐',
-          category: 'encoding'
-        }
-      ]
-    },
-    decodeOverview: {
-      heading: 'Decoder',
-      subheading: 'Decode Base64, Base32, Base58, or hexadecimal back into readable text',
-      tools: [
-        {
-          title: 'Base64 Decoder',
-          description: 'Decode Base64 strings to recover original text, perfect for inspecting encoded data.',
-          path: '/decode/base64',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Base32 Decoder',
-          description: 'Decode Base32 encoded values back to plain text, useful for TOTP and DNS entries.',
-          path: '/decode/base32',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Base58 Decoder',
-          description: 'Convert Base58 strings back to text for blockchain and short ID verification.',
-          path: '/decode/base58',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Hex Decoder',
-          description: 'Translate hexadecimal values back to readable text quickly and accurately.',
-          path: '/decode/hex',
-          icon: '🔓',
-          category: 'encoding'
-        }
-      ]
-    },
-    formatter: {
-      auto: {
-        heading: 'Web Formatter — Tulkit overview',
-        paragraphs: [
-          'Some developers keep their code perfectly aligned, while others move fast and end up with scripts that are hard to scan. Tulkit’s web formatter is designed to quickly tidy those rough snippets so they are easier for teammates, reviewers, and your future self to read.',
-          'The formatter looks at the snippet you paste or upload, figures out whether it is HTML, CSS, JavaScript, JSON, SQL, or PHP, then applies consistent indentation to each line. Once the structure is cleaned up, you can copy, download, or share the formatted version without touching a full IDE or build pipeline.',
-          'All of this work happens directly in your browser. Tulkit does not upload your code to a server or store it remotely, which makes the tool suitable for private repositories, client work, and internal snippets that should never leave your machine.',
-          'This kind of formatter is especially helpful when you open a file with no indentation, paste code copied from a blog post, or receive a snippet from someone who does not follow your team’s style guide. A few clicks are usually enough to turn it into something readable and ready for review.',
-          'Using the tool is straightforward: drag a file into the editor or paste your code, let Tulkit detect the language, then click Format. Adjust the tab size if you want different spacing, and when you are happy with the result, use the Copy or Download actions before hitting Clear to start again.'
-        ]
-      },
-      html: {
-        heading: 'HTML Formatter overview',
-        paragraphs: [
-          'Overview content for the HTML formatter slug. Explain what kind of HTML snippets people usually format here and how it helps.',
-          'Replace these placeholder paragraphs with your own copy; this text only appears on the /formatter/html slug.'
-        ]
-      },
-      css: {
-        heading: 'CSS Formatter overview',
-        paragraphs: [
-          'Overview content for the CSS formatter slug. Describe how Tulkit can clean up stylesheets, utility classes, or component styles.',
-          'Update this copy to focus on the CSS, SCSS, or Tailwind workflows that matter most to your users.'
-        ]
-      },
-      js: {
-        heading: 'JavaScript Formatter overview',
-        paragraphs: [
-          'Overview content for the JavaScript formatter slug. Talk about formatting snippets, modules, or debug output pasted from logs.',
-          'You can also mention how this tool fits into front-end or Node.js development in your own words.'
-        ]
-      },
-      json: {
-        heading: 'JSON Formatter overview',
-        paragraphs: [
-          'Overview content for the JSON formatter slug. Describe how teams can prettify API responses, configs, or event payloads here.',
-          'Adjust this text to highlight validation, collaboration, or debugging benefits specific to your JSON use cases.'
-        ]
-      },
-      sql: {
-        heading: 'SQL Formatter overviews',
-        paragraphs: [
-          'Overview content for the SQL formatter slug. Explain how Tulkit helps make long queries readable and shareable.',
-          'Customize this copy to mention the databases, ORMs, or reporting tools that are most relevant to your audience.'
-        ]
-      },
-      php: {
-        heading: 'PHP Formatter overview',
-        paragraphs: [
-          'Overview content for the PHP formatter slug. Describe how this helps with Laravel, WordPress, or other PHP projects.',
-          'Update these placeholders to match the frameworks, CMSs, or libraries that you want to target for SEO.'
-        ]
-      },
-      xml: {
-        heading: 'XML Formatter overview',
-        paragraphs: [
-          'Overview content for the XML formatter slug. Explain how Tulkit helps clean up XML config files, sitemaps, or API payloads so they are easier to review.',
-          'Update this copy to highlight the specific XML-based tools, platforms, or workflows that matter most to your users.'
-        ]
-      },
-      yaml: {
-        heading: 'YAML Formatter overview',
-        paragraphs: [
-          'Overview content for the YAML formatter slug. Describe how Tulkit helps tidy CI configs, infrastructure manifests, or other YAML-based configuration files.',
-          'Adjust this text to focus on the deployment tools, CI platforms, or infrastructure stacks that are most relevant to your audience.'
-        ]
-      }
-    },
-    uuid: {
-      v1: {
-        heading: 'UUID v1 generator overview',
-        paragraphs: [
-          'Overview content for the UUID v1 generator slug. Explain when time-based UUIDs make sense in your stack.',
-          'Replace this copy with your own examples, such as logs, background jobs, or batch imports.'
-        ]
-      },
-      v4: {
-        heading: 'UUID v4 generator overview',
-        paragraphs: [
-          'Overview content for the UUID v4 generator slug. Describe typical use cases for random identifiers in your applications.',
-          'You can mention public URLs, database primary keys, or any scenarios where v4 is a good default.'
-        ]
-      },
-      v7: {
-        heading: 'UUID v7 generator overview',
-        paragraphs: [
-          'Overview content for the UUID v7 generator slug. Explain how time-ordered IDs help with write-heavy tables or analytics.',
-          'Customize this text to focus on the databases or event pipelines where UUID v7 shines for your users.'
-        ]
-      }
-    },
-    epoch: {
-      heading: 'Epoch Converter — Tulkit overview',
-      paragraphs: [
-        'Epoch time, sometimes called Unix time or POSIX time, counts how many seconds have passed since 1 January 1970 at 00:00:00 UTC. Because this number is the same no matter which country or time zone you are in, it is a convenient way for systems and APIs to talk about a specific instant in time.',
-        'Tulkit’s epoch converter turns those raw timestamp numbers into readable dates and times, and back again. You can paste a value like 1764298543 to see when it happens in UTC, GMT-style long form, or your preferred time zone, then copy the formatted result for documentation, debugging notes, or support replies.',
-        'When you go the other direction—starting from a date—you can experiment with different time zones and immediately see the matching Unix seconds and milliseconds. This makes it easier to align logs, schedule jobs, or compare records between services that may all be storing timestamps in slightly different formats.',
-        'All calculations run entirely in your browser using the built-in JavaScript date APIs, so none of your event data or log excerpts are uploaded to a server while you are exploring timestamps.'
-      ]
-    },
-    encode: {
-      default: {
-        heading: 'Encoder — Tulkit overview',
-        paragraphs: [
-          'Base64 originally appeared as a MIME content-transfer encoding: a way to represent arbitrary binary data using only readable ASCII characters. In practice, it works by slicing bytes into 6-bit chunks, then mapping each chunk to one of 64 symbols made up of letters, digits, and a couple of punctuation characters.',
-          'Because Base64 output uses only safe characters, it is ideal for transporting data through systems that were designed for text rather than raw bytes. Email attachments, XML or JSON documents that need to embed binary blobs, and many HTTP APIs all rely on Base64 to keep data intact even when intermediate systems are not 8-bit clean.',
-          'The "64" in Base64 refers to the size of the alphabet: A-Z, a-z, 0-9, plus two extra symbols that vary slightly between standards (such as + and / in RFC 4648). Tulkit’s encoder lets you move between UTF-8 text, hex, Base64, Base32, and Base58 so you can inspect what is actually being sent over the wire, debug payloads, or generate test values for other tools without leaving your browser.'
-        ]
-      },
-      base64: {
-        heading: 'Base64 encoder overview',
-        paragraphs: [
-          'Tulkit’s Base64 encoder turns UTF-8 text or raw bytes into the familiar alphabet of A-Z, a-z, 0-9, plus + and /. It also supports the URL-safe flavor so you can prepare strings for JWTs, cookies, or signed URLs.',
-          'Use it when you need to normalize padding, strip whitespace, or double-check what will be sent through APIs that expect Base64 payloads for attachments, certificates, or HTTP headers.'
-        ]
-      },
-      base32: {
-        heading: 'Base32 encoder overview',
-        paragraphs: [
-          'Base32 represents data with a restricted alphabet that stays legible even in case-insensitive systems such as DNS labels or backup codes.',
-          'Tulkit emits uppercase RFC 4648 output, making it easy to provision TOTP seeds, generate recovery codes, or embed identifiers that must survive OCR and transcription.'
-        ]
-      },
-      base58: {
-        heading: 'Base58 encoder overview',
-        paragraphs: [
-          'Base58 drops visually confusing characters so the encoded value is friendlier for humans while still compact. The Bitcoin alphabet is the de facto standard for wallet addresses and blockchain payloads.',
-          'Generate those values directly in your browser to craft shareable invite codes, short IDs, or fixtures for blockchain integrations without worrying about desktop tooling.'
-        ]
-      },
-      hex: {
-        heading: 'Hex encoder overview',
-        paragraphs: [
-          'Hex encoding spells out every byte as two hexadecimal characters, which makes it perfect for logs, checksums, and protocols that like deterministic ASCII.',
-          'Tulkit produces lowercase hex strings so you can copy keys, salts, or binary payloads into CLIs, environment files, or documentation with zero surprises.'
-        ]
-      }
-    },
-    minify: {
-      heading: 'Minifier — Tulkit overview',
-      paragraphs: [
-        'Sometimes you just need to shrink a snippet before shipping it—maybe it is a CSS block going into a CMS, inline JavaScript for an email, or an HTML include that you hand off to another team. Tulkit’s minifier focuses on that workflow by letting you paste code, pick the matching language tab, and compress it instantly in your browser.',
-        'HTML and XML minification keeps closing tags valid while trimming attributes and whitespace. CSS minification relies on csso to drop redundant characters without rewriting your selectors. JavaScript minification uses Terser’s browser build so you can squeeze inline scripts without touching Node.js tooling. JSON minification simply strips spaces while keeping your data intact.',
-        'Because everything runs locally, you can confidently minify snippets that contain API keys, proprietary markup, or private customer data. Once you are done, copy or download the compressed result and drop it straight into your project.'
-      ]
-    },
-    hash: {
-      heading: 'Hash Generator — Tulkit overview',
-      paragraphs: [
-        'Hash functions like SHA-1, SHA-256, and SHA-512 turn arbitrary text into fixed-length fingerprints that are easy to compare but hard to reverse. Developers rely on these digests for checksums, cache keys, and test fixtures across many tools and languages.',
-        'Tulkit’s hash generator focuses on that day-to-day workflow: paste any snippet, pick an algorithm, and compute a deterministic hex digest entirely in your browser. Because everything runs on top of the Web Crypto API, inputs never leave your device and the results match what you would see from common CLIs and libraries.',
-        'Use it to verify file downloads, generate stable IDs for configuration blocks, or quickly inspect how a value will be represented in logs and database fields without leaving the browser.'
-      ]
-    },
-    decode: {
-      default: {
-        heading: 'Decoder — Tulkit overview',
-        paragraphs: [
-          'When you receive Base64, Base32, Base58, or hex from an API or log file, the first step is often to turn it back into readable text. Tulkit’s decoder focuses on that workflow, letting you quickly inspect what an encoded value really contains.',
-          'Paste an encoded string, pick the matching encoding, and Tulkit will decode it to UTF-8 text or raw bytes so you can verify payloads, troubleshoot integration issues, or share clean examples in documentation — all without uploading data to any server.'
-        ]
-      },
-      base64: {
-        heading: 'Base64 decoder overview',
-        paragraphs: [
-          'When you run into Base64 blobs, Tulkit shows what is inside right away. Paste the value and the decoder will handle both standard and URL-safe alphabets, fix padding, and reveal the original bytes as readable text.',
-          'That is perfect for reversing Authorization headers, opaque API payloads, or JWT segments when you need to audit exactly what the sender included.'
-        ]
-      },
-      base32: {
-        heading: 'Base32 decoder overview',
-        paragraphs: [
-          'Base32 decoding is useful when troubleshooting time-based one-time password secrets, provisioning URIs, or vendor-specific recovery codes that rely on uppercase letters and digits.',
-          'Tulkit flags invalid characters and shows the resulting text so you can verify what a device or API is storing before you roll it out to customers.'
-        ]
-      },
-      base58: {
-        heading: 'Base58 decoder overview',
-        paragraphs: [
-          'Wallet addresses, content identifiers, and other blockchain-style tokens often arrive as Base58. Tulkit converts them back into raw bytes so you can inspect version bytes, payloads, or checksums.',
-          'It is an easy way to validate addresses pasted by users, unit-test integrations, or explain what a given Base58 string represents in documentation.'
-        ]
-      },
-      hex: {
-        heading: 'Hex decoder overview',
-        paragraphs: [
-          'Hex dumps tend to obscure meaning when you are looking at them in a console or support ticket. Tulkit turns those pairs back into text or binary data instantly.',
-          'Use the decoder to inspect log fragments, verify keys, or confirm that the payload you captured really matches the bytes you expect.'
-        ]
-      }
-    },
-    lorem: {
-      heading: 'Lorem Ipsum Generator — Tulkit overview',
-      paragraphs: [
-        'Lorem ipsum is a long‑lived dummy text used by printers, designers, and front‑end developers to stand in for real copy. It grew out of classical Latin writing, was adopted by typesetters in the 1500s, and later shipped with desktop publishing tools as convenient sample content.',
-        'People rely on lorem ipsum because its letters and word lengths resemble natural English, so layouts look realistic without inviting readers to focus on the wording itself. That makes it easier to judge spacing, hierarchy, and visual balance instead of getting distracted by “content here, content here” placeholders.',
-        'Although it can look random, the traditional lorem ipsum block is based on passages from Cicero’s “De Finibus Bonorum et Malorum”, trimmed and jumbled over time. Modern generators remix those Latin roots into chunks that feel familiar while avoiding embarrassing or out‑of‑place phrases.',
-        'Tulkit’s lorem ipsum generator follows that spirit: it assembles sensible paragraphs from a pool of sentences, lets you pick how much text you need, and keeps a classic “Lorem ipsum dolor sit amet…” opening when you want it. Everything runs locally in your browser so you can use it freely in mockups, prototypes, and client work.'
-      ]
-    },
-    case: {
-      heading: 'Case Converter — Tulkit overview',
-      paragraphs: [
-        'Variable names, function names, and identifiers follow different naming conventions depending on the language, framework, or team style guide. camelCase is common in JavaScript and Java, snake_case is standard in Python and SQL, while PascalCase appears in class names across many languages.',
-        'When you refactor code, integrate systems that use different conventions, or prepare examples for documentation, converting between these cases quickly becomes essential. Rather than manually rewriting each identifier, Tulkit\'s case converter lets you paste text and instantly see it transformed into camelCase, snake_case, PascalCase, kebab-case, and more.',
-        'The tool handles multi-word inputs intelligently, respects existing delimiters and boundaries, and produces clean output ready to paste back into your editor. All transformations happen locally in your browser, so you can safely convert identifiers from private repositories, configuration files, or internal systems without uploading anything to a server.',
-        'Use it when refactoring variable names across a codebase, adapting API responses to match your naming style, preparing code examples for documentation, or simply experimenting with how a new identifier would look in different conventions.'
-      ]
-    },
-    url: {
-      heading: 'URL Encoder — Tulkit overview',
-      paragraphs: [
-        'URLs can only contain unreserved characters (alphanumeric, hyphen, underscore, period, and tilde) and reserved characters in specific contexts. When you need to include spaces, special characters, or international text in URLs or query parameters, they must be percent-encoded (URL encoded) to ensure safe transmission and correct interpretation by servers and applications.',
-        'Common characters like spaces, ampersands, question marks, and hashes have special meaning in URLs. For example, spaces become %20, ampersands separate parameters with &, and question marks introduce query strings. When these characters appear in user-provided data—like search terms, form values, or message content—they must be encoded to prevent syntax conflicts and misinterpretation.',
-        'Tulkit\'s URL encoder lets you quickly convert plain text to percent-encoded format and decode encoded URLs back to readable text. Whether you\'re building dynamic URLs for API calls, preparing form submissions, debugging encoded query strings from logs, or embedding special characters in hyperlinks, the tool handles encoding and decoding without uploading data to any server.',
-        'The encoder supports the full range of UTF-8 characters, respects RFC 3986 standards, and provides instant feedback. Use it when constructing URLs programmatically, inspecting encoded parameters from browser consoles, troubleshooting 404 errors from encoding mismatches, or preparing safe URLs that contain user-generated content or international text.'
-      ]
-    }
-  }
+
 }
 
 const id: Translation = {
@@ -1857,39 +1197,13 @@ const id: Translation = {
     copyErrorPrefix: 'Gagal menyalin: ',
     inputErrorPrefix: 'Hash tidak dapat dihitung: '
   },
-  lorem: {
-    paragraphCountLabel: 'Berapa banyak paragraf?',
-    classicPrefixLabel: 'Mulai dengan “Lorem ipsum dolor sit amet…”',
-    lengthLabel: 'Panjang kalimat',
-    lengthShort: 'Pendek',
-    lengthMedium: 'Sedang',
-    lengthLong: 'Panjang',
-    generateLabel: 'Buat lorem ipsum',
-    copyLabel: 'Salin',
-    copySuccess: 'Teks lorem ipsum berhasil disalin',
-    copyErrorPrefix: 'Gagal menyalin: ',
-    referencesHeading: 'Sumber klasik Lorem Ipsum',
-    standardHeading: 'Paragraf standar Lorem Ipsum yang dipakai sejak 1500‑an',
-    standardBody:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    cicero1Heading: 'Bagian 1.10.32 dari “De Finibus Bonorum et Malorum” (Cicero, 45 SM)',
-    cicero1Latin:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
-    cicero1TranslationHeading: 'Terjemahan Inggris 1914 oleh H. Rackham',
-    cicero1Translation:
-      'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?',
-    cicero2Heading: 'Bagian 1.10.33 dari “De Finibus Bonorum et Malorum” (Cicero, 45 SM)',
-    cicero2Latin:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',
-    cicero2TranslationHeading: 'Terjemahan Inggris 1914 oleh H. Rackham',
-    cicero2Translation:
-      'On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.'
-  },
   app: {
     logoAlt: 'Logo Tulkit Online',
     brandHeading: 'Peralatan Web — Tulkit',
     brandSubheading: 'Kumpulan alat web ringan untuk kebutuhan developer sehari-hari',
     brandNote: 'Semua pemformatan dan pembuatan berjalan di browser Anda saja; kode tidak pernah keluar dari perangkat.',
+    navGenerator: 'Generator',
+    navConverters: 'Konverter',
     navFormatter: 'Pemformat',
     navUuid: 'Generator UUID',
     navEpoch: 'Konverter Epoch',
@@ -1938,189 +1252,21 @@ const id: Translation = {
       url: 'Encoder URL — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
-    seoBlurb: {
-      generator: [
-        'Koleksi empat alat generator yang ampuh untuk memperlancar alur kerja pengembangan Anda: UUID Generator untuk membuat pengenal unik, Lorem Ipsum Generator untuk konten placeholder, Hash Generator untuk checksum dan sidik jari, serta Case Converter untuk mengubah konvensi penamaan.',
-        'Semua alat berjalan sepenuhnya di browser Anda tanpa unggah data atau bergantung server. Sempurna untuk prototipe cepat, pengujian, mockup desain, dan tugas pengembangan harian yang memerlukan pembuatan teks dan transformasi cepat.'
-      ],
-      uuidOverview: [
-        [
-          'Pilih dari tiga versi UUID: v1 untuk ID berbasis waktu yang menyertakan urutan pembuatan, v4 untuk pengenal acak dengan entropi tinggi, atau v7 untuk nilai berurutan waktu yang dapat diurutkan. Hasilkan UUID tunggal atau massal langsung di browser dengan kontrol pemformatan penuh.',
-          'Semua pembuatan UUID menggunakan Web Crypto API untuk keamanan dan kualitas maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya pembuatan UUID yang mengutamakan privasi dan berjalan sepenuhnya di mesin Anda untuk arsitektur database, API, dan microservice.'
-        ],
-        [
-          'UUID v1 ideal untuk log, job latar belakang, dan proses impor yang mendapat nilai dari penyortiran berdasarkan urutan pembuatan. UUID v4 bekerja dengan baik untuk ID publik, kunci database, dan di mana pun Anda memerlukan keacakan murni.',
-          'UUID v7 menggabungkan pengurutan timestamp dengan keacakan kuat—sempurna untuk pipeline analitik, database append-only, dan tabel write-heavy di mana ID monotonic meningkatkan performa tanpa membocorkan metadata perangkat keras.'
-        ]
-      ],
-      converterOverview: [
-        'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya secara instan. Tempel nilai Unix dalam detik atau milidetik untuk melihat kapan itu terjadi di UTC, GMT, dan zona waktu lokal Anda.',
-        'Konverter epoch Tulkit berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan. Tidak ada unggah data, tidak ada dependensi eksternal—hanya konversi cepat dan akurat untuk debugging log, menyinkronkan event, dan memahami kapan terjadi sesuatu di berbagai zona waktu.'
-      ],
-      hashOverview: [
-        'Pilih di antara tiga algoritma hash kriptografi—SHA-1, SHA-256, dan SHA-512—untuk menghasilkan checksum, sidik jari, dan digest untuk data Anda. Setiap algoritma menawarkan tingkat keamanan dan ukuran output yang berbeda untuk cocok dengan kasus penggunaan spesifik.',
-        'Semua hashing terjadi di browser Anda menggunakan Web Crypto API, jadi data Anda tidak pernah meninggalkan mesin. Ideal untuk memverifikasi integritas berkas, membuat cache key, menghasilkan test fixture, atau debug bagaimana nilai muncul di log dan database.'
-      ],
-      encodeOverview: [
-        'Konversi teks ke empat format enkoding berbeda: Base64 untuk lampiran MIME dan API, Base32 untuk sistem tak sensitif huruf dan seed TOTP, Base58 untuk alamat Bitcoin dan ID pendek, atau heksadesimal untuk protokol dan checksum.',
-        'Semua enkoding berjalan lokal di browser tanpa mengunggah data ke server apa pun. Sempurna untuk menyiapkan payload untuk API, membuat URL aman, menyematkan data biner, atau mengubah string untuk penyimpanan dan transmisi.'
-      ],
-      decodeOverview: [
-        'Balikkan proses enkoding secara instan: konversi string Base64, Base32, Base58, atau heksadesimal kembali ke teks yang mudah dibaca. Periksa respons API, debug payload terenkode, verifikasi transaksi blockchain, atau pulihkan data asli dari format terenkode apa pun.',
-        'Dekoding terjadi sepenuhnya di browser Anda untuk privasi maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya konversi cepat dan dapat diandalkan yang membantu Anda memahami dan bekerja dengan data terenkode secara langsung.'
-      ],
-      formatter: {
-        auto: [
-          'Alternatif WebFormatter yang cepat untuk HTML, CSS, JavaScript, SQL, JSON, dan PHP. Tulkit membantu developer, penulis teknis, dan tim QA merapikan kode langsung di browser tanpa memasang alat tambahan. Tempel potongan dari editor atau seret berkas, lalu dapatkan hasil bersih yang siap untuk dokumentasi, pull request, atau sesi debugging.',
-          'Pemformat ini memiliki highlight sintaks, pengaturan lebar tab, dan deteksi bahasa otomatis sehingga cocok mendampingi pekerjaan Anda baik saat memoles aset front-end maupun meninjau query database. Semua pemformatan tetap lokal di browser demi privasi maksimal.'
-        ],
-        html: [
-          'Gunakan pemformat HTML Tulkit untuk merapikan landing page, template email, atau potongan CMS agar tag bertingkat tetap mudah dibaca saat ditempel kembali ke editor.',
-          'Cocok untuk SVG inline atau komponen templat ketika Anda hanya perlu indentasi konsisten tanpa membuka IDE penuh.'
-        ],
-        css: [
-          'Normalkan selector, kelas utilitas, dan gaya komponen sehingga jarak dan kurung kurawal rapi sebelum membagikan stylesheet.',
-          'Tulkit mengikuti lebar tab pilihan Anda sehingga mudah membersihkan SCSS, blok Tailwind, atau hasil handoff desainer langsung di browser.'
-        ],
-        js: [
-          'Rapikan potongan JavaScript atau TypeScript dari eksperimen, codepen, atau output log dalam hitungan detik.',
-          'Pemformat ini menangani modul, fungsi async, dan kode penuh arrow sehingga Anda bisa fokus ke logika tanpa repot indentasi.'
-        ],
-        json: [
-          'Cetak cantik payload JSON, konfigurasi, atau respons API sambil memastikan strukturnya tetap valid.',
-          'Pas untuk men-debug payload webhook, mengedit konfigurasi layanan, atau berbagi contoh yang mudah dibaca ke tim.'
-        ],
-        sql: [
-          'Susun ulang query SQL panjang agar klausa SELECT, JOIN, dan CTE gampang dipindai sebelum direview.',
-          'Ideal saat mendokumentasikan query analitik atau memeriksa pernyataan hasil ORM tanpa membuka IDE database.'
-        ],
-        php: [
-          'Rapikan potongan PHP untuk WordPress, Laravel, atau proyek legacy tanpa menyalakan stack lokal.',
-          'Tulkit memuat pemformat PHP sesuai kebutuhan sehingga Anda bisa membersihkan template Blade, controller, atau helper langsung di browser.'
-        ],
-        xml: [
-          'Format sitemap, feed, atau berkas konfigurasi XML agar atribut dan elemen bertingkat tetap sejajar.',
-          'Berguna ketika meninjau respons API, indeks sitemap, atau deskriptor sistem yang jadi berantakan setelah banyak revisi.'
-        ],
-        yaml: [
-          'Jaga manifest, konfigurasi CI, dan berkas infrastruktur berbasis YAML tetap aman diedit dengan indentasi konsisten.',
-          'Tulkit memudahkan merapikan cuplikan dari dokumentasi atau chat sebelum dikomit kembali ke repo.'
-        ]
-      },
-      uuid: {
-        v1: [
-          'Buat UUID v1 yang menyertakan stempel waktu dan petunjuk node sehingga ID cenderung mengikuti urutan pembuatan, semuanya langsung di browser Anda.',
-          'Cocok untuk log, job latar belakang, atau proses impor yang membutuhkan pengelompokan kronologis tanpa menyiapkan layanan tambahan.'
-        ],
-        v4: [
-          'Buat satu atau banyak UUID v4 sesuai RFC-4122 langsung di browser. Atur huruf dan format agar sesuai kebutuhan aplikasi Anda.',
-          'UUID dibuat menggunakan Web Crypto API ketika tersedia, sehingga hasilnya berkualitas tinggi dan tidak pernah dikirim ke server.'
-        ],
-        v7: [
-          'Hasilkan UUID v7 yang tetap berurutan waktu namun tetap memiliki entropi kuat sehingga aman dipakai untuk ID publik.',
-          'Gunakan untuk pipeline analitik, basis data append-only, atau antrean yang diuntungkan dari ID monotonic tanpa membocorkan informasi perangkat.'
-        ]
-      },
-      epoch: [
-        'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dalam hitungan detik. Tempel nilai dalam detik atau milidetik untuk melihat keluaran UTC, GMT, dan zona waktu lokal.',
-        'Anda juga bisa memilih tanggal dan waktu, menyalin nilai Unix untuk API atau query database, serta mengganti zona waktu untuk melihat bagaimana momen yang sama muncul di berbagai wilayah.'
-      ],
+    breadcrumbTitles: {
       encode: {
-        default: [
-          'Konversi antara teks, hex, dan Base64 langsung di browser Anda. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
-          'Encoder ini berguna ketika Anda bekerja dengan header HTTP, segmen JWT, secret konfigurasi, atau blob biner dan ingin memeriksa atau menormalkan encoding tanpa membuka CLI terpisah.'
-        ],
-        base64: [
-          'Ubah teks UTF-8 ke Base64 standar atau aman-URL secara instan. Tulkit menormalkan padding dan menghapus spasi berlebih sehingga output siap ditempel ke header Authorization, lampiran MIME, atau klaim JWT tanpa edit tambahan.',
-          'Gunakan saat Anda ingin memastikan secret, sertifikat, atau blob biner akan berjalan mulus di sistem yang hanya menerima karakter ASCII.'
-        ],
-        base32: [
-          'Encode nilai dengan alfabet Base32 RFC 4648 yang sering dipakai untuk pengenal aman-DNS, kode pemulihan, atau seed TOTP.',
-          'Tulkit menjaga jarak dan padding tetap konsisten sehingga hasilnya bisa langsung ditempel ke alur provisioning atau payload API.'
-        ],
-        base58: [
-          'Buat string Base58 yang menghindari karakter membingungkan seperti 0/O atau I/l namun tetap padat informasi.',
-          'Cocok untuk alamat bergaya blockchain, kode undangan, atau ID pendek yang harus dibacakan manusia tanpa salah.'
-        ],
-        hex: [
-          'Ubah teks menjadi pasangan hex huruf kecil seperti yang biasa Anda lihat di banyak alat CLI.',
-          'Berguna untuk memeriksa payload, menyiapkan fixture manual, atau membagikan nilai deterministik ke tim QA dan backend.'
-        ]
-      },
-      minify: {
-        auto: [
-          'Padatkan HTML, XML, CSS, JavaScript, atau JSON langsung di browser Anda. Tempel kode yang ingin dikirim, klik Minify, dan Tulkit akan memangkas whitespace serta atribut berlebih tanpa mengunggah apa pun.',
-          'Cocok ketika Anda perlu snippet siap produksi untuk embed, template email, atau konfigurasi kecil namun tidak mau repot menyiapkan pipeline build hanya demi mengecilkan perbaikan cepat.'
-        ],
-        html: [
-          'Kecilkan template landing page, email, atau embed dengan menghapus whitespace, komentar, dan atribut berlebih sambil menjaga struktur HTML tetap sah.',
-          'Pas ketika Anda menyerahkan snippet ringan ke tim marketing atau dokumentasi tanpa bantuan pipeline build.'
-        ],
-        xml: [
-          'Minify sitemap, feed, atau berkas konfigurasi XML tanpa merusak huruf besar kecil atau tag penutup wajib.',
-          'Bermanfaat saat ingin mengirim payload XML yang ringkas ke partner atau CDN tetapi tidak punya tooling server.'
-        ],
-        css: [
-          'Padatkan CSS atau keluaran SCSS memakai csso agar selector tetap aman tetapi byte berkurang.',
-          'Ideal untuk blok style inline di CMS, template email, atau komponen desain yang sensitif terhadap ukuran.'
-        ],
-        js: [
-          'Gunakan bundle Terser bawaan untuk memadatkan JavaScript inline, feature flag, atau snippet widget tanpa meninggalkan browser.',
-          'Sangat membantu ketika mengedit skrip kecil di CMS atau balasan dukungan namun tetap ingin versi produksi yang ringkas.'
-        ],
-        json: [
-          'Ubah konfigurasi, payload API, atau bundle lokalisasi menjadi JSON satu baris tanpa mengubah isinya.',
-          'Mudah ketika Anda perlu menaruh JSON di parameter query, atribut data, atau berkas migrasi supaya hemat ruang.'
-        ]
-      },
-      hash: {
-        sha1: [
-          'Buat hash SHA-1 dari teks apa pun langsung di browser Anda ketika perlu kompatibilitas dengan sistem lama. Tulkit memanfaatkan Web Crypto API agar perhitungan digest berlangsung lokal dan tidak meninggalkan perangkat.',
-          'Gunakan mode SHA-1 ini hanya ketika Anda berurusan dengan API atau alat lama yang masih mengharuskannya, sambil tetap menikmati alur kerja ringan di browser.'
-        ],
-        sha256: [
-          'Buat hash SHA-256 untuk snippet, blok konfigurasi, atau berkas kecil langsung di browser Anda. Tulkit mengandalkan Web Crypto API sehingga digest selaras dengan hasil banyak CLI dan library populer.',
-          'Mode SHA-256 cocok ketika Anda membutuhkan sidik jari modern yang luas dukungannya untuk unduhan, fixture, atau kunci cache tanpa harus membuka terminal.'
-        ],
-        sha512: [
-          'Hitung hash SHA-512 sepenuhnya di browser untuk kasus yang membutuhkan digest lebih panjang, misalnya skenario arsip atau alur kerja yang bersinggungan dengan keamanan.',
-          'Mode ini membantu saat bereksperimen dengan skema tanda tangan, penyimpanan jangka panjang, atau sistem yang menstandarkan SHA-512 sambil tetap memanfaatkan kenyamanan Tulkit di browser.'
-        ]
+        default: 'Encoder',
+        base64: 'Encoder Base64',
+        base32: 'Encoder Base32',
+        base58: 'Encoder Base58',
+        hex: 'Encoder Hex'
       },
       decode: {
-        default: [
-          'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
-          'Decoder ini membantu saat Anda memeriksa token, payload, atau blob biner dari API dan perlu mengembalikannya ke bentuk yang mudah dibaca untuk debugging atau dokumentasi.'
-        ],
-        base64: [
-          'Tempel string Base64 atau Base64URL dan Tulkit akan menormalkan padding, mengganti karakter aman-URL, lalu menampilkan teks hasil decode.',
-          'Sempurna untuk men-debug payload JWT, lampiran email, atau header Authorization yang sering menyembunyikan data penting di balik Base64.'
-        ],
-        base32: [
-          'Dekode cepat nilai Base32 yang muncul di URI provisioning, kode cadangan, atau pengenal ramah DNS.',
-          'Tulkit mengubahnya ke huruf besar dan menampilkan teks UTF-8 atau byte mentah agar Anda tahu apa yang sebenarnya disimpan perangkat atau API.'
-        ],
-        base58: [
-          'Periksa string Base58 beralfabet Bitcoin tanpa takut salah baca karakter mirip.',
-          'Tulkit mengubahnya kembali ke byte mentah dan teks sehingga Anda bisa memvalidasi alamat blockchain, kode undangan, atau token ringkas tanpa CLI.'
-        ],
-        hex: [
-          'Kembalikan dump hex panjang menjadi teks atau data biner sehingga Anda bisa melihat isi log, trace paket, atau checksum.',
-          'Bermanfaat saat mengecek ulang kunci, payload biner, atau materi signature yang biasanya dibagikan sebagai hex.'
-        ]
-      },
-      lorem: [
-        'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
-        'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
-      ],
-      case: [
-        'Konversikan nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
-        'Berguna saat refaktor codebase, menyesuaikan respons API agar cocok gaya penamaan Anda, menyiapkan contoh kode, atau mengintegrasikan sistem yang pakai konvensi penamaan berbeda.'
-      ],
-      url: [
-        'Enkode parameter URL dan karakter khusus untuk dipakai di alamat web, panggilan API, dan string query. Tempel teks biasa atau URL lengkap untuk mengenkodinya dengan aman untuk transmisi, atau tempel URL yang sudah dienkode untuk mendekodinya kembali menjadi bentuk yang bisa dibaca secara instan.',
-        'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
-      ]
+        default: 'Decoder',
+        base64: 'Decoder Base64',
+        base32: 'Decoder Base32',
+        base58: 'Decoder Base58',
+        hex: 'Decoder Hex'
+      }
     },
     notFoundHeading: 'Halaman tidak ditemukan',
     notFoundBody:
@@ -2228,451 +1374,7 @@ const id: Translation = {
     notFoundMetaDescription:
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },
-  overviews: {
-    home: {
-      heading: 'Tulkit Web Tools',
-      subheading: 'Kumpulan utilitas web cepat dan privat untuk developer, penulis, dan desainer',
-      tools: [
-        {
-          title: 'Pemformat Web',
-          description: 'Format HTML, CSS, JavaScript, JSON, SQL, YAML, XML, atau PHP di browser dengan deteksi bahasa otomatis.',
-          path: '/formatter',
-          icon: '✨',
-          category: 'formatting'
-        },
-        {
-          title: 'Minifier',
-          description: 'Padatkan HTML, CSS, JavaScript, atau JSON langsung di browser tanpa perlu build tools.',
-          path: '/minify',
-          icon: '📦',
-          category: 'optimization'
-        },
-        {
-          title: 'Generator UUID',
-          description: 'Hasilkan UUID v1, v4, atau v7 dalam jumlah banyak dengan opsi format dan huruf besar yang dapat disesuaikan.',
-          path: '/generator/uuid',
-          icon: '🎲',
-          category: 'generation'
-        },
-        {
-          title: 'Konverter Epoch',
-          description: 'Konversi antara Unix timestamp dan tanggal yang mudah dibaca di zona waktu apa pun secara instan.',
-          path: '/converter/epoch',
-          icon: '⏰',
-          category: 'conversion'
-        },
-        {
-          title: 'Encoder',
-          description: 'Enkode teks ke Base64, Base32, Base58, atau hex di browser Anda.',
-          path: '/encode',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Decoder',
-          description: 'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang mudah dibaca tanpa meninggalkan browser.',
-          path: '/decode',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Generator Hash',
-          description: 'Buat hash SHA-1, SHA-256, atau SHA-512 untuk teks apa pun menggunakan Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'Generator Lorem Ipsum',
-          description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Konverter Case',
-          description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'Penyandi URL',
-          description: 'Enkode dan dekode parameter URL serta karakter khusus langsung di browser.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        }
-      ]
-    },
-    generator: {
-      heading: 'Tools Generator',
-      subheading: 'Buat pengenal unik, konten placeholder, hash, dan konversi konvensi penamaan',
-      tools: [
-        {
-          title: 'Generator UUID',
-          description: 'Hasilkan UUID v1, v4, atau v7 dalam jumlah banyak dengan opsi format dan huruf besar yang dapat disesuaikan.',
-          path: '/generator/uuid',
-          icon: '🎲',
-          category: 'generation'
-        },
-        {
-          title: 'Generator Lorem Ipsum',
-          description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Generator Hash',
-          description: 'Buat hash SHA-1, SHA-256, atau SHA-512 untuk teks apa pun menggunakan Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        }
-      ]
-    },
-    converterOverview: {
-      heading: 'Tools Converter',
-      subheading: 'Konversi antara konvensi penamaan, ubah stempel Unix, dan sesuaikan zona waktu secara instan',
-      tools: [
-        {
-          title: 'Konverter Epoch',
-          description: 'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya. Periksa waktu epoch dalam detik, milidetik, dan berbagai zona waktu.',
-          path: '/converter/epoch',
-          icon: '⏱️',
-          category: 'conversion'
-        },
-        {
-          title: 'Konverter Case',
-          description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'Encoder URL',
-          description: 'Enkode dan dekode parameter URL serta karakter khusus untuk transmisi yang aman di alamat web.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        }
-      ]
-    },
-    hashOverview: {
-      heading: 'Hash Generator',
-      subheading: 'Buat SHA-1, SHA-256, atau SHA-512 hash untuk checksum, sidik jari, dan kebutuhan kriptografi',
-      tools: [
-        {
-          title: 'SHA-1 Hash',
-          description: 'Hasilkan hash SHA-1 berkarakter 40 untuk input teks apa pun. Gunakan untuk sistem legacy dan kompatibilitas.',
-          path: '/generator/hash/sha1',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'SHA-256 Hash',
-          description: 'Buat hash SHA-256 berkarakter 64, standar industri untuk keamanan dan checksum.',
-          path: '/generator/hash/sha256',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'SHA-512 Hash',
-          description: 'Hasilkan hash SHA-512 berkarakter 128 untuk keamanan maksimal dan ketahanan kolisi.',
-          path: '/generator/hash/sha512',
-          icon: '#️⃣',
-          category: 'security'
-        }
-      ]
-    },
-    encodeOverview: {
-      heading: 'Encoder',
-      subheading: 'Konversi teks ke Base64, Base32, Base58, atau heksadesimal untuk transportasi dan penyimpanan',
-      tools: [
-        {
-          title: 'Encoder Base64',
-          description: 'Enkode teks ke Base64, enkoding paling umum untuk transmisi data dan lampiran MIME.',
-          path: '/encode/base64',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Encoder Base32',
-          description: 'Enkode ke Base32 untuk sistem tak sensitif huruf, label DNS, dan seed TOTP.',
-          path: '/encode/base32',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Encoder Base58',
-          description: 'Buat string Base58 yang ramah-manusia untuk alamat Bitcoin dan ID pendek.',
-          path: '/encode/base58',
-          icon: '🔐',
-          category: 'encoding'
-        },
-        {
-          title: 'Encoder Hex',
-          description: 'Konversi teks ke heksadesimal untuk protokol, checksum, dan output ASCII deterministik.',
-          path: '/encode/hex',
-          icon: '🔐',
-          category: 'encoding'
-        }
-      ]
-    },
-    decodeOverview: {
-      heading: 'Decoder',
-      subheading: 'Dekode Base64, Base32, Base58, atau heksadesimal kembali ke teks yang mudah dibaca',
-      tools: [
-        {
-          title: 'Decoder Base64',
-          description: 'Dekode string Base64 untuk memulihkan teks asli, sempurna untuk memeriksa data terenkode.',
-          path: '/decode/base64',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Decoder Base32',
-          description: 'Dekode nilai Base32 kembali ke teks biasa, berguna untuk TOTP dan entri DNS.',
-          path: '/decode/base32',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Decoder Base58',
-          description: 'Konversi string Base58 kembali ke teks untuk verifikasi blockchain dan ID pendek.',
-          path: '/decode/base58',
-          icon: '🔓',
-          category: 'encoding'
-        },
-        {
-          title: 'Decoder Hex',
-          description: 'Terjemahkan nilai heksadesimal kembali ke teks yang mudah dibaca dengan cepat dan akurat.',
-          path: '/decode/hex',
-          icon: '🔓',
-          category: 'encoding'
-        }
-      ]
-    },
-    formatter: {
-      auto: {
-        heading: 'Ikhtisar Pemformat Web — Tulkit',
-        paragraphs: [
-          'Sebagian developer menjaga kode tetap rapi, sementara yang lain bergerak cepat dan meninggalkan skrip yang sulit dibaca. Pemformat web Tulkit dibuat untuk merapikan potongan kasar itu agar lebih mudah dipindai rekan kerja, reviewer, dan diri Anda di masa depan.',
-          'Pemformat memeriksa potongan yang Anda tempel atau unggah, menentukan apakah itu HTML, CSS, JavaScript, JSON, SQL, atau PHP, lalu menerapkan indentasi yang konsisten pada setiap baris. Setelah struktur bersih, Anda bisa menyalin, mengunduh, atau membagikan hasil format tanpa perlu IDE lengkap atau pipeline build.',
-          'Semua pekerjaan ini berlangsung langsung di browser Anda. Tulkit tidak mengunggah kode ke server atau menyimpannya secara jarak jauh, sehingga aman untuk repositori privat, pekerjaan klien, dan potongan internal yang tidak boleh keluar dari perangkat.',
-          'Pemformat seperti ini sangat membantu ketika Anda membuka berkas tanpa indentasi, menempel kode dari blog, atau menerima potongan dari orang yang tidak mengikuti panduan gaya tim Anda. Beberapa klik biasanya cukup untuk membuatnya siap dibaca dan direview.',
-          'Cara pakainya sederhana: seret berkas ke editor atau tempel kode Anda, biarkan Tulkit mendeteksi bahasa, lalu klik Format. Sesuaikan ukuran tab bila ingin jarak berbeda, dan setelah puas gunakan aksi Salin atau Unduh sebelum menekan Bersihkan untuk mulai lagi.'
-        ]
-      },
-      html: {
-        heading: 'Ikhtisar Pemformat HTML',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat HTML. Jelaskan jenis potongan HTML apa yang biasa dirapikan di sini dan manfaatnya.',
-          'Ganti paragraf placeholder ini dengan salinan Anda sendiri; teks ini hanya muncul pada slug /formatter/html.'
-        ]
-      },
-      css: {
-        heading: 'Ikhtisar Pemformat CSS',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat CSS. Terangkan bagaimana Tulkit dapat merapikan stylesheet, kelas utilitas, atau gaya komponen.',
-          'Perbarui salinan ini agar fokus pada alur kerja CSS, SCSS, atau Tailwind yang paling penting bagi pengguna Anda.'
-        ]
-      },
-      js: {
-        heading: 'Ikhtisar Pemformat JavaScript',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat JavaScript. Bahas tentang pemformatan potongan, modul, atau keluaran debug dari log.',
-          'Anda juga bisa menyebutkan bagaimana alat ini cocok dengan pengembangan front-end atau Node.js.'
-        ]
-      },
-      json: {
-        heading: 'Ikhtisar Pemformat JSON',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat JSON. Jelaskan bagaimana tim dapat mempercantik respons API, konfigurasi, atau payload event di sini.',
-          'Sesuaikan teks ini untuk menonjolkan manfaat validasi, kolaborasi, atau debugging khusus untuk kasus JSON Anda.'
-        ]
-      },
-      sql: {
-        heading: 'Ikhtisar Pemformat SQL',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat SQL. Jelaskan bagaimana Tulkit membantu membuat query panjang lebih mudah dibaca dan dibagikan.',
-          'Sesuaikan salinan ini untuk menyebut database, ORM, atau alat pelaporan yang paling relevan bagi audiens Anda.'
-        ]
-      },
-      php: {
-        heading: 'Ikhtisar Pemformat PHP',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat PHP. Terangkan bagaimana alat ini membantu proyek Laravel, WordPress, atau PHP lainnya.',
-          'Perbarui placeholder ini agar sesuai dengan framework, CMS, atau library yang ingin Anda bidik untuk SEO.'
-        ]
-      },
-      xml: {
-        heading: 'Ikhtisar Pemformat XML',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat XML. Jelaskan bagaimana Tulkit membantu merapikan berkas konfigurasi, sitemap, atau payload XML lainnya.',
-          'Sesuaikan teks ini agar menonjolkan tools atau platform berbasis XML yang paling relevan bagi pengguna Anda.'
-        ]
-      },
-      yaml: {
-        heading: 'Ikhtisar Pemformat YAML',
-        paragraphs: [
-          'Konten ikhtisar untuk slug pemformat YAML. Jelaskan bagaimana Tulkit membantu merapikan konfigurasi CI, manifest infrastruktur, atau berkas YAML lain agar aman diedit.',
-          'Perbarui teks ini untuk menonjolkan tool deployment, platform CI, atau stack infrastruktur yang paling relevan bagi audiens Anda.'
-        ]
-      }
-    },
-    uuid: {
-      v1: {
-        heading: 'Ikhtisar generator UUID v1',
-        paragraphs: [
-          'Konten ikhtisar untuk slug generator UUID v1. Jelaskan kapan UUID berbasis waktu masuk akal di stack Anda.',
-          'Ganti salinan ini dengan contoh Anda sendiri, seperti log, job latar belakang, atau impor batch.'
-        ]
-      },
-      v4: {
-        heading: 'Ikhtisar generator UUID v4',
-        paragraphs: [
-          'Konten ikhtisar untuk slug generator UUID v4. Deskripsikan penggunaan umum pengenal acak di aplikasi Anda.',
-          'Anda bisa menyebut URL publik, primary key database, atau skenario lain ketika v4 menjadi default yang baik.'
-        ]
-      },
-      v7: {
-        heading: 'Ikhtisar generator UUID v7',
-        paragraphs: [
-          'Konten ikhtisar untuk slug generator UUID v7. Jelaskan bagaimana ID berurutan waktu membantu tabel dengan banyak penulisan atau analitik.',
-          'Sesuaikan teks ini untuk fokus pada database atau pipeline event tempat UUID v7 bersinar bagi pengguna Anda.'
-        ]
-      }
-    },
-    epoch: {
-      heading: 'Ikhtisar Konverter Epoch — Tulkit',
-      paragraphs: [
-        'Epoch time, kadang disebut Unix time atau POSIX time, menghitung berapa detik yang berlalu sejak 1 Januari 1970 pukul 00:00:00 UTC. Karena angkanya sama di negara mana pun, ia menjadi cara praktis bagi sistem dan API untuk merujuk momen tertentu.',
-        'Konverter epoch Tulkit mengubah angka timestamp mentah menjadi tanggal dan waktu yang mudah dibaca, dan sebaliknya. Anda bisa menempel nilai seperti 1764298543 untuk melihat kapan itu terjadi di UTC, format panjang ala GMT, atau zona waktu pilihan Anda, lalu menyalin hasilnya untuk dokumentasi, catatan debugging, atau balasan dukungan.',
-        'Saat berangkat dari tanggal menuju angka, Anda dapat bereksperimen dengan berbagai zona waktu dan langsung melihat kecocokan detik dan milidetik Unix. Ini memudahkan menyelaraskan log, menjadwalkan job, atau membandingkan catatan antar layanan yang mungkin menyimpan timestamp dalam format berbeda.',
-        'Semua perhitungan berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan, jadi tidak ada data event atau potongan log yang diunggah ke server saat Anda menelusuri timestamp.'
-      ]
-    },
-    encode: {
-      default: {
-        heading: 'Ikhtisar Encoder — Tulkit',
-        paragraphs: [
-          'Istilah Base64 berasal dari skema content-transfer encoding di MIME: cara mengubah data biner menjadi deretan karakter ASCII yang aman dibaca. Secara sederhana, Base64 memecah byte menjadi potongan 6 bit lalu memetakan tiap potongan ke salah satu dari 64 simbol yang terdiri dari huruf, angka, dan beberapa tanda baca.',
-          'Karena keluarannya hanya berisi karakter yang "aman", Base64 cocok untuk mengirimkan data melalui sistem yang awalnya didesain untuk teks, bukan byte mentah. Lampiran email, dokumen XML atau JSON yang perlu menyisipkan blob biner, hingga banyak API HTTP mengandalkan Base64 agar data tetap utuh meskipun melewati jalur yang tidak sepenuhnya 8-bit clean.',
-          'Angka "64" pada Base64 merujuk pada ukuran alfabetnya: A-Z, a-z, 0-9, ditambah dua simbol yang sedikit berbeda antar standar (misalnya + dan / pada RFC 4648). Encoder Tulkit membantu Anda berpindah antara teks UTF-8, hex, Base64, Base32, dan Base58 sehingga lebih mudah melihat apa yang benar-benar dikirim di jaringan, men-debug payload, atau membuat nilai uji untuk alat lain langsung dari browser.'
-        ]
-      },
-      base64: {
-        heading: 'Ikhtisar encoder Base64',
-        paragraphs: [
-          'Encoder Base64 Tulkit mengubah teks UTF-8 atau byte mentah menjadi alfabet familiar A-Z, a-z, 0-9 plus + dan /. Varian aman-URL juga tersedia sehingga string siap dipakai untuk JWT, cookie, atau URL bertanda tangan.',
-          'Gunakan ketika Anda perlu menormalkan padding, membersihkan whitespace, atau memastikan apa yang akan dikirim melalui API yang mengharuskan payload Base64 untuk lampiran, sertifikat, atau header HTTP.'
-        ]
-      },
-      base32: {
-        heading: 'Ikhtisar encoder Base32',
-        paragraphs: [
-          'Base32 merepresentasikan data dengan alfabet terbatas yang tetap mudah dibaca pada sistem yang tidak peka huruf besar kecil seperti label DNS atau kode pemulihan.',
-          'Tulkit menghasilkan output huruf besar sesuai RFC 4648 sehingga Anda bisa menyiapkan seed TOTP, membuat kode pemulihan, atau menyematkan pengenal yang harus tahan terhadap OCR dan pengetikan ulang.'
-        ]
-      },
-      base58: {
-        heading: 'Ikhtisar encoder Base58',
-        paragraphs: [
-          'Base58 menghilangkan karakter mirip sehingga nilai terenkode lebih ramah manusia namun tetap ringkas. Alfabet Bitcoin menjadi standar de facto untuk alamat dompet dan payload blockchain.',
-          'Buat nilai tersebut langsung di browser untuk kode undangan, ID pendek, atau fixture integrasi blockchain tanpa repot mengatur alat desktop.'
-        ]
-      },
-      hex: {
-        heading: 'Ikhtisar encoder Hex',
-        paragraphs: [
-          'Encoding hex menuliskan setiap byte sebagai dua karakter heksadesimal sehingga cocok untuk log, checksum, dan protokol yang membutuhkan ASCII deterministik.',
-          'Tulkit menghasilkan string hex huruf kecil sehingga Anda bisa menyalin kunci, salt, atau payload biner ke CLI, file environment, atau dokumentasi tanpa kejutan.'
-        ]
-      }
-    },
-    minify: {
-      heading: 'Ikhtisar Minifier — Tulkit',
-      paragraphs: [
-        'Kadang Anda hanya perlu mengecilkan snippet sebelum dikirim—entah itu blok CSS dalam CMS, JavaScript inline untuk email, atau include HTML yang dibagikan ke tim lain. Minifier Tulkit dibuat untuk alur tersebut dengan membiarkan Anda menempel kode, memilih tab bahasa, lalu memadatkannya seketika di browser.',
-        'Minifikasi HTML dan XML menjaga struktur tag tetap valid sembari memangkas atribut serta whitespace. CSS menggunakan csso agar selector tetap aman tanpa karakter berlebih. JavaScript memanfaatkan build Terser untuk memadatkan script inline tanpa harus membuka tooling Node.js. JSON cukup diubah menjadi satu baris sehingga payload tetap valid tetapi lebih ringan.',
-        'Karena semua proses berjalan lokal, Anda bisa meminify snippet yang mengandung data sensitif tanpa khawatir keluar dari perangkat. Setelah selesai, salin atau unduh hasilnya dan tempelkan langsung ke proyek Anda.'
-      ]
-    },
-    hash: {
-      heading: 'Ikhtisar Generator Hash — Tulkit',
-      paragraphs: [
-        'Fungsi hash seperti SHA-1, SHA-256, dan SHA-512 mengubah teks apa pun menjadi sidik jari berdimensi tetap yang mudah dibandingkan namun sulit dibalik. Developer mengandalkan digest ini untuk checksum, kunci cache, dan fixture pengujian di berbagai alat dan bahasa.',
-        'Generator hash Tulkit dibuat untuk alur sehari-hari itu: tempel potongan teks, pilih algoritma, lalu hitung digest hex deterministik sepenuhnya di browser Anda. Karena berjalan di atas Web Crypto API, input tidak pernah keluar dari perangkat dan hasilnya selaras dengan CLI atau library umum.',
-        'Gunakan alat ini untuk memverifikasi unduhan, membuat ID stabil untuk blok konfigurasi, atau sekadar melihat bagaimana sebuah nilai akan direpresentasikan di log dan kolom database tanpa meninggalkan browser.'
-      ]
-    },
-    decode: {
-      default: {
-        heading: 'Ikhtisar Decoder — Tulkit',
-        paragraphs: [
-          'Ketika Anda menerima Base64, Base32, Base58, atau hex dari API atau berkas log, langkah pertama biasanya mengembalikannya ke teks yang bisa dibaca. Decoder Tulkit berfokus pada alur kerja itu sehingga Anda bisa dengan cepat melihat isi sebenarnya dari nilai yang terenkode.',
-          'Tempel string terenkode, pilih encoding yang sesuai, dan Tulkit akan mendekodekannya ke teks UTF-8 atau byte mentah sehingga Anda dapat memeriksa payload, menelusuri masalah integrasi, atau menyalin contoh yang bersih ke dokumentasi — semuanya tanpa mengunggah data ke server mana pun.'
-        ]
-      },
-      base64: {
-        heading: 'Ikhtisar decoder Base64',
-        paragraphs: [
-          'Saat bertemu blob Base64, Tulkit langsung menunjukkan isinya. Tempel nilai tersebut dan decoder akan menangani alfabet standar serta aman-URL, memperbaiki padding, dan menampilkan byte asli sebagai teks yang bisa dibaca.',
-          'Sangat pas untuk membongkar header Authorization, payload API yang samar, atau segmen JWT ketika Anda perlu mengaudit isi yang dikirim.'
-        ]
-      },
-      base32: {
-        heading: 'Ikhtisar decoder Base32',
-        paragraphs: [
-          'Dekode Base32 berguna saat menelusuri secret TOTP, URI provisioning, atau kode pemulihan vendor yang mengandalkan huruf besar dan angka.',
-          'Tulkit memberi tahu jika ada karakter tidak valid dan memperlihatkan teks hasil decode sehingga Anda bisa memverifikasi apa yang disimpan perangkat atau API sebelum digunakan pelanggan.'
-        ]
-      },
-      base58: {
-        heading: 'Ikhtisar decoder Base58',
-        paragraphs: [
-          'Alamat dompet, content identifier, dan token bergaya blockchain sering datang sebagai Base58. Tulkit mengubahnya kembali menjadi byte mentah sehingga Anda bisa memeriksa byte versi, payload, atau checksum.',
-          'Ini cara mudah memvalidasi alamat yang ditempel pengguna, menguji integrasi, atau menjelaskan arti string Base58 tertentu di dokumentasi.'
-        ]
-      },
-      hex: {
-        heading: 'Ikhtisar decoder Hex',
-        paragraphs: [
-          'Dump hex mudah membuat bingung ketika dilihat di konsol atau tiket dukungan. Tulkit mengembalikan pasangan tersebut menjadi teks atau data biner secara instan.',
-          'Gunakan decoder untuk memeriksa potongan log, mengecek kunci, atau memastikan payload yang Anda tangkap benar-benar sesuai dengan byte yang diharapkan.'
-        ]
-      }
-    },
-    lorem: {
-      heading: 'Ikhtisar Generator Lorem Ipsum — Tulkit',
-      paragraphs: [
-        'Lorem ipsum adalah teks dummy klasik yang sudah lama dipakai di dunia percetakan, desain, dan pengembangan antarmuka untuk menggantikan tulisan asli. Teks ini berakar dari karya Latin kuno, lalu diadopsi para typesetter sejak 1500‑an dan akhirnya dibundel ke dalam software desktop publishing sebagai contoh isi bawaan.',
-        'Alasan lorem ipsum populer adalah karena pola huruf dan panjang katanya mirip bahasa nyata, sehingga layout tampak realistis tanpa membuat pembaca terpaku pada kalimatnya. Ini membantu desainer menilai spasi, hirarki, dan komposisi visual tanpa terdistraksi oleh placeholder generik seperti “content here, content here”.',
-        'Meski terlihat acak, blok lorem ipsum standar sebenarnya disusun dari potongan teks Cicero di “De Finibus Bonorum et Malorum” yang dipotong dan diacak seiring waktu. Generator modern mengambil akar Latin tersebut dan merangkainya kembali agar tetap terasa familiar sekaligus aman dipakai di beragam konteks.',
-        'Generator lorem ipsum Tulkit mengikuti semangat itu: ia menyusun paragraf yang wajar dari kumpulan kalimat, memungkinkan Anda memilih jumlah paragraf dan panjang kalimat, serta tetap menyediakan pembuka klasik “Lorem ipsum dolor sit amet…” bila diinginkan. Semua berjalan lokal di browser sehingga aman digunakan untuk mockup, prototipe, maupun proyek klien.'
-      ]
-    },
-    case: {
-      heading: 'Ikhtisar Konverter Kasus — Tulkit',
-      paragraphs: [
-        'Nama variabel, nama fungsi, dan identifier mengikuti konvensi penamaan yang berbeda tergantung bahasa pemrograman, framework, atau panduan gaya tim. camelCase umum dalam JavaScript dan Java, snake_case adalah standar Python dan SQL, sementara PascalCase muncul di nama kelas di banyak bahasa.',
-        'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, konverter kasus Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
-        'Alat ini menangani input multi-kata secara cerdas, menghormati delimiter dan batasan yang sudah ada, serta menghasilkan output bersih siap dipaste ulang ke editor Anda. Semua transformasi terjadi lokal di browser, sehingga aman mengkonversi identifier dari repo pribadi, file konfigurasi, atau sistem internal tanpa mengupload apa pun ke server.',
-        'Gunakan saat refaktor nama variabel di seluruh codebase, menyesuaikan respons API agar cocok dengan gaya penamaan Anda, menyiapkan contoh kode untuk dokumentasi, atau sekadar bereksperimen melihat bagaimana identifier baru akan terlihat di berbagai konvensi.'
-      ]
-    },
-    url: {
-      heading: 'Ikhtisar Penyandi URL — Tulkit',
-      paragraphs: [
-        'URL hanya dapat berisi karakter tak tercadang (huruf, angka, dan tanda "-", "_", ".", "~") di sebagian besar bagiannya. Karakter lain—termasuk spasi, titik koma, dan simbol khusus—harus dikodekan menjadi representasi persen (disebut "URL encoded" atau "percent-encoded") sebelum dapat digunakan dalam URL. Misalnya, spasi menjadi %20, "?" menjadi %3F, dan "&" menjadi %26.',
-        'Banyak karakter membawa makna khusus dalam URL: "&" memisahkan parameter, "?" memulai string query, "#" menandai fragment. Ketika karakter tersebut muncul sebagai data yang seharusnya dikodekan, bukan delimitator, maka harus diproduksi dalam bentuk persen-encoded agar parser URL membacanya dengan benar dan tidak salah tafsir struktur URL.',
-        'Penyandi URL Tulkit memungkinkan Anda mengkonversi teks biasa ke bentuk terenkripsi URL dengan cepat, dan sebaliknya mendekodekan URL yang sudah dikodekan kembali ke teks yang dapat dibaca—tanpa perlu mengunggah data apa pun ke server eksternal. Semua pengolahan terjadi secara lokal di browser Anda.',
-        'Gunakan untuk mengkodekan parameter dalam query string, mendekodekan URL dari log atau database, membangun URL secara terprogram, atau menyiapkan contoh dokumentasi API. Penyandi ini mendukung seluruh rentang karakter UTF-8 dan sesuai dengan standar RFC 3986 untuk pengkodean URL.'
-      ]
-    }
-  }
+
 }
 
 export const translations: Record<LanguageCode,Translation> = { en, id }

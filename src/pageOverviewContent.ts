@@ -1,23 +1,29 @@
-import type { ActiveTab, LanguageCode, UuidVersion } from './types'
-import { getTranslations, type OverviewContent } from './i18n'
+import type { LanguageCode } from './types'
+import type { OverviewContent, OverviewCopy } from './i18n'
+import enOverviews from './copy/overviews/en'
 
 export type { OverviewContent }
 
-export function getFormatterOverviewByTab(language: LanguageCode): Record<ActiveTab,OverviewContent>{
-  return getTranslations(language).overviews.formatter
+const loaders: Partial<Record<LanguageCode, () => Promise<{ default: OverviewCopy }>>> = {
+  id: () => import('./copy/overviews/id')
 }
 
-export function getUuidOverviewByVersion(language: LanguageCode): Record<UuidVersion,OverviewContent>{
-  return getTranslations(language).overviews.uuid
-}
+const cache = new Map<LanguageCode,OverviewCopy>()
 
-export function getEpochOverview(language: LanguageCode): OverviewContent{
-  return getTranslations(language).overviews.epoch
-}
-
-export function getCaseOverview(language: LanguageCode): OverviewContent{
-  return getTranslations(language).overviews.case
-}
-export function getUrlOverview(language: LanguageCode): OverviewContent{
-  return getTranslations(language).overviews.url
+export async function loadOverviewContent(language: LanguageCode): Promise<OverviewCopy>{
+  if(language === 'en'){
+    cache.set('en', enOverviews)
+    return enOverviews
+  }
+  const cached = cache.get(language)
+  if(cached){
+    return cached
+  }
+  const loader = loaders[language]
+  if(!loader){
+    return enOverviews
+  }
+  const module = await loader()
+  cache.set(language, module.default)
+  return module.default
 }

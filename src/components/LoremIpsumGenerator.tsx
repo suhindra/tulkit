@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { LanguageCode } from '../types'
-import { getTranslations } from '../i18n'
+import { getLoremCopy } from '../loremCopy'
 
 type Props = {
   language: LanguageCode
@@ -44,7 +44,7 @@ function buildLorem(
 }
 
 export default function LoremIpsumGenerator({ language }: Props){
-  const { lorem: loremCopy } = getTranslations(language)
+  const loremCopy = getLoremCopy(language)
   const [paragraphs, setParagraphs] = useState(3)
   const [sentenceLength, setSentenceLength] = useState<'short'|'medium'|'long'>('medium')
   const [startWithClassic, setStartWithClassic] = useState(true)
