@@ -162,6 +162,47 @@ type HashCopy = {
   inputErrorPrefix: string
 }
 
+type IndexNowCopy = {
+  heading: string
+  description: string
+  keyLabel: string
+  keyHelp: string
+  hostLabel: string
+  hostHelp: string
+  keyLocationLabel: string
+  keyLocationHelp: string
+  currentUrlLabel: string
+  submitLabel: string
+  submittingLabel: string
+  successMessage: string
+  errorPrefix: string
+  missingKey: string
+  missingUrl: string
+  missingHost: string
+  openPing: string
+  copyPingUrl: string
+  copied: string
+  pingUrlLabel: string
+  pingUrlHelp: string
+  keyFileLabel: string
+  keyFileHelp: string
+  keyFileNote: string
+  downloadKey: string
+  sitemapLabel: string
+  sitemapHelp: string
+  loadSitemap: string
+  sitemapLoading: string
+  sitemapLoaded: string
+  sitemapEmpty: string
+  sitemapErrorPrefix: string
+  sitemapUrlListLabel: string
+  selectAll: string
+  clearSelection: string
+  selectedCount: string
+  submitSelectedLabel: string
+  missingSelection: string
+}
+
 type AppCopy = {
   logoAlt: string
   brandHeading: string
@@ -215,12 +256,14 @@ type AppCopy = {
     hash: string
     case: string
     url: string
+    indexNowAdmin?: string
     notFound: string
   }
   breadcrumbTitles: {
     encode: Record<CodecSubtool,string>
     decode: Record<CodecSubtool,string>
   }
+  indexNow: IndexNowCopy
   notFoundHeading: string
   notFoundBody: string
   goToFormatterCta: string
@@ -249,6 +292,7 @@ type AppCopy = {
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
   caseMetaDescription: string
   urlMetaDescription: string
+  indexNowMetaDescription: string
   notFoundMetaDescription: string
 }
 
@@ -726,6 +770,7 @@ const en: Translation = {
       hash: 'Hash Generator — Tulkit',
       case: 'Case Converter — Tulkit',
       url: 'URL Encoder — Tulkit',
+      indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
     breadcrumbTitles: {
@@ -744,6 +789,47 @@ const en: Translation = {
         hex: 'Hex Decoder'
       }
     },
+    indexNow: {
+      heading: 'IndexNow submit',
+      description:
+        'Ping IndexNow so Bing and Yandex re-crawl the URL you are on. Your key stays in this browser; if POST is blocked by CORS, use the GET link below.',
+      keyLabel: 'IndexNow key',
+      keyHelp: 'The same key you host at https://your-domain/<key>.txt. Tulkit stores it locally.',
+      hostLabel: 'Site host',
+      hostHelp: 'Defaults to the current host.',
+      keyLocationLabel: 'Key file URL',
+      keyLocationHelp: 'Leave blank to use https://{host}/{key}.txt',
+      currentUrlLabel: 'Current URL',
+      submitLabel: 'Submit current URL',
+      submittingLabel: 'Submitting…',
+      successMessage: 'URL submitted to IndexNow. Crawlers will fetch it soon.',
+      errorPrefix: 'Submit failed: ',
+      missingKey: 'Add your IndexNow key first.',
+      missingUrl: 'Current URL is missing.',
+      missingHost: 'Add a site host (e.g., example.com).',
+      openPing: 'Open GET ping',
+      copyPingUrl: 'Copy ping URL',
+      copied: 'Copied',
+      pingUrlLabel: 'Fallback GET ping',
+      pingUrlHelp: 'If POST is blocked, open or copy this GET URL to trigger IndexNow manually.',
+      keyFileLabel: 'Key file location',
+      keyFileHelp: 'Place the key file at your site root so IndexNow can verify ownership.',
+      keyFileNote: 'Host a static file named <key>.txt containing only the key string.',
+      downloadKey: 'Download key.txt',
+      sitemapLabel: 'Sitemap URL',
+      sitemapHelp: 'Defaults to /sitemap.xml on this host. Load it to pick URLs to submit.',
+      loadSitemap: 'Load sitemap',
+      sitemapLoading: 'Loading sitemap…',
+      sitemapLoaded: 'Sitemap loaded: {count} URLs found.',
+      sitemapEmpty: 'No URLs found in this sitemap.',
+      sitemapErrorPrefix: 'Failed to load sitemap: ',
+    sitemapUrlListLabel: 'Select URLs to submit',
+    selectAll: 'Select all',
+    clearSelection: 'Clear',
+    selectedCount: 'Selected: {count}',
+    submitSelectedLabel: 'Submit selected URLs',
+    missingSelection: 'Pick at least one URL to submit.'
+  },
     notFoundHeading: 'Page not found',
     notFoundBody:
       'The link you followed does not match any Tulkit tools. You can jump back to the formatter, UUID generator, or epoch converter using the buttons above.',
@@ -847,6 +933,8 @@ const en: Translation = {
       'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and more using Tulkit\'s case converter. Paste any identifier and see instant transformations across all naming conventions directly in your browser.',
     urlMetaDescription:
       'Encode and decode URL parameters, query strings, and special characters directly in your browser with Tulkit\'s URL encoder. Perfect for debugging API requests, preparing form data, and inspecting encoded URLs without leaving your desktop.',
+    indexNowMetaDescription:
+      'Submit URLs to IndexNow from Tulkit. Host your key file at the site root, load sitemap URLs, and ping search engines via POST or GET.',
     notFoundMetaDescription:
       'The page you were looking for on Tulkit could not be found. Browse the web formatter, UUID generator, or epoch converter tools instead.'
   },
@@ -1250,6 +1338,7 @@ const id: Translation = {
       hash: 'Generator Hash — Tulkit',
       case: 'Konverter Kasus — Tulkit',
       url: 'Encoder URL — Tulkit',
+      indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
     breadcrumbTitles: {
@@ -1268,6 +1357,47 @@ const id: Translation = {
         hex: 'Decoder Hex'
       }
     },
+    indexNow: {
+      heading: 'Ping IndexNow',
+      description:
+        'Kirim permintaan IndexNow untuk URL yang sedang dibuka. Kunci disimpan di browser saja; jika POST terblokir/CORS, pakai tautan GET di bawah.',
+      keyLabel: 'Kunci IndexNow',
+      keyHelp: 'Gunakan kunci yang disimpan di https://domain-anda/<key>.txt. Tersimpan lokal di browser.',
+      hostLabel: 'Host situs',
+      hostHelp: 'Default ke host saat ini.',
+      keyLocationLabel: 'URL file kunci',
+      keyLocationHelp: 'Biarkan kosong untuk https://{host}/{key}.txt',
+      currentUrlLabel: 'URL sekarang',
+      submitLabel: 'Submit URL ini',
+      submittingLabel: 'Mengirim…',
+      successMessage: 'URL dikirim ke IndexNow. Perayap akan mengambilnya sebentar lagi.',
+      errorPrefix: 'Gagal kirim: ',
+      missingKey: 'Masukkan kunci IndexNow dulu.',
+      missingUrl: 'URL sekarang tidak tersedia.',
+      missingHost: 'Isi host situs (mis. contoh.com).',
+      openPing: 'Buka ping GET',
+      copyPingUrl: 'Salin URL ping',
+      copied: 'Tersalin',
+      pingUrlLabel: 'Ping GET cadangan',
+      pingUrlHelp: 'Kalau POST diblokir, buka atau salin URL GET ini untuk memicu IndexNow manual.',
+      keyFileLabel: 'Lokasi file kunci',
+      keyFileHelp: 'Simpan file kunci di root situs agar IndexNow bisa verifikasi kepemilikan.',
+      keyFileNote: 'Host file statis bernama <key>.txt dengan isi hanya string kuncinya.',
+      downloadKey: 'Unduh key.txt',
+      sitemapLabel: 'URL Sitemap',
+      sitemapHelp: 'Default ke /sitemap.xml di host ini. Muat untuk memilih URL yang mau dikirim.',
+      loadSitemap: 'Muat sitemap',
+      sitemapLoading: 'Memuat sitemap…',
+      sitemapLoaded: 'Sitemap dimuat: {count} URL ditemukan.',
+      sitemapEmpty: 'Tidak ada URL di sitemap ini.',
+      sitemapErrorPrefix: 'Gagal memuat sitemap: ',
+    sitemapUrlListLabel: 'Pilih URL yang akan dikirim',
+    selectAll: 'Pilih semua',
+    clearSelection: 'Bersihkan',
+    selectedCount: 'Terpilih: {count}',
+    submitSelectedLabel: 'Submit URL terpilih',
+    missingSelection: 'Pilih minimal satu URL untuk dikirim.'
+  },
     notFoundHeading: 'Halaman tidak ditemukan',
     notFoundBody:
       'Tautan yang Anda ikuti tidak cocok dengan alat Tulkit mana pun. Gunakan tombol di atas untuk kembali ke pemformat, generator UUID, atau konverter epoch.',
@@ -1371,6 +1501,8 @@ const id: Translation = {
       'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
     urlMetaDescription:
       'Enkode dan dekode parameter URL serta karakter khusus langsung di browser dengan encoder URL Tulkit. Sempurna untuk men-debug permintaan API, menyiapkan data form, dan memeriksa URL terenkode tanpa meninggalkan desktop.',
+    indexNowMetaDescription:
+      'Submit URL ke IndexNow langsung dari Tulkit. Host file kunci di root situs, muat URL sitemap, lalu ping mesin pencari via POST atau GET.',
     notFoundMetaDescription:
       'Halaman Tulkit yang Anda cari tidak ditemukan. Jelajahi alat pemformat web, generator UUID, atau konverter epoch sebagai gantinya.'
   },

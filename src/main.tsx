@@ -55,6 +55,19 @@ const viewPreloads: ViewPreload[] = [
   }
 ]
 
+if(typeof window !== 'undefined'){
+  const redirectTarget = window.sessionStorage.getItem('tulkit-redirect')
+  if(redirectTarget && (window.location.pathname === '/' || window.location.pathname === '')){
+    window.sessionStorage.removeItem('tulkit-redirect')
+    try{
+      window.history.replaceState(null, '', redirectTarget + window.location.search)
+    }catch{
+      // fallback
+      window.location.replace(redirectTarget + window.location.search)
+    }
+  }
+}
+
 function preloadModulesForPath(path: string){
   if(typeof document === 'undefined') return
   const normalized = path.toLowerCase()
