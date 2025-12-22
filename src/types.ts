@@ -12,4 +12,4 @@ export type MinifyTab = 'auto' | 'html' | 'css' | 'js' | 'json'
 
 export type CodecSubtool = 'default' | 'base64' | 'base32' | 'base58' | 'hex'
 
-export type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'case' | 'notfound'
+export type View = 'formatter' | 'minify' | 'uuid' | 'epoch' | 'encode' | 'decode' | 'lorem' | 'hash' | 'case' | 'notfound' | 'indexnow-admin'

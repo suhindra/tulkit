@@ -10,6 +10,7 @@ const Decoder = React.lazy(()=>import('./components/Decoder'))
 const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
 const UrlEncoder = React.lazy(()=>import('./components/UrlEncoder'))
+import IndexNowSubmit from './components/IndexNowSubmit'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { loadOverviewContent, type OverviewCopy } from './pageOverviewContent'
 import { loadSeoBlurbs } from './seoBlurbs'
@@ -19,7 +20,7 @@ import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } fr
 import { Helmet } from 'react-helmet-async'
 import './components/Breadcrumb.css'
 
-type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'indexnow-admin' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -58,6 +59,9 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/decode')){
     return 'decode'
+  }
+  if(normalized === '/admin/indexnow'){
+    return 'indexnow-admin'
   }
   if(normalized === '/converter'){
     return 'converter-overview'
@@ -202,6 +206,8 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return null
     case 'decode-overview':
       return null
+    case 'indexnow-admin':
+      return null
     case 'converter-overview':
       return null
     case 'formatter':
@@ -237,6 +243,7 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'hash-overview': return ''
     case 'encode-overview': return ''
     case 'decode-overview': return ''
+    case 'indexnow-admin': return appCopy.indexNow.heading
     case 'converter-overview': return ''
     case 'formatter': return appCopy.navFormatter
     case 'minify': return appCopy.navMinify
@@ -422,6 +429,10 @@ export default function App(){
   const hashSlug = useMemo<HashAlgorithmKey>(()=> (view === 'hash' ? getHashSlugFromPath(relativePath) : 'sha256'), [view, relativePath])
   const effectiveFormatterTab = useMemo<ActiveTab>(()=> (view === 'formatter' ? formatterTab : 'auto'), [view, formatterTab])
   const effectiveMinifyTab = useMemo<MinifyTab>(()=> (view === 'minify' ? minifierTab : 'auto'), [view, minifierTab])
+  const currentFullUrl = useMemo(()=>{
+    if(typeof window === 'undefined') return ''
+    return window.location.href
+  },[location.pathname, location.search])
 
   useEffect(()=>{
     if(view !== 'formatter') return
@@ -541,6 +552,9 @@ export default function App(){
     if(view === 'generator'){
       return 'Generator Tools — Tulkit'
     }
+    if(view === 'indexnow-admin'){
+      return `${appCopy.indexNow.heading} — Tulkit`
+    }
     if(view === 'uuid-overview'){
       return 'UUID Generator — Tulkit'
     }
@@ -597,6 +611,9 @@ export default function App(){
     }
     if(view === 'url'){
       return appCopy.seoTitles.url
+    }
+    if(view === 'indexnow-admin'){
+      return appCopy.seoTitles.indexNowAdmin || `${appCopy.indexNow.heading} — Tulkit`
     }
     if(view === 'notfound'){
       return appCopy.seoTitles.notFound
@@ -670,6 +687,9 @@ export default function App(){
     }
     if(view === 'case'){
       return appCopy.caseMetaDescription
+    }
+    if(view === 'indexnow-admin'){
+      return appCopy.indexNowMetaDescription
     }
     if(view === 'notfound'){
       return appCopy.notFoundMetaDescription
@@ -943,7 +963,7 @@ export default function App(){
           </div>
         </div>
       </header>
-      {view !== 'notfound' && view !== 'home' && view !== 'uuid-overview' && view !== 'converter-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && (
+      {view !== 'notfound' && view !== 'home' && view !== 'uuid-overview' && view !== 'converter-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && view !== 'indexnow-admin' && (
         <section className="seo-blurb">
           <div className="container">
             <h2>{seoHeading}</h2>
@@ -1327,6 +1347,9 @@ export default function App(){
             <UrlEncoder language={language} />
           </React.Suspense>
         )}
+        {view === 'indexnow-admin' && (
+          <IndexNowSubmit language={language} currentUrl={currentFullUrl} />
+        )}
         {view === 'notfound' && (
           <div className="not-found-card">
             <h2>{appCopy.notFoundHeading}</h2>
@@ -1337,7 +1360,7 @@ export default function App(){
           </div>
         )}
       </main>
-      {view !== 'notfound' && view !== 'home' && view !== 'generator' && view !== 'uuid-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && (
+      {view !== 'notfound' && view !== 'home' && view !== 'generator' && view !== 'uuid-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && view !== 'indexnow-admin' && (
         <section className="page-overview">
           <div className="container">
             {view === 'formatter' && (
