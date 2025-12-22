@@ -6,52 +6,54 @@ import App from './App'
 import criticalStyles from './index.css?inline'
 import './analytics'
 const asyncStylesHref = new URL('./async-styles.css', import.meta.url).href
+const viewModules = import.meta.glob('./components/*.tsx')
+const preloadedModules = new Set<keyof typeof viewModules>()
 
 type ViewPreload = {
   match: (path: string) => boolean
-  href: string
+  importKey: keyof typeof viewModules
 }
 
 const viewPreloads: ViewPreload[] = [
   {
     match: path => path.startsWith('/formatter'),
-    href: new URL('./components/Formatter.tsx', import.meta.url).href
+    importKey: './components/Formatter.tsx'
   },
   {
     match: path => path.startsWith('/minify'),
-    href: new URL('./components/Minifier.tsx', import.meta.url).href
+    importKey: './components/Minifier.tsx'
   },
   {
     match: path => path.startsWith('/encode'),
-    href: new URL('./components/Encoder.tsx', import.meta.url).href
+    importKey: './components/Encoder.tsx'
   },
   {
     match: path => path.startsWith('/decode'),
-    href: new URL('./components/Decoder.tsx', import.meta.url).href
+    importKey: './components/Decoder.tsx'
   },
   {
     match: path => path.startsWith('/generator/uuid') || path.startsWith('/uuid'),
-    href: new URL('./components/UuidGenerator.tsx', import.meta.url).href
+    importKey: './components/UuidGenerator.tsx'
   },
   {
     match: path => path.startsWith('/generator/lorem'),
-    href: new URL('./components/LoremIpsumGenerator.tsx', import.meta.url).href
+    importKey: './components/LoremIpsumGenerator.tsx'
   },
   {
     match: path => path.startsWith('/generator/hash') || path.startsWith('/hash'),
-    href: new URL('./components/HashGenerator.tsx', import.meta.url).href
+    importKey: './components/HashGenerator.tsx'
   },
   {
     match: path => path.startsWith('/converter/epoch'),
-    href: new URL('./components/EpochConverter.tsx', import.meta.url).href
+    importKey: './components/EpochConverter.tsx'
   },
   {
     match: path => path.startsWith('/converter/case'),
-    href: new URL('./components/CaseConverter.tsx', import.meta.url).href
+    importKey: './components/CaseConverter.tsx'
   },
   {
     match: path => path.startsWith('/converter/url'),
-    href: new URL('./components/UrlEncoder.tsx', import.meta.url).href
+    importKey: './components/UrlEncoder.tsx'
   }
 ]
 
@@ -69,17 +71,17 @@ if(typeof window !== 'undefined'){
 }
 
 function preloadModulesForPath(path: string){
-  if(typeof document === 'undefined') return
+  if(typeof window === 'undefined') return
   const normalized = path.toLowerCase()
-  viewPreloads.forEach(({ match, href }) => {
-    if(match(normalized)){
-      if(document.querySelector(`link[data-preloaded-module="${href}"]`)) return
-      const link = document.createElement('link')
-      link.rel = 'modulepreload'
-      link.href = href
-      link.setAttribute('data-preloaded-module', href)
-      document.head.appendChild(link)
-    }
+  viewPreloads.forEach(({ match, importKey }) => {
+    if(!match(normalized)) return
+    if(preloadedModules.has(importKey)) return
+    const loadModule = viewModules[importKey]
+    if(!loadModule) return
+    preloadedModules.add(importKey)
+    loadModule().catch(()=>{
+      preloadedModules.delete(importKey)
+    })
   })
 }
 
