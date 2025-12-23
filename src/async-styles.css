@@ -1318,3 +1318,212 @@
     justify-content:center;
   }
 }
+.regex-pattern{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:16px;
+}
+
+.regex-pattern label{
+  font-weight:600;
+  font-size:13px;
+  color:#0f172a;
+}
+
+.regex-pattern input{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:14px;
+  font-family:inherit;
+  background:#fff;
+}
+
+.regex-flags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  margin-top:16px;
+}
+
+.regex-flags-label{
+  font-size:13px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.regex-flag-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.regex-flag-button{
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#fff;
+  padding:8px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  cursor:pointer;
+  font-size:12px;
+  min-width:90px;
+  transition:all 0.15s ease;
+}
+
+.regex-flag-button.active{
+  border-color:var(--tab-border);
+  background:#ecfdf5;
+}
+
+.regex-flag-key{
+  font-weight:700;
+  font-size:13px;
+  color:#0f172a;
+}
+
+.regex-flag-label{
+  color:#475467;
+  font-size:12px;
+}
+
+.regex-editor-grid{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+
+.regex-editor,
+.regex-preview{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.regex-editor label,
+.regex-preview label{
+  font-size:13px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.regex-editor textarea{
+  min-height:190px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px;
+  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+  font-size:13px;
+  background:#fff;
+  color:#0f172a;
+}
+
+.regex-preview-text{
+  min-height:190px;
+  border-radius:8px;
+  padding:12px;
+  background:#0f172a;
+  color:#f3f4f6;
+  overflow:auto;
+  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+  font-size:13px;
+}
+
+.regex-preview-text mark{
+  background:#fcd34d;
+  color:#92400e;
+  border-radius:4px;
+  padding:0 2px;
+}
+
+.regex-summary{
+  margin-top:18px;
+  padding:12px 14px;
+  border-radius:8px;
+  font-size:13px;
+  border:1px solid transparent;
+}
+
+.regex-summary.success{
+  background:#f0fdf4;
+  border-color:#bbf7d0;
+  color:#166534;
+}
+
+.regex-summary.error{
+  background:#fef2f2;
+  border-color:#fecaca;
+  color:#b91c1c;
+}
+
+.regex-summary.muted{
+  background:#f3f4f6;
+  border-color:#e5e7eb;
+  color:#4b5563;
+}
+
+.regex-matches{
+  margin-top:20px;
+}
+
+.regex-table-wrapper{
+  overflow:auto;
+  margin-top:12px;
+}
+
+.regex-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:13px;
+}
+
+.regex-table th{
+  text-align:left;
+  background:#f8fafc;
+  padding:10px;
+  font-weight:600;
+  color:#0f172a;
+  border-bottom:1px solid #e2e8f0;
+}
+
+.regex-table td{
+  padding:10px;
+  border-bottom:1px solid #f1f5f9;
+  vertical-align:top;
+}
+
+.regex-group-list{
+  margin:0;
+  padding-left:18px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.regex-group-label{
+  font-weight:600;
+  margin-right:6px;
+  color:#0f172a;
+}
+
+.regex-group-list li{
+  list-style:disc;
+  color:#475467;
+}
+
+.regex-muted{
+  color:#6b7280;
+  font-size:13px;
+}
+
+.regex-match-index{
+  display:inline-block;
+  margin-right:6px;
+  font-weight:600;
+  color:#2563eb;
+}

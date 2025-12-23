@@ -60,6 +60,13 @@ export const navItems: NavItem[] = [
     category: 'converters',
     icon: '🔤'
   },
+  {
+    label: 'Regex Tester',
+    labelId: 'navRegex',
+    path: '/converter/regex',
+    category: 'converters',
+    icon: '🧪'
+  },
   // Converters
   {
     label: 'Epoch',

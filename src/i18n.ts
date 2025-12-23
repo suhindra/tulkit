@@ -96,6 +96,33 @@ type UrlEncoderCopy = {
   }
 }
 
+type RegexFlagKey = 'g' | 'i' | 'm' | 's' | 'u' | 'y'
+
+type RegexTesterCopy = {
+  heading: string
+  subheading: string
+  patternLabel: string
+  patternPlaceholder: string
+  sampleLabel: string
+  samplePlaceholder: string
+  flagsLabel: string
+  flags: Record<RegexFlagKey,{ label: string; description: string }>
+  emptyPatternHint: string
+  summaryLabel: string
+  noMatchesLabel: string
+  invalidPatternPrefix: string
+  previewLabel: string
+  emptyPreviewLabel: string
+  matchesHeading: string
+  matchColumn: string
+  indexColumn: string
+  groupsColumn: string
+  noGroupsLabel: string
+  emptyGroupValue: string
+  numberedGroupLabel: string
+  namedGroupLabel: string
+}
+
 export type LoremCopy = {
   paragraphCountLabel: string
   classicPrefixLabel: string
@@ -220,6 +247,7 @@ type AppCopy = {
   navHash: string
   navCase: string
   navUrl: string
+  navRegex: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
@@ -256,6 +284,7 @@ type AppCopy = {
     hash: string
     case: string
     url: string
+    regex: string
     indexNowAdmin?: string
     notFound: string
   }
@@ -292,6 +321,7 @@ type AppCopy = {
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
   caseMetaDescription: string
   urlMetaDescription: string
+  regexMetaDescription: string
   indexNowMetaDescription: string
   notFoundMetaDescription: string
 }
@@ -313,6 +343,7 @@ export type SeoBlurbCopy = {
   hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
   case: string[]
   url: string[]
+  regex: string[]
 }
 
 type HomeTool = {
@@ -346,6 +377,8 @@ export type OverviewCopy = {
   lorem: OverviewContent
   hash: OverviewContent
   case: OverviewContent
+  url: OverviewContent
+  regex: OverviewContent
 }
 
 type Translation = {
@@ -357,6 +390,7 @@ type Translation = {
   uuid: UuidCopy
   epoch: EpochCopy
   urlEncoder: UrlEncoderCopy
+  regexTester: RegexTesterCopy
   encoder: EncoderCopy
   hash: HashCopy
   app: AppCopy
@@ -669,6 +703,55 @@ const en: Translation = {
       ]
     }
   },
+  regexTester: {
+    heading: 'Regex Tester',
+    subheading: 'Experiment with JavaScript regular expressions, flags, and capture groups entirely in your browser.',
+    patternLabel: 'Pattern',
+    patternPlaceholder: 'e.g. (\\w+)@(\\w+\\.\\w+)',
+    sampleLabel: 'Test text',
+    samplePlaceholder: 'Paste the text you want to inspect',
+    flagsLabel: 'Flags',
+    flags: {
+      g: {
+        label: 'Global',
+        description: 'Find every possible match instead of stopping after the first result.'
+      },
+      i: {
+        label: 'Ignore case',
+        description: 'Treat uppercase and lowercase letters as the same.'
+      },
+      m: {
+        label: 'Multi-line',
+        description: 'Make ^ and $ match the start or end of each line.'
+      },
+      s: {
+        label: 'Dotall',
+        description: 'Allow the dot (.) token to match newline characters.'
+      },
+      u: {
+        label: 'Unicode',
+        description: 'Enable Unicode mode so escapes work with astral symbols.'
+      },
+      y: {
+        label: 'Sticky',
+        description: 'Only match starting at the current lastIndex position.'
+      }
+    },
+    emptyPatternHint: 'Start by typing a regular expression.',
+    summaryLabel: 'Matches found: {count}',
+    noMatchesLabel: 'No matches yet.',
+    invalidPatternPrefix: 'Pattern error: ',
+    previewLabel: 'Preview with highlights',
+    emptyPreviewLabel: 'Nothing to preview yet.',
+    matchesHeading: 'Match details',
+    matchColumn: 'Match',
+    indexColumn: 'Index',
+    groupsColumn: 'Capture groups',
+    noGroupsLabel: 'No capture groups',
+    emptyGroupValue: '—',
+    numberedGroupLabel: 'Group {index}',
+    namedGroupLabel: 'Named group {name}'
+  },
   encoder: {
     inputEncodingLabel: 'Input encoding',
     inputEncodingUtf8: 'Text (UTF-8)',
@@ -734,6 +817,7 @@ const en: Translation = {
     navHash: 'Hash Generator',
     navCase: 'Case Converter',
     navUrl: 'URL Encoder',
+    navRegex: 'Regex Tester',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
@@ -770,6 +854,7 @@ const en: Translation = {
       hash: 'Hash Generator — Tulkit',
       case: 'Case Converter — Tulkit',
       url: 'URL Encoder — Tulkit',
+      regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Page not found — Tulkit'
     },
@@ -857,7 +942,8 @@ const en: Translation = {
       conversion: [
         { label: 'Epoch Converter', path: '/converter/epoch' },
         { label: 'Case Converter', path: '/converter/case' },
-        { label: 'URL Encoder', path: '/converter/url' }
+        { label: 'URL Encoder', path: '/converter/url' },
+        { label: 'Regex Tester', path: '/converter/regex' }
       ],
       encoding: [
         { label: 'Encoder', path: '/encode' },
@@ -933,6 +1019,8 @@ const en: Translation = {
       'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and more using Tulkit\'s case converter. Paste any identifier and see instant transformations across all naming conventions directly in your browser.',
     urlMetaDescription:
       'Encode and decode URL parameters, query strings, and special characters directly in your browser with Tulkit\'s URL encoder. Perfect for debugging API requests, preparing form data, and inspecting encoded URLs without leaving your desktop.',
+    regexMetaDescription:
+      'Test JavaScript regular expressions, toggle flags, and inspect capture groups entirely in your browser with Tulkit\'s regex tester.',
     indexNowMetaDescription:
       'Submit URLs to IndexNow from Tulkit. Host your key file at the site root, load sitemap URLs, and ping search engines via POST or GET.',
     notFoundMetaDescription:
@@ -1237,6 +1325,55 @@ const id: Translation = {
       ]
     }
   },
+  regexTester: {
+    heading: 'Regex Tester',
+    subheading: 'Uji ekspresi reguler JavaScript, flag, dan grup tangkap langsung di browser Anda.',
+    patternLabel: 'Pola',
+    patternPlaceholder: 'mis. (\\w+)@(\\w+\\.\\w+)',
+    sampleLabel: 'Teks uji',
+    samplePlaceholder: 'Tempel teks yang ingin diperiksa',
+    flagsLabel: 'Flag',
+    flags: {
+      g: {
+        label: 'Global',
+        description: 'Temukan semua kecocokan, bukan berhenti di kecocokan pertama.'
+      },
+      i: {
+        label: 'Abaikan huruf besar',
+        description: 'Perlakukan huruf kecil dan huruf besar sebagai karakter yang sama.'
+      },
+      m: {
+        label: 'Multi-line',
+        description: 'Buat ^ dan $ cocok di awal atau akhir setiap baris.'
+      },
+      s: {
+        label: 'Dotall',
+        description: 'Izinkan token titik (.) mencocokkan karakter newline.'
+      },
+      u: {
+        label: 'Unicode',
+        description: 'Aktifkan mode Unicode agar escape khusus dan simbol astral didukung.'
+      },
+      y: {
+        label: 'Sticky',
+        description: 'Cocokkan mulai dari posisi lastIndex saat ini saja.'
+      }
+    },
+    emptyPatternHint: 'Mulai dengan mengetik ekspresi reguler.',
+    summaryLabel: 'Jumlah kecocokan: {count}',
+    noMatchesLabel: 'Belum ada kecocokan.',
+    invalidPatternPrefix: 'Pola tidak valid: ',
+    previewLabel: 'Pratinjau dengan highlight',
+    emptyPreviewLabel: 'Belum ada teks untuk dipratinjau.',
+    matchesHeading: 'Detail kecocokan',
+    matchColumn: 'Cocokan',
+    indexColumn: 'Indeks',
+    groupsColumn: 'Grup tangkap',
+    noGroupsLabel: 'Tidak ada grup tangkap',
+    emptyGroupValue: '—',
+    numberedGroupLabel: 'Grup {index}',
+    namedGroupLabel: 'Grup bernama {name}'
+  },
   encoder: {
     inputEncodingLabel: 'Encoding input',
     inputEncodingUtf8: 'Teks (UTF-8)',
@@ -1302,6 +1439,7 @@ const id: Translation = {
     navHash: 'Generator Hash',
     navCase: 'Konverter Kasus',
     navUrl: 'Encoder URL',
+    navRegex: 'Tester Regex',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
@@ -1338,6 +1476,7 @@ const id: Translation = {
       hash: 'Generator Hash — Tulkit',
       case: 'Konverter Kasus — Tulkit',
       url: 'Encoder URL — Tulkit',
+      regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
     },
@@ -1425,7 +1564,8 @@ const id: Translation = {
       conversion: [
         { label: 'Konverter Epoch', path: '/converter/epoch' },
         { label: 'Konverter Case', path: '/converter/case' },
-        { label: 'Penyandi URL', path: '/converter/url' }
+        { label: 'Penyandi URL', path: '/converter/url' },
+        { label: 'Regex Tester', path: '/converter/regex' }
       ],
       encoding: [
         { label: 'Encoder', path: '/encode' },
@@ -1501,6 +1641,8 @@ const id: Translation = {
       'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
     urlMetaDescription:
       'Enkode dan dekode parameter URL serta karakter khusus langsung di browser dengan encoder URL Tulkit. Sempurna untuk men-debug permintaan API, menyiapkan data form, dan memeriksa URL terenkode tanpa meninggalkan desktop.',
+    regexMetaDescription:
+      'Uji ekspresi reguler JavaScript, ubah flag, dan lihat grup tangkap secara lokal di browser Anda dengan Regex Tester Tulkit.',
     indexNowMetaDescription:
       'Submit URL ke IndexNow langsung dari Tulkit. Host file kunci di root situs, muat URL sitemap, lalu ping mesin pencari via POST atau GET.',
     notFoundMetaDescription:

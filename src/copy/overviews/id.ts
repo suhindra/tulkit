@@ -74,6 +74,13 @@ const overviews: OverviewCopy = {
           path: '/converter/url',
           icon: '🔗',
           category: 'conversion'
+        },
+        {
+          title: 'Regex Tester',
+          description: 'Uji pola regex JavaScript lengkap dengan flag dan grup tangkap langsung di browser.',
+          path: '/converter/regex',
+          icon: '🧪',
+          category: 'conversion'
         }
       ]
     },
@@ -127,6 +134,13 @@ const overviews: OverviewCopy = {
           description: 'Enkode dan dekode parameter URL serta karakter khusus untuk transmisi yang aman di alamat web.',
           path: '/converter/url',
           icon: '🔗',
+          category: 'conversion'
+        },
+        {
+          title: 'Regex Tester',
+          description: 'Eksperimen dengan regex, flag, dan grup tangkap menggunakan teks contoh langsung di browser.',
+          path: '/converter/regex',
+          icon: '🧪',
           category: 'conversion'
         }
       ]
@@ -433,6 +447,13 @@ const overviews: OverviewCopy = {
         'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, konverter kasus Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
         'Alat ini menangani input multi-kata secara cerdas, menghormati delimiter dan batasan yang sudah ada, serta menghasilkan output bersih siap dipaste ulang ke editor Anda. Semua transformasi terjadi lokal di browser, sehingga aman mengkonversi identifier dari repo pribadi, file konfigurasi, atau sistem internal tanpa mengupload apa pun ke server.',
         'Gunakan saat refaktor nama variabel di seluruh codebase, menyesuaikan respons API agar cocok dengan gaya penamaan Anda, menyiapkan contoh kode untuk dokumentasi, atau sekadar bereksperimen melihat bagaimana identifier baru akan terlihat di berbagai konvensi.'
+      ]
+    },
+    regex: {
+      heading: 'Regex Tester — ringkasan Tulkit',
+      paragraphs: [
+        'Ekspresi reguler memudahkan mencari dan memodifikasi teks, tetapi menyusun pola yang tepat biasanya butuh percobaan berkali-kali. Regex Tester Tulkit mempermudah proses tersebut dengan highlight instan saat Anda menempelkan teks contoh dan menyesuaikan pola.',
+        'Anda bisa menyalakan atau mematikan flag global, sensitif huruf, multi-line, dotall, Unicode, hingga sticky untuk melihat dampaknya, lalu memeriksa setiap grup tangkap bernomor maupun bernama di tabel yang rapi. Semuanya terjadi lokal di browser sehingga aman dipakai untuk kode atau log internal.'
       ]
     },
     url: {

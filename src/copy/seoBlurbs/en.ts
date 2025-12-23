@@ -182,6 +182,10 @@ const seoBlurb: SeoBlurbCopy = {
       url: [
         'Encode URL parameters and special characters for use in web addresses, API calls, and query strings. Paste regular text or a full URL to encode it safely for transmission, or paste an encoded URL to decode it back to readable form instantly.',
         'Tulkit handles encoding and decoding entirely in your browser using the native URL encoding standard. Perfect for debugging API requests, preparing parameters for web forms, embedding data in URLs, or inspecting query strings from logs and analytics.'
+      ],
+      regex: [
+        'Experiment with JavaScript regular expressions using live sample text, highlight previews, and capture-group tables. You can see how each flag—global, case-insensitive, multi-line, dotall, Unicode, or sticky—changes the matches in real time.',
+        'All pattern testing runs locally in your browser so you can safely debug proprietary logs, payloads, or snippets while iterating on search-and-replace logic for editors, ETL jobs, and validation rules.'
       ]
     }
 

@@ -10,6 +10,7 @@ const Decoder = React.lazy(()=>import('./components/Decoder'))
 const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
 const UrlEncoder = React.lazy(()=>import('./components/UrlEncoder'))
+const RegexTester = React.lazy(()=>import('./components/RegexTester'))
 import IndexNowSubmit from './components/IndexNowSubmit'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { loadOverviewContent, type OverviewCopy } from './pageOverviewContent'
@@ -20,7 +21,7 @@ import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } fr
 import { Helmet } from 'react-helmet-async'
 import './components/Breadcrumb.css'
 
-type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'indexnow-admin' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'regex' | 'indexnow-admin' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -71,6 +72,9 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/converter/url')){
     return 'url'
+  }
+  if(normalized.startsWith('/converter/regex') || normalized.startsWith('/regex')){
+    return 'regex'
   }
   if(normalized.startsWith('/minify')){
     return 'minify'
@@ -220,6 +224,8 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return '/converter'
     case 'case':
       return '/converter'
+    case 'regex':
+      return '/converter'
     case 'encode':
       return '/encode'
     case 'decode':
@@ -255,6 +261,7 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'hash': return appCopy.navHash
     case 'case': return appCopy.navConverters
     case 'url': return appCopy.navConverters
+    case 'regex': return appCopy.navConverters
     default: return ''
   }
 }
@@ -329,6 +336,9 @@ function buildDetailBreadcrumb({
   }
   if(view === 'url'){
     return { name: appCopy.navUrl, url: currentUrl }
+  }
+  if(view === 'regex'){
+    return { name: appCopy.navRegex, url: currentUrl }
   }
   return null
 }
@@ -525,6 +535,7 @@ export default function App(){
   const epochOverview = overviews?.epoch
   const caseOverview = overviews?.case
   const urlOverview = overviews?.url
+  const regexOverview = overviews?.regex
   const encodeOverview = overviews?.encode[encodeSlug]
   const decodeOverview = overviews?.decode[decodeSlug]
   const loremOverview = overviews?.lorem
@@ -545,6 +556,7 @@ export default function App(){
   const loremSeoBlurb = seoBlurbs?.lorem || []
   const caseSeoBlurb = seoBlurbs?.case || []
   const urlSeoBlurb = seoBlurbs?.url || []
+  const regexSeoBlurb = seoBlurbs?.regex || []
   const seoHeading = useMemo(()=>{
     if(view === 'home'){
       return 'Tulkit — Web Tools for Developers'
@@ -611,6 +623,9 @@ export default function App(){
     }
     if(view === 'url'){
       return appCopy.seoTitles.url
+    }
+    if(view === 'regex'){
+      return appCopy.seoTitles.regex
     }
     if(view === 'indexnow-admin'){
       return appCopy.seoTitles.indexNowAdmin || `${appCopy.indexNow.heading} — Tulkit`
@@ -687,6 +702,12 @@ export default function App(){
     }
     if(view === 'case'){
       return appCopy.caseMetaDescription
+    }
+    if(view === 'url'){
+      return appCopy.urlMetaDescription
+    }
+    if(view === 'regex'){
+      return appCopy.regexMetaDescription
     }
     if(view === 'indexnow-admin'){
       return appCopy.indexNowMetaDescription
@@ -802,6 +823,10 @@ export default function App(){
       pageName = appCopy.navLorem
     }else if(view === 'case'){
       pageName = appCopy.navCase
+    }else if(view === 'url'){
+      pageName = appCopy.navUrl
+    }else if(view === 'regex'){
+      pageName = appCopy.navRegex
     }
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -1033,6 +1058,13 @@ export default function App(){
             {view === 'url' && urlSeoBlurb.length > 0 && (
               <>
                 {urlSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'regex' && regexSeoBlurb.length > 0 && (
+              <>
+                {regexSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -1347,6 +1379,11 @@ export default function App(){
             <UrlEncoder language={language} />
           </React.Suspense>
         )}
+        {view === 'regex' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <RegexTester language={language} />
+          </React.Suspense>
+        )}
         {view === 'indexnow-admin' && (
           <IndexNowSubmit language={language} currentUrl={currentFullUrl} />
         )}
@@ -1458,6 +1495,16 @@ export default function App(){
                 <>
                   <h2>{urlOverview.heading}</h2>
                   {urlOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'regex' && (
+              regexOverview ? (
+                <>
+                  <h2>{regexOverview.heading}</h2>
+                  {regexOverview.paragraphs.map(text=>(
                     <p key={text}>{text}</p>
                   ))}
                 </>

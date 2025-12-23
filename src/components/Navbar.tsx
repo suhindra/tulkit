@@ -43,7 +43,9 @@ export default function Navbar({
       if (currentView === 'lorem') return item.path.includes('lorem')
       if (currentView === 'hash' || currentView === 'hash-overview') return item.path.includes('hash')
       if (currentView === 'case') return item.path.includes('case')
+      if (currentView === 'regex') return item.path.includes('regex')
       if (currentView === 'epoch') return item.category === 'converters'
+      if (currentView === 'url') return item.path.includes('url')
       if (currentView === 'encode' || currentView === 'encode-overview') return item.path.includes('encode')
       if (currentView === 'decode' || currentView === 'decode-overview') return item.path.includes('decode')
       return false
@@ -131,6 +133,8 @@ export default function Navbar({
                           (currentView === 'lorem' && item.path.includes('lorem')) ||
                           (currentView === 'hash' || currentView === 'hash-overview') && item.path.includes('hash') ||
                           (currentView === 'case' && item.path.includes('case')) ||
+                          (currentView === 'regex' && item.path.includes('regex')) ||
+                          (currentView === 'url' && item.path.includes('url')) ||
                           (currentView === 'epoch' && item.path.includes('epoch')) ||
                           (currentView === 'encode' || currentView === 'encode-overview') && item.path.includes('encode') ||
                           (currentView === 'decode' || currentView === 'decode-overview') && item.path.includes('decode')

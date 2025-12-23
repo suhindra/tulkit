@@ -54,6 +54,10 @@ const viewPreloads: ViewPreload[] = [
   {
     match: path => path.startsWith('/converter/url'),
     importKey: './components/UrlEncoder.tsx'
+  },
+  {
+    match: path => path.startsWith('/converter/regex'),
+    importKey: './components/RegexTester.tsx'
   }
 ]
 

@@ -182,6 +182,10 @@ const seoBlurb: SeoBlurbCopy = {
       url: [
         'Enkode parameter URL dan karakter khusus untuk dipakai di alamat web, panggilan API, dan string query. Tempel teks biasa atau URL lengkap untuk mengenkodinya dengan aman untuk transmisi, atau tempel URL yang sudah dienkode untuk mendekodinya kembali menjadi bentuk yang bisa dibaca secara instan.',
         'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
+      ],
+      regex: [
+        'Eksperimen dengan ekspresi reguler JavaScript menggunakan teks contoh hidup, highlight instan, dan tabel grup tangkap. Aktifkan atau matikan flag global, tidak sensitif huruf, multi-line, dotall, Unicode, maupun sticky untuk melihat bagaimana hasilnya berubah seketika.',
+        'Seluruh pengujian pola berjalan lokal di browser sehingga aman digunakan pada log, payload, atau potongan kode internal saat Anda menyempurnakan logika pencarian, validasi input, atau alur find-and-replace.'
       ]
     }
 

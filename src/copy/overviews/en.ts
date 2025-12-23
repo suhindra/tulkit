@@ -74,6 +74,13 @@ const overviews: OverviewCopy = {
           path: '/converter/url',
           icon: '🔗',
           category: 'conversion'
+        },
+        {
+          title: 'Regex Tester',
+          description: 'Test JavaScript regular expressions, flags, and capture groups entirely in your browser.',
+          path: '/converter/regex',
+          icon: '🧪',
+          category: 'conversion'
         }
       ]
     },
@@ -154,6 +161,13 @@ const overviews: OverviewCopy = {
           description: 'Encode and decode URL parameters and special characters for safe transmission in web addresses.',
           path: '/converter/url',
           icon: '🔗',
+          category: 'conversion'
+        },
+        {
+          title: 'Regex Tester',
+          description: 'Quickly experiment with regex patterns, flags, and capture groups using sample text, all in your browser.',
+          path: '/converter/regex',
+          icon: '🧪',
           category: 'conversion'
         }
       ]
@@ -460,6 +474,13 @@ const overviews: OverviewCopy = {
         'When you refactor code, integrate systems that use different conventions, or prepare examples for documentation, converting between these cases quickly becomes essential. Rather than manually rewriting each identifier, Tulkit\'s case converter lets you paste text and instantly see it transformed into camelCase, snake_case, PascalCase, kebab-case, and more.',
         'The tool handles multi-word inputs intelligently, respects existing delimiters and boundaries, and produces clean output ready to paste back into your editor. All transformations happen locally in your browser, so you can safely convert identifiers from private repositories, configuration files, or internal systems without uploading anything to a server.',
         'Use it when refactoring variable names across a codebase, adapting API responses to match your naming style, preparing code examples for documentation, or simply experimenting with how a new identifier would look in different conventions.'
+      ]
+    },
+    regex: {
+      heading: 'Regex Tester — Tulkit overview',
+      paragraphs: [
+        'Regular expressions are powerful search patterns, but crafting the right one usually takes iteration. Tulkit’s Regex Tester lets you paste sample text, tweak your pattern, and immediately see highlights for every match without touching a terminal or IDE.',
+        'Toggle the global, case-insensitive, multi-line, dotall, Unicode, or sticky flags to understand how they affect the result, and inspect each capture group—numbered or named—in a structured table. Everything runs locally in your browser so you can safely test proprietary snippets, logs, or payloads.'
       ]
     },
     url: {
