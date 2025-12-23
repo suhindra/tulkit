@@ -76,6 +76,20 @@ const overviews: OverviewCopy = {
           category: 'conversion'
         },
         {
+          title: 'Konverter Pantone',
+          description: 'Cari kecocokan Pantone terdekat untuk warna HEX dengan jarak ΔE dan pratinjau swatch.',
+          path: '/pantone/hex-to-pantone',
+          icon: '🎨',
+          category: 'conversion'
+        },
+        {
+          title: 'Pantone ke HEX',
+          description: 'Jelajahi daftar Pantone dan salin kode HEX atau RGB langsung dari browser.',
+          path: '/pantone/pantone-to-hex',
+          icon: '🗂️',
+          category: 'conversion'
+        },
+        {
           title: 'Regex Tester',
           description: 'Uji pola regex JavaScript lengkap dengan flag dan grup tangkap langsung di browser.',
           path: '/converter/regex',
@@ -134,6 +148,20 @@ const overviews: OverviewCopy = {
           description: 'Enkode dan dekode parameter URL serta karakter khusus untuk transmisi yang aman di alamat web.',
           path: '/converter/url',
           icon: '🔗',
+          category: 'conversion'
+        },
+        {
+          title: 'Konverter Pantone',
+          description: 'Samakan warna HEX dengan swatch Pantone memakai jarak ΔE dan salin kodenya seketika.',
+          path: '/pantone/hex-to-pantone',
+          icon: '🎨',
+          category: 'conversion'
+        },
+        {
+          title: 'Pantone ke HEX',
+          description: 'Buka daftar Pantone, filter berdasarkan nama/kode, dan salin HEX atau RGB-nya.',
+          path: '/pantone/pantone-to-hex',
+          icon: '🗂️',
           category: 'conversion'
         },
         {
@@ -463,6 +491,20 @@ const overviews: OverviewCopy = {
         'Banyak karakter membawa makna khusus dalam URL: "&" memisahkan parameter, "?" memulai string query, "#" menandai fragment. Ketika karakter tersebut muncul sebagai data yang seharusnya dikodekan, bukan delimitator, maka harus diproduksi dalam bentuk persen-encoded agar parser URL membacanya dengan benar dan tidak salah tafsir struktur URL.',
         'Penyandi URL Tulkit memungkinkan Anda mengkonversi teks biasa ke bentuk terenkripsi URL dengan cepat, dan sebaliknya mendekodekan URL yang sudah dikodekan kembali ke teks yang dapat dibaca—tanpa perlu mengunggah data apa pun ke server eksternal. Semua pengolahan terjadi secara lokal di browser Anda.',
         'Gunakan untuk mengkodekan parameter dalam query string, mendekodekan URL dari log atau database, membangun URL secara terprogram, atau menyiapkan contoh dokumentasi API. Penyandi ini mendukung seluruh rentang karakter UTF-8 dan sesuai dengan standar RFC 3986 untuk pengkodean URL.'
+      ]
+    },
+    pantone: {
+      heading: 'Konverter Pantone — ringkasan Tulkit',
+      paragraphs: [
+        'Mencari padanan Pantone untuk warna digital biasanya membutuhkan plugin atau software khusus. Tulkit membandingkan warna HEX Anda dengan palet Pantone terkurasi memakai jarak ΔE di ruang warna LAB sehingga Anda tahu swatch mana yang paling mendekati dan seberapa besar perbedaannya.',
+        'Hasilnya berguna saat menyiapkan spesifikasi cetak, menyelaraskan token desain dengan tinta Pantone, atau menjawab pertanyaan tim marketing tanpa meninggalkan browser. Salin kode Pantone atau hex-nya langsung dan kirimkan ke desainer maupun vendor dengan percaya diri.'
+      ]
+    },
+    pantoneCatalog: {
+      heading: 'Pantone ke HEX — ringkasan Tulkit',
+      paragraphs: [
+        'Jika Anda sudah memiliki kode Pantone dan tinggal membutuhkan nilai digitalnya, katalog Pantone ke HEX Tulkit menghadirkan seluruh palet di satu tempat. Filter berdasarkan nama atau kode, lihat swatch langsung, lalu salin nilai HEX atau RGB tanpa membuka software desain.',
+        'Setiap entri menampilkan kode Pantone resmi beserta HEX dan RGB, sehingga tim brand, percetakan, dan marketing bisa menjaga konsistensi antara aset cetak dan digital. Semua berjalan lokal di browser sehingga aman dibagikan saat review atau saat mencocokkan warna dengan cepat.'
       ]
     }
   }

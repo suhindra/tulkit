@@ -183,6 +183,18 @@ const seoBlurb: SeoBlurbCopy = {
         'Encode URL parameters and special characters for use in web addresses, API calls, and query strings. Paste regular text or a full URL to encode it safely for transmission, or paste an encoded URL to decode it back to readable form instantly.',
         'Tulkit handles encoding and decoding entirely in your browser using the native URL encoding standard. Perfect for debugging API requests, preparing parameters for web forms, embedding data in URLs, or inspecting query strings from logs and analytics.'
       ],
+      pantoneHub: [
+        'Work with Pantone colors from both directions: convert HEX values to their nearest Pantone swatches using ΔE distance, or browse the Pantone palette to copy HEX/RGB equivalents.',
+        'Tulkit keeps both workflows local in your browser so designers, developers, and marketers can stay in sync without juggling desktop plugins.'
+      ],
+      pantone: [
+        'Paste a HEX value and Tulkit computes the closest Pantone color using ΔE distance so you can match brand palettes, packaging, or print assets without opening a desktop tool.',
+        'Preview both swatches, compare RGB values, and copy the Pantone code instantly—all processing stays local in your browser for quick handoffs to designers and print vendors.'
+      ],
+      pantoneCatalog: [
+        'Browse Tulkit’s Pantone palette when you need the HEX or RGB value for a specific swatch. Filter by code or name, view a live preview, and copy the exact digital color for your guidelines.',
+        'Use the catalog when translating print specs back into design tokens, prepping front-end themes from Pantone references, or sharing links to swatches with teammates.'
+      ],
       regex: [
         'Experiment with JavaScript regular expressions using live sample text, highlight previews, and capture-group tables. You can see how each flag—global, case-insensitive, multi-line, dotall, Unicode, or sticky—changes the matches in real time.',
         'All pattern testing runs locally in your browser so you can safely debug proprietary logs, payloads, or snippets while iterating on search-and-replace logic for editors, ETL jobs, and validation rules.'

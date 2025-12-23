@@ -183,6 +183,18 @@ const seoBlurb: SeoBlurbCopy = {
         'Enkode parameter URL dan karakter khusus untuk dipakai di alamat web, panggilan API, dan string query. Tempel teks biasa atau URL lengkap untuk mengenkodinya dengan aman untuk transmisi, atau tempel URL yang sudah dienkode untuk mendekodinya kembali menjadi bentuk yang bisa dibaca secara instan.',
         'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
       ],
+      pantoneHub: [
+        'Kerjakan warna Pantone dari dua arah: konversi HEX ke swatch Pantone terdekat dengan jarak ΔE, atau telusuri palet Pantone untuk menyalin padanan HEX/RGB-nya.',
+        'Semua berjalan lokal di browser sehingga desainer, developer, dan marketer bisa tetap sinkron tanpa harus memasang plugin desktop.'
+      ],
+      pantone: [
+        'Tempel warna HEX dan Tulkit akan menghitung kecocokan Pantone terdekat memakai jarak ΔE sehingga Anda bisa mencocokkan palet brand, kemasan, atau aset cetak tanpa membuka aplikasi desktop.',
+        'Pratinjau kedua swatch, bandingkan nilai RGB, dan salin kode Pantone secara instan—semuanya berjalan lokal di browser sehingga aman digunakan dengan data desain internal.'
+      ],
+      pantoneCatalog: [
+        'Jelajahi palet Pantone Tulkit saat Anda butuh nilai HEX atau RGB dari kode Pantone tertentu. Filter berdasarkan nama atau kode, lihat swatch langsung, dan salin nilainya tanpa software tambahan.',
+        'Gunakan katalog ini ketika menerjemahkan spesifikasi cetak ke aset digital, membangun tema front-end dari referensi Pantone, atau berbagi tautan swatch spesifik kepada rekan tim.'
+      ],
       regex: [
         'Eksperimen dengan ekspresi reguler JavaScript menggunakan teks contoh hidup, highlight instan, dan tabel grup tangkap. Aktifkan atau matikan flag global, tidak sensitif huruf, multi-line, dotall, Unicode, maupun sticky untuk melihat bagaimana hasilnya berubah seketika.',
         'Seluruh pengujian pola berjalan lokal di browser sehingga aman digunakan pada log, payload, atau potongan kode internal saat Anda menyempurnakan logika pencarian, validasi input, atau alur find-and-replace.'

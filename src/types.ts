@@ -31,5 +31,8 @@ export type View =
   | 'case'
   | 'url'
   | 'regex'
+  | 'pantone-hub'
+  | 'pantone'
+  | 'pantone-catalog'
   | 'indexnow-admin'
   | 'notfound'

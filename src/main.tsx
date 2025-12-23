@@ -56,6 +56,18 @@ const viewPreloads: ViewPreload[] = [
     importKey: './components/UrlEncoder.tsx'
   },
   {
+    match: path => path === '/pantone' || path === '/pantone/' || path === '/id-id/pantone' || path === '/id-id/pantone/',
+    importKey: './components/PantoneLanding.tsx'
+  },
+  {
+    match: path => path.startsWith('/converter/pantone') || path.startsWith('/pantone/hex-to-pantone'),
+    importKey: './components/PantoneConverter.tsx'
+  },
+  {
+    match: path => path.startsWith('/pantone/pantone-to-hex'),
+    importKey: './components/PantoneCatalog.tsx'
+  },
+  {
     match: path => path.startsWith('/converter/regex'),
     importKey: './components/RegexTester.tsx'
   }

@@ -46,6 +46,7 @@ export default function Navbar({
       if (currentView === 'regex') return item.path.includes('regex')
       if (currentView === 'epoch') return item.category === 'converters'
       if (currentView === 'url') return item.path.includes('url')
+      if (currentView === 'pantone-hub' || currentView === 'pantone' || currentView === 'pantone-catalog') return item.path.includes('pantone')
       if (currentView === 'encode' || currentView === 'encode-overview') return item.path.includes('encode')
       if (currentView === 'decode' || currentView === 'decode-overview') return item.path.includes('decode')
       return false
@@ -135,6 +136,9 @@ export default function Navbar({
                           (currentView === 'case' && item.path.includes('case')) ||
                           (currentView === 'regex' && item.path.includes('regex')) ||
                           (currentView === 'url' && item.path.includes('url')) ||
+                          (currentView === 'pantone-hub' && item.path === '/pantone') ||
+                          (currentView === 'pantone' && item.path.includes('/pantone/hex-to-pantone')) ||
+                          (currentView === 'pantone-catalog' && item.path.includes('/pantone/pantone-to-hex')) ||
                           (currentView === 'epoch' && item.path.includes('epoch')) ||
                           (currentView === 'encode' || currentView === 'encode-overview') && item.path.includes('encode') ||
                           (currentView === 'decode' || currentView === 'decode-overview') && item.path.includes('decode')

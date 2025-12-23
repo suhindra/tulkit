@@ -123,6 +123,59 @@ type RegexTesterCopy = {
   namedGroupLabel: string
 }
 
+type PantoneCopy = {
+  title: string
+  description: string
+  inputLabel: string
+  hexPlaceholder: string
+  convertBtn: string
+  invalidHex: string
+  hexLabel: string
+  rgbLabel: string
+  distanceLabel: string
+  pantoneLabel: string
+  codeLabel: string
+  nameLabel: string
+  yourColorLabel: string
+  pantoneColorLabel: string
+  matchHeading: string
+  comparisonHeading: string
+  alternatesHeading: string
+  matchRankLabel: string
+  pickerLabel: string
+  copyLabel: string
+  copySuccess: string
+  copyError: string
+}
+
+type PantoneCatalogCopy = {
+  title: string
+  description: string
+  searchLabel: string
+  searchPlaceholder: string
+  clearSearch: string
+  listHeading: string
+  emptyState: string
+  detailHeading: string
+  notFoundMessage: string
+  converterCta: string
+  converterCtaButton: string
+}
+
+type PantoneLandingCopy = {
+  title: string
+  description: string
+  intro: string
+  hexTitle: string
+  hexDescription: string
+  hexFeatures: string[]
+  hexCta: string
+  catalogTitle: string
+  catalogDescription: string
+  catalogFeatures: string[]
+  catalogCta: string
+}
+
 export type LoremCopy = {
   paragraphCountLabel: string
   classicPrefixLabel: string
@@ -247,6 +300,8 @@ type AppCopy = {
   navHash: string
   navCase: string
   navUrl: string
+  navPantone: string
+  navPantoneCatalog: string
   navRegex: string
   languageSwitcherLabel: string
   seoTitles: {
@@ -284,6 +339,9 @@ type AppCopy = {
     hash: string
     case: string
     url: string
+    pantoneHub: string
+    pantone: string
+    pantoneCatalog: string
     regex: string
     indexNowAdmin?: string
     notFound: string
@@ -321,6 +379,9 @@ type AppCopy = {
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
   caseMetaDescription: string
   urlMetaDescription: string
+  pantoneHubMetaDescription: string
+  pantoneMetaDescription: string
+  pantoneCatalogMetaDescription: string
   regexMetaDescription: string
   indexNowMetaDescription: string
   notFoundMetaDescription: string
@@ -343,6 +404,9 @@ export type SeoBlurbCopy = {
   hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
   case: string[]
   url: string[]
+  pantoneHub: string[]
+  pantone: string[]
+  pantoneCatalog: string[]
   regex: string[]
 }
 
@@ -378,6 +442,8 @@ export type OverviewCopy = {
   hash: OverviewContent
   case: OverviewContent
   url: OverviewContent
+  pantone: OverviewContent
+  pantoneCatalog: OverviewContent
   regex: OverviewContent
 }
 
@@ -393,6 +459,9 @@ type Translation = {
   regexTester: RegexTesterCopy
   encoder: EncoderCopy
   hash: HashCopy
+  pantone: PantoneCopy
+  pantoneLanding: PantoneLandingCopy
+  pantoneCatalog: PantoneCatalogCopy
   app: AppCopy
 }
 
@@ -800,6 +869,64 @@ const en: Translation = {
     copyErrorPrefix: 'Clipboard failed: ',
     inputErrorPrefix: 'Could not compute hash: '
   },
+  pantone: {
+    title: 'HEX to Pantone Converter',
+    description: 'Paste any HEX color to instantly calculate the closest Pantone swatch using ΔE distance.',
+    inputLabel: 'Hex color',
+    hexPlaceholder: '#2F6BFF',
+    convertBtn: 'Find Pantone match',
+    invalidHex: 'Enter a valid 3 or 6 digit hex color (with or without #).',
+    hexLabel: 'Hex',
+    rgbLabel: 'RGB',
+    distanceLabel: 'ΔE distance',
+    pantoneLabel: 'Closest Pantone match',
+    codeLabel: 'Pantone code',
+    nameLabel: 'Name',
+    yourColorLabel: 'Your color',
+    pantoneColorLabel: 'Pantone color',
+    matchHeading: 'Match details',
+    comparisonHeading: 'Side-by-side comparison',
+    alternatesHeading: 'Other close Pantone matches',
+    matchRankLabel: 'Match',
+    pickerLabel: 'Open color picker',
+    copyLabel: 'Copy',
+    copySuccess: 'Copied!',
+    copyError: 'Failed to copy'
+  },
+  pantoneCatalog: {
+    title: 'Pantone to HEX lookup',
+    description: 'Browse every Pantone swatch in Tulkit’s palette and copy the HEX or RGB value directly from your browser.',
+    searchLabel: 'Search Pantone swatches',
+    searchPlaceholder: 'Type a Pantone code or name…',
+    clearSearch: 'Clear',
+    listHeading: 'Pantone palette',
+    emptyState: 'No Pantone swatches match that search.',
+    detailHeading: 'Color details',
+    notFoundMessage: 'We could not find that Pantone code. Pick a color from the list instead.',
+    converterCta: 'Need to convert HEX to Pantone?',
+    converterCtaButton: 'Open HEX → Pantone'
+  },
+  pantoneLanding: {
+    title: 'Pantone color tools',
+    description: 'Pick the Pantone workflow you need: convert HEX values to the closest Pantone swatch or browse the Pantone palette and copy digital values.',
+    intro: 'Tulkit keeps two complementary Pantone tools in your browser so you can move between print and digital specs without desktop software.',
+    hexTitle: 'HEX → Pantone converter',
+    hexDescription: 'Paste any HEX color to calculate the nearest Pantone swatch using LAB ΔE distance. Compare swatches side-by-side and copy Pantone codes instantly.',
+    hexFeatures: [
+      'ΔE distance for accuracy',
+      'Copy Pantone code & RGB',
+      'Shareable ?hex= links'
+    ],
+    hexCta: 'Open HEX → Pantone',
+    catalogTitle: 'Pantone → HEX lookup',
+    catalogDescription: 'Search the Pantone palette by code or name, view live swatches, then copy HEX or RGB values for your digital guidelines.',
+    catalogFeatures: [
+      'Filter by code or name',
+      'Direct HEX/RGB copy',
+      'Shareable color links'
+    ],
+    catalogCta: 'Open Pantone catalog'
+  },
   app: {
     logoAlt: 'Tulkit Online logo',
     brandHeading: 'Web Tools — Tulkit',
@@ -817,6 +944,8 @@ const en: Translation = {
     navHash: 'Hash Generator',
     navCase: 'Case Converter',
     navUrl: 'URL Encoder',
+    navPantone: 'Pantone Tools',
+    navPantoneCatalog: 'Pantone to HEX',
     navRegex: 'Regex Tester',
     languageSwitcherLabel: 'Language',
     seoTitles: {
@@ -854,6 +983,9 @@ const en: Translation = {
       hash: 'Hash Generator — Tulkit',
       case: 'Case Converter — Tulkit',
       url: 'URL Encoder — Tulkit',
+      pantoneHub: 'Pantone Tools — Tulkit',
+      pantone: 'Pantone Converter — Tulkit',
+      pantoneCatalog: 'Pantone to HEX — Tulkit',
       regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Page not found — Tulkit'
@@ -940,9 +1072,12 @@ const en: Translation = {
         { label: 'JSON Minifier', path: '/minify/json' }
       ],
       conversion: [
+        { label: 'Pantone Tools', path: '/pantone' },
         { label: 'Epoch Converter', path: '/converter/epoch' },
         { label: 'Case Converter', path: '/converter/case' },
         { label: 'URL Encoder', path: '/converter/url' },
+        { label: 'Pantone Converter', path: '/pantone/hex-to-pantone' },
+        { label: 'Pantone to HEX', path: '/pantone/pantone-to-hex' },
         { label: 'Regex Tester', path: '/converter/regex' }
       ],
       encoding: [
@@ -1019,6 +1154,12 @@ const en: Translation = {
       'Convert variable and function names between camelCase, snake_case, PascalCase, kebab-case, and more using Tulkit\'s case converter. Paste any identifier and see instant transformations across all naming conventions directly in your browser.',
     urlMetaDescription:
       'Encode and decode URL parameters, query strings, and special characters directly in your browser with Tulkit\'s URL encoder. Perfect for debugging API requests, preparing form data, and inspecting encoded URLs without leaving your desktop.',
+    pantoneHubMetaDescription:
+      'Choose between Tulkit’s HEX→Pantone converter and Pantone lookup catalog in one place. Convert digital colors to Pantone swatches or grab HEX codes from Pantone references.',
+    pantoneMetaDescription:
+      'Convert HEX values to their closest Pantone colors in your browser with Tulkit. Inspect ΔE distance, copy Pantone codes, and compare swatches instantly.',
+    pantoneCatalogMetaDescription:
+      'Browse Pantone swatches and copy HEX or RGB values instantly in your browser. Filter by code or name to grab the exact color for your next handoff.',
     regexMetaDescription:
       'Test JavaScript regular expressions, toggle flags, and inspect capture groups entirely in your browser with Tulkit\'s regex tester.',
     indexNowMetaDescription:
@@ -1422,6 +1563,64 @@ const id: Translation = {
     copyErrorPrefix: 'Gagal menyalin: ',
     inputErrorPrefix: 'Hash tidak dapat dihitung: '
   },
+  pantone: {
+    title: 'Konverter Hex ke Pantone',
+    description: 'Tempel warna HEX apa pun untuk menghitung kecocokan Pantone terdekat dengan jarak ΔE.',
+    inputLabel: 'Warna hex',
+    hexPlaceholder: '#2F6BFF',
+    convertBtn: 'Cari kecocokan Pantone',
+    invalidHex: 'Masukkan warna hex 3 atau 6 digit (boleh tanpa #).',
+    hexLabel: 'Hex',
+    rgbLabel: 'RGB',
+    distanceLabel: 'Jarak ΔE',
+    pantoneLabel: 'Kecocokan Pantone terdekat',
+    codeLabel: 'Kode Pantone',
+    nameLabel: 'Nama',
+    yourColorLabel: 'Warna Anda',
+    pantoneColorLabel: 'Pantone',
+    matchHeading: 'Detail kecocokan',
+    comparisonHeading: 'Perbandingan',
+    alternatesHeading: 'Pilihan Pantone terdekat lainnya',
+    matchRankLabel: 'Kecocokan',
+    pickerLabel: 'Buka pemilih warna',
+    copyLabel: 'Salin',
+    copySuccess: 'Tersalin!',
+    copyError: 'Gagal menyalin'
+  },
+  pantoneCatalog: {
+    title: 'Pantone ke HEX',
+    description: 'Jelajahi katalog Pantone Tulkit dan salin kode HEX atau RGB langsung dari browser.',
+    searchLabel: 'Cari Pantone',
+    searchPlaceholder: 'Ketik kode atau nama Pantone…',
+    clearSearch: 'Bersihkan',
+    listHeading: 'Daftar Pantone',
+    emptyState: 'Tidak ada Pantone yang cocok dengan pencarian ini.',
+    detailHeading: 'Detail warna',
+    notFoundMessage: 'Link ini tidak cocok dengan kode Pantone mana pun. Pilih warna dari daftar.',
+    converterCta: 'Butuh konversi HEX ke Pantone?',
+    converterCtaButton: 'Buka HEX → Pantone'
+  },
+  pantoneLanding: {
+    title: 'Tools warna Pantone',
+    description: 'Pilih alur Pantone yang Anda butuhkan: konversi warna HEX ke swatch Pantone terdekat atau jelajahi palet Pantone untuk menyalin nilai digitalnya.',
+    intro: 'Tulkit menyediakan dua tool Pantone yang saling melengkapi langsung di browser, sehingga Anda bisa bolak-balik antara spesifikasi cetak dan digital tanpa software tambahan.',
+    hexTitle: 'Konverter HEX → Pantone',
+    hexDescription: 'Tempel warna HEX apa pun untuk menghitung swatch Pantone terdekat memakai jarak ΔE. Bandingkan swatch berdampingan dan salin kode Pantone seketika.',
+    hexFeatures: [
+      'Akurasi ΔE (LAB)',
+      'Salin kode & RGB Pantone',
+      'Link bagikan dengan ?hex='
+    ],
+    hexCta: 'Buka konverter HEX → Pantone',
+    catalogTitle: 'Lookup Pantone → HEX',
+    catalogDescription: 'Cari palet Pantone berdasarkan kode atau nama, lihat swatch langsung, lalu salin nilai HEX atau RGB untuk guideline digital Anda.',
+    catalogFeatures: [
+      'Filter nama/kode Pantone',
+      'Salin HEX/RGB instan',
+      'Link swatch yang bisa dibagi'
+    ],
+    catalogCta: 'Buka katalog Pantone'
+  },
   app: {
     logoAlt: 'Logo Tulkit Online',
     brandHeading: 'Peralatan Web — Tulkit',
@@ -1439,6 +1638,8 @@ const id: Translation = {
     navHash: 'Generator Hash',
     navCase: 'Konverter Kasus',
     navUrl: 'Encoder URL',
+    navPantone: 'Tools Pantone',
+    navPantoneCatalog: 'Pantone ke HEX',
     navRegex: 'Tester Regex',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
@@ -1476,6 +1677,9 @@ const id: Translation = {
       hash: 'Generator Hash — Tulkit',
       case: 'Konverter Kasus — Tulkit',
       url: 'Encoder URL — Tulkit',
+      pantoneHub: 'Tools Pantone — Tulkit',
+      pantone: 'Konverter Pantone — Tulkit',
+      pantoneCatalog: 'Pantone ke HEX — Tulkit',
       regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
@@ -1562,9 +1766,12 @@ const id: Translation = {
         { label: 'Minifier JSON', path: '/minify/json' }
       ],
       conversion: [
+        { label: 'Tools Pantone', path: '/pantone' },
         { label: 'Konverter Epoch', path: '/converter/epoch' },
         { label: 'Konverter Case', path: '/converter/case' },
         { label: 'Penyandi URL', path: '/converter/url' },
+        { label: 'Konverter Pantone', path: '/pantone/hex-to-pantone' },
+        { label: 'Pantone ke HEX', path: '/pantone/pantone-to-hex' },
         { label: 'Regex Tester', path: '/converter/regex' }
       ],
       encoding: [
@@ -1641,6 +1848,12 @@ const id: Translation = {
       'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
     urlMetaDescription:
       'Enkode dan dekode parameter URL serta karakter khusus langsung di browser dengan encoder URL Tulkit. Sempurna untuk men-debug permintaan API, menyiapkan data form, dan memeriksa URL terenkode tanpa meninggalkan desktop.',
+    pantoneHubMetaDescription:
+      'Pilih antara konverter HEX→Pantone dan katalog Pantone→HEX Tulkit di satu halaman. Cocok untuk menyamakan warna digital dengan swatch Pantone atau sebaliknya.',
+    pantoneMetaDescription:
+      'Konversikan warna HEX ke swatch Pantone terdekat di browser dengan Tulkit. Lihat jarak ΔE, bandingkan swatch, dan salin kode Pantone secara instan.',
+    pantoneCatalogMetaDescription:
+      'Lihat daftar warna Pantone dan salin kode HEX atau RGB secara instan. Filter berdasarkan nama atau kode Pantone langsung dari browser Anda.',
     regexMetaDescription:
       'Uji ekspresi reguler JavaScript, ubah flag, dan lihat grup tangkap secara lokal di browser Anda dengan Regex Tester Tulkit.',
     indexNowMetaDescription:

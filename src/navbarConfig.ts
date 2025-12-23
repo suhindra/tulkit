@@ -82,6 +82,20 @@ export const navItems: NavItem[] = [
     category: 'converters',
     icon: '🔗'
   },
+  {
+    label: 'Pantone Converter',
+    labelId: 'navPantone',
+    path: '/pantone',
+    category: 'converters',
+    icon: '🎨'
+  },
+  {
+    label: 'Pantone to HEX',
+    labelId: 'navPantoneCatalog',
+    path: '/pantone/pantone-to-hex',
+    category: 'converters',
+    icon: '🗂️'
+  },
   // Codecs
   {
     label: 'Encode',

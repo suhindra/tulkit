@@ -76,6 +76,20 @@ const overviews: OverviewCopy = {
           category: 'conversion'
         },
         {
+          title: 'Pantone Converter',
+          description: 'Find the closest Pantone color for any HEX value using ΔE distance and copy-ready codes.',
+          path: '/pantone/hex-to-pantone',
+          icon: '🎨',
+          category: 'conversion'
+        },
+        {
+          title: 'Pantone to HEX',
+          description: 'Browse Pantone swatches and copy their HEX or RGB values directly from your browser.',
+          path: '/pantone/pantone-to-hex',
+          icon: '🗂️',
+          category: 'conversion'
+        },
+        {
           title: 'Regex Tester',
           description: 'Test JavaScript regular expressions, flags, and capture groups entirely in your browser.',
           path: '/converter/regex',
@@ -161,6 +175,20 @@ const overviews: OverviewCopy = {
           description: 'Encode and decode URL parameters and special characters for safe transmission in web addresses.',
           path: '/converter/url',
           icon: '🔗',
+          category: 'conversion'
+        },
+        {
+          title: 'Pantone Converter',
+          description: 'Match HEX values to Pantone colors using ΔE distance with copy-ready codes.',
+          path: '/pantone/hex-to-pantone',
+          icon: '🎨',
+          category: 'conversion'
+        },
+        {
+          title: 'Pantone to HEX',
+          description: 'Open a Pantone palette, filter by name or code, and grab HEX/RGB equivalents instantly.',
+          path: '/pantone/pantone-to-hex',
+          icon: '🗂️',
           category: 'conversion'
         },
         {
@@ -490,6 +518,20 @@ const overviews: OverviewCopy = {
         'Common characters like spaces, ampersands, question marks, and hashes have special meaning in URLs. For example, spaces become %20, ampersands separate parameters with &, and question marks introduce query strings. When these characters appear in user-provided data—like search terms, form values, or message content—they must be encoded to prevent syntax conflicts and misinterpretation.',
         'Tulkit\'s URL encoder lets you quickly convert plain text to percent-encoded format and decode encoded URLs back to readable text. Whether you\'re building dynamic URLs for API calls, preparing form submissions, debugging encoded query strings from logs, or embedding special characters in hyperlinks, the tool handles encoding and decoding without uploading data to any server.',
         'The encoder supports the full range of UTF-8 characters, respects RFC 3986 standards, and provides instant feedback. Use it when constructing URLs programmatically, inspecting encoded parameters from browser consoles, troubleshooting 404 errors from encoding mismatches, or preparing safe URLs that contain user-generated content or international text.'
+      ]
+    },
+    pantone: {
+      heading: 'Pantone Converter — Tulkit overview',
+      paragraphs: [
+        'Matching HEX colors to Pantone swatches normally requires separate desktop software. Tulkit compares your HEX color to a curated Pantone palette using ΔE distance (LAB color space) so you can see the nearest swatch and the exact difference between the two.',
+        'It is perfect for preparing print-ready specs, aligning design tokens with ink libraries, or answering “what’s the Pantone equivalent?” without leaving the browser. Copy the Pantone code or HEX instantly and hand it to designers, marketers, or vendors with confidence.'
+      ]
+    },
+    pantoneCatalog: {
+      heading: 'Pantone to HEX — Tulkit overview',
+      paragraphs: [
+        'When you already have a Pantone code and simply need the digital HEX or RGB equivalent, Tulkit’s Pantone to HEX lookup keeps the entire swatch library within reach. Browse the palette by name or code, view a live swatch, and copy the HEX or RGB value without opening design suites.',
+        'Each entry includes the official Pantone code, HEX, and RGB representation so brand, packaging, and marketing teams can keep print and digital assets aligned. Everything runs in your browser, so you can check colors and share links to specific swatches quickly during reviews.'
       ]
     }
   }

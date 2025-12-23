@@ -11,6 +11,9 @@ const HashGenerator = React.lazy(()=>import('./components/HashGenerator'))
 const CaseConverter = React.lazy(()=>import('./components/CaseConverter'))
 const UrlEncoder = React.lazy(()=>import('./components/UrlEncoder'))
 const RegexTester = React.lazy(()=>import('./components/RegexTester'))
+const PantoneConverter = React.lazy(()=>import('./components/PantoneConverter'))
+const PantoneLanding = React.lazy(()=>import('./components/PantoneLanding'))
+const PantoneCatalog = React.lazy(()=>import('./components/PantoneCatalog'))
 import IndexNowSubmit from './components/IndexNowSubmit'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { loadOverviewContent, type OverviewCopy } from './pageOverviewContent'
@@ -18,10 +21,11 @@ import { loadSeoBlurbs } from './seoBlurbs'
 import { getTranslations, type SeoBlurbCopy } from './i18n'
 import { formatterLangs, type ActiveTab, type CodecSubtool, type LanguageCode, type MinifyTab, type UuidVersion } from './types'
 import { detectLanguageFromPath, stripLanguagePrefix, buildPathWithLanguage } from './routing'
+import { findPantoneBySlug } from './data/pantoneColors'
 import { Helmet } from 'react-helmet-async'
 import './components/Breadcrumb.css'
 
-type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'regex' | 'indexnow-admin' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'pantone' | 'pantone-catalog' | 'regex' | 'indexnow-admin' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
@@ -72,6 +76,18 @@ function getViewFromPath(path: string): View{
   }
   if(normalized.startsWith('/converter/url')){
     return 'url'
+  }
+  if(normalized.startsWith('/pantone/pantone-to-hex')){
+    return 'pantone-catalog'
+  }
+  if(normalized === '/pantone' || normalized === '/pantone/'){
+    return 'pantone-hub'
+  }
+  if(normalized.startsWith('/pantone/hex-to-pantone')){
+    return 'pantone'
+  }
+  if(normalized.startsWith('/converter/pantone')){
+    return 'pantone'
   }
   if(normalized.startsWith('/converter/regex') || normalized.startsWith('/regex')){
     return 'regex'
@@ -236,6 +252,12 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return relativePath.startsWith('/hash') ? '/hash' : '/generator/hash'
     case 'url':
       return '/converter'
+    case 'pantone-hub':
+      return '/pantone'
+    case 'pantone':
+      return '/pantone'
+    case 'pantone-catalog':
+      return '/pantone/pantone-to-hex'
     default:
       return null
   }
@@ -261,6 +283,9 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'hash': return appCopy.navHash
     case 'case': return appCopy.navConverters
     case 'url': return appCopy.navConverters
+    case 'pantone-hub': return appCopy.navPantone
+    case 'pantone': return appCopy.navPantone
+    case 'pantone-catalog': return appCopy.navPantoneCatalog
     case 'regex': return appCopy.navConverters
     default: return ''
   }
@@ -278,6 +303,7 @@ type BreadcrumbArgs = {
   encodeSlug: CodecSubtool
   decodeSlug: CodecSubtool
   hashSlug: HashAlgorithmKey
+  pantoneLanding: ReturnType<typeof getTranslations>['pantoneLanding']
 }
 
 function buildDetailBreadcrumb({
@@ -291,7 +317,8 @@ function buildDetailBreadcrumb({
   hashCopy,
   encodeSlug,
   decodeSlug,
-  hashSlug
+  hashSlug,
+  pantoneLanding
 }: BreadcrumbArgs): BreadcrumbItem | null{
   if(view === 'formatter'){
     const tab = getFormatterTabFromPath(relativePath)
@@ -337,6 +364,22 @@ function buildDetailBreadcrumb({
   if(view === 'url'){
     return { name: appCopy.navUrl, url: currentUrl }
   }
+  if(view === 'pantone-hub'){
+    return { name: appCopy.navPantone, url: currentUrl }
+  }
+  if(view === 'pantone'){
+    return { name: pantoneLanding.hexTitle, url: currentUrl }
+  }
+  if(view === 'pantone-catalog'){
+    const slug = getPantoneCatalogSlugFromPath(relativePath)
+    if(slug){
+      const color = findPantoneBySlug(slug)
+      if(color){
+        return { name: `${color.code} — ${color.name}`, url: currentUrl }
+      }
+    }
+    return { name: appCopy.navPantoneCatalog, url: currentUrl }
+  }
   if(view === 'regex'){
     return { name: appCopy.navRegex, url: currentUrl }
   }
@@ -352,6 +395,11 @@ function getHashSlugFromPath(path: string): HashAlgorithmKey{
     return slug
   }
   return 'sha256'
+}
+
+function getPantoneCatalogSlugFromPath(path: string): string | null{
+  const match = path.match(/^\/pantone\/pantone-to-hex\/([^/]+)(?:\/)?/)
+  return match ? match[1].toLowerCase() : null
 }
 
 function isFormatterTabValue(value: unknown): value is ActiveTab{
@@ -437,6 +485,7 @@ export default function App(){
   const encodeSlug = useMemo<CodecSubtool>(()=> (view === 'encode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const decodeSlug = useMemo<CodecSubtool>(()=> (view === 'decode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const hashSlug = useMemo<HashAlgorithmKey>(()=> (view === 'hash' ? getHashSlugFromPath(relativePath) : 'sha256'), [view, relativePath])
+  const pantoneCatalogSlug = useMemo(()=> (view === 'pantone-catalog' ? getPantoneCatalogSlugFromPath(relativePath) : null), [view, relativePath])
   const effectiveFormatterTab = useMemo<ActiveTab>(()=> (view === 'formatter' ? formatterTab : 'auto'), [view, formatterTab])
   const effectiveMinifyTab = useMemo<MinifyTab>(()=> (view === 'minify' ? minifierTab : 'auto'), [view, minifierTab])
   const currentFullUrl = useMemo(()=>{
@@ -519,7 +568,8 @@ export default function App(){
     uuidDescriptionByVersion,
     minifierLangInfo,
     uuid: uuidCopy,
-    hash: hashCopy
+    hash: hashCopy,
+    pantoneLanding: pantoneLandingCopy
   } = translations
 
   const homeOverview = overviews?.home
@@ -535,6 +585,8 @@ export default function App(){
   const epochOverview = overviews?.epoch
   const caseOverview = overviews?.case
   const urlOverview = overviews?.url
+  const pantoneOverview = overviews?.pantone
+  const pantoneCatalogOverview = overviews?.pantoneCatalog
   const regexOverview = overviews?.regex
   const encodeOverview = overviews?.encode[encodeSlug]
   const decodeOverview = overviews?.decode[decodeSlug]
@@ -556,6 +608,9 @@ export default function App(){
   const loremSeoBlurb = seoBlurbs?.lorem || []
   const caseSeoBlurb = seoBlurbs?.case || []
   const urlSeoBlurb = seoBlurbs?.url || []
+  const pantoneHubSeoBlurb = seoBlurbs?.pantoneHub || []
+  const pantoneSeoBlurb = seoBlurbs?.pantone || []
+  const pantoneCatalogSeoBlurb = seoBlurbs?.pantoneCatalog || []
   const regexSeoBlurb = seoBlurbs?.regex || []
   const seoHeading = useMemo(()=>{
     if(view === 'home'){
@@ -623,6 +678,15 @@ export default function App(){
     }
     if(view === 'url'){
       return appCopy.seoTitles.url
+    }
+    if(view === 'pantone-hub'){
+      return appCopy.seoTitles.pantoneHub
+    }
+    if(view === 'pantone'){
+      return appCopy.seoTitles.pantone
+    }
+    if(view === 'pantone-catalog'){
+      return appCopy.seoTitles.pantoneCatalog
     }
     if(view === 'regex'){
       return appCopy.seoTitles.regex
@@ -705,6 +769,15 @@ export default function App(){
     }
     if(view === 'url'){
       return appCopy.urlMetaDescription
+    }
+    if(view === 'pantone-hub'){
+      return appCopy.pantoneHubMetaDescription
+    }
+    if(view === 'pantone'){
+      return appCopy.pantoneMetaDescription
+    }
+    if(view === 'pantone-catalog'){
+      return appCopy.pantoneCatalogMetaDescription
     }
     if(view === 'regex'){
       return appCopy.regexMetaDescription
@@ -825,6 +898,10 @@ export default function App(){
       pageName = appCopy.navCase
     }else if(view === 'url'){
       pageName = appCopy.navUrl
+    }else if(view === 'pantone'){
+      pageName = appCopy.navPantone
+    }else if(view === 'pantone-catalog'){
+      pageName = appCopy.navPantoneCatalog
     }else if(view === 'regex'){
       pageName = appCopy.navRegex
     }
@@ -864,7 +941,8 @@ export default function App(){
       hashCopy,
       encodeSlug,
       decodeSlug,
-      hashSlug
+      hashSlug,
+      pantoneLanding: pantoneLandingCopy
     })
 
     const finalItem = detailItem || { name: pageName, url: currentUrl }
@@ -1058,6 +1136,27 @@ export default function App(){
             {view === 'url' && urlSeoBlurb.length > 0 && (
               <>
                 {urlSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'pantone-hub' && pantoneHubSeoBlurb.length > 0 && (
+              <>
+                {pantoneHubSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'pantone' && pantoneSeoBlurb.length > 0 && (
+              <>
+                {pantoneSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'pantone-catalog' && pantoneCatalogSeoBlurb.length > 0 && (
+              <>
+                {pantoneCatalogSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -1379,6 +1478,21 @@ export default function App(){
             <UrlEncoder language={language} />
           </React.Suspense>
         )}
+        {view === 'pantone-hub' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <PantoneLanding language={language} />
+          </React.Suspense>
+        )}
+        {view === 'pantone' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <PantoneConverter language={language} />
+          </React.Suspense>
+        )}
+        {view === 'pantone-catalog' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <PantoneCatalog language={language} slug={pantoneCatalogSlug} />
+          </React.Suspense>
+        )}
         {view === 'regex' && (
           <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
             <RegexTester language={language} />
@@ -1495,6 +1609,36 @@ export default function App(){
                 <>
                   <h2>{urlOverview.heading}</h2>
                   {urlOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'pantone-hub' && (
+              pantoneOverview ? (
+                <>
+                  <h2>{pantoneOverview.heading}</h2>
+                  {pantoneOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'pantone' && (
+              pantoneOverview ? (
+                <>
+                  <h2>{pantoneOverview.heading}</h2>
+                  {pantoneOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'pantone-catalog' && (
+              pantoneCatalogOverview ? (
+                <>
+                  <h2>{pantoneCatalogOverview.heading}</h2>
+                  {pantoneCatalogOverview.paragraphs.map(text=>(
                     <p key={text}>{text}</p>
                   ))}
                 </>

@@ -613,4 +613,52 @@
     <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/converter/regex"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/converter/regex"/>
   </url>
+  <url>
+    <loc>https://tulkit.online/pantone/hex-to-pantone</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone/hex-to-pantone"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone/hex-to-pantone"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone/hex-to-pantone"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/pantone/hex-to-pantone</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone/hex-to-pantone"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone/hex-to-pantone"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone/hex-to-pantone"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/pantone/pantone-to-hex</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone/pantone-to-hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone/pantone-to-hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone/pantone-to-hex"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/pantone/pantone-to-hex</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone/pantone-to-hex"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone/pantone-to-hex"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone/pantone-to-hex"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/pantone</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/pantone</loc>
+    <priority>0.65</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/pantone"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/pantone"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/pantone"/>
+  </url>
 </urlset>
