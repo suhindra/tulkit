@@ -613,6 +613,44 @@ export default function App(){
   const pantoneSeoBlurb = seoBlurbs?.pantone || []
   const pantoneCatalogSeoBlurb = seoBlurbs?.pantoneCatalog || []
   const regexSeoBlurb = seoBlurbs?.regex || []
+  const pantoneCatalogSeoBlurbResolved = useMemo(()=>{
+    if(pantoneCatalogColor){
+      if(language === 'id'){
+        return [
+          `Swatch Pantone ${pantoneCatalogColor.code} (${pantoneCatalogColor.name}) dengan HEX ${pantoneCatalogColor.hex} dan RGB ${pantoneCatalogColor.rgb}. Salin nilainya atau bagikan tautan ini ke tim.`,
+          'Gunakan detail ini untuk menjaga konsistensi brand saat mengubah spesifikasi Pantone ke aset digital atau token desain.'
+        ]
+      }
+      return [
+        `See Pantone ${pantoneCatalogColor.code} (${pantoneCatalogColor.name}) with HEX ${pantoneCatalogColor.hex} and RGB ${pantoneCatalogColor.rgb}. Copy the digital values or share this link with your team.`,
+        'Use this swatch page when translating print specs back to digital assets, checking brand consistency, or grabbing a quick HEX value for design tokens.'
+      ]
+    }
+    return pantoneCatalogSeoBlurb
+  },[pantoneCatalogColor, language, pantoneCatalogSeoBlurb])
+
+  const pantoneCatalogOverviewResolved = useMemo(()=>{
+    if(pantoneCatalogColor){
+      const heading = `Pantone ${pantoneCatalogColor.code} — ${pantoneCatalogColor.name} (HEX ${pantoneCatalogColor.hex})`
+      if(language === 'id'){
+        return {
+          heading,
+          paragraphs: [
+            `Lihat swatch Pantone ${pantoneCatalogColor.code} (${pantoneCatalogColor.name}) lengkap dengan HEX ${pantoneCatalogColor.hex} dan RGB ${pantoneCatalogColor.rgb}. Salin nilai digital atau bagikan tautan warna ini dengan cepat.`,
+            'Cocok untuk mencocokkan aset cetak ke token desain, mengecek konsistensi brand, atau mengambil nilai HEX untuk front-end secara instan.'
+          ]
+        }
+      }
+      return {
+        heading,
+        paragraphs: [
+          `View Pantone ${pantoneCatalogColor.code} (${pantoneCatalogColor.name}) with live HEX ${pantoneCatalogColor.hex} and RGB ${pantoneCatalogColor.rgb} values. Copy them or share this color link instantly with teammates.`,
+          'Perfect for translating print specs to digital assets, sanity-checking brand consistency, or pulling a fast HEX value for design tokens.'
+        ]
+      }
+    }
+    return pantoneCatalogOverview || null
+  },[pantoneCatalogColor, language, pantoneCatalogOverview])
   const seoHeading = useMemo(()=>{
     if(view === 'home'){
       return 'Tulkit — Web Tools for Developers'
@@ -1198,9 +1236,9 @@ export default function App(){
                 ))}
               </>
             )}
-            {view === 'pantone-catalog' && pantoneCatalogSeoBlurb.length > 0 && (
+            {view === 'pantone-catalog' && pantoneCatalogSeoBlurbResolved.length > 0 && (
               <>
-                {pantoneCatalogSeoBlurb.map((text: string)=>(
+                {pantoneCatalogSeoBlurbResolved.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -1679,10 +1717,10 @@ export default function App(){
               ) : <ParagraphSkeleton lines={4} />
             )}
             {view === 'pantone-catalog' && (
-              pantoneCatalogOverview ? (
+              pantoneCatalogOverviewResolved ? (
                 <>
-                  <h2>{pantoneCatalogOverview.heading}</h2>
-                  {pantoneCatalogOverview.paragraphs.map(text=>(
+                  <h2>{pantoneCatalogOverviewResolved.heading}</h2>
+                  {pantoneCatalogOverviewResolved.paragraphs.map(text=>(
                     <p key={text}>{text}</p>
                   ))}
                 </>
