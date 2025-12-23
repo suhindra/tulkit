@@ -342,6 +342,7 @@ type AppCopy = {
     pantoneHub: string
     pantone: string
     pantoneCatalog: string
+    pantoneCatalogColor: string
     regex: string
     indexNowAdmin?: string
     notFound: string
@@ -382,6 +383,7 @@ type AppCopy = {
   pantoneHubMetaDescription: string
   pantoneMetaDescription: string
   pantoneCatalogMetaDescription: string
+  pantoneCatalogColorMetaDescription: string
   regexMetaDescription: string
   indexNowMetaDescription: string
   notFoundMetaDescription: string
@@ -986,6 +988,7 @@ const en: Translation = {
       pantoneHub: 'Pantone Tools — Tulkit',
       pantone: 'Pantone Converter — Tulkit',
       pantoneCatalog: 'Pantone to HEX — Tulkit',
+      pantoneCatalogColor: 'Pantone {code} to HEX ({hex}) — Tulkit',
       regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Page not found — Tulkit'
@@ -1160,6 +1163,8 @@ const en: Translation = {
       'Convert HEX values to their closest Pantone colors in your browser with Tulkit. Inspect ΔE distance, copy Pantone codes, and compare swatches instantly.',
     pantoneCatalogMetaDescription:
       'Browse Pantone swatches and copy HEX or RGB values instantly in your browser. Filter by code or name to grab the exact color for your next handoff.',
+    pantoneCatalogColorMetaDescription:
+      'View Pantone {code} ({name}) with HEX {hex} and RGB values. Copy this specific swatch directly from Tulkit’s Pantone catalog.',
     regexMetaDescription:
       'Test JavaScript regular expressions, toggle flags, and inspect capture groups entirely in your browser with Tulkit\'s regex tester.',
     indexNowMetaDescription:
@@ -1680,6 +1685,7 @@ const id: Translation = {
       pantoneHub: 'Tools Pantone — Tulkit',
       pantone: 'Konverter Pantone — Tulkit',
       pantoneCatalog: 'Pantone ke HEX — Tulkit',
+      pantoneCatalogColor: 'Pantone {code} ke HEX ({hex}) — Tulkit',
       regex: 'Regex Tester — Tulkit',
       indexNowAdmin: 'IndexNow Submit — Tulkit',
       notFound: 'Halaman tidak ditemukan — Tulkit'
@@ -1854,6 +1860,8 @@ const id: Translation = {
       'Konversikan warna HEX ke swatch Pantone terdekat di browser dengan Tulkit. Lihat jarak ΔE, bandingkan swatch, dan salin kode Pantone secara instan.',
     pantoneCatalogMetaDescription:
       'Lihat daftar warna Pantone dan salin kode HEX atau RGB secara instan. Filter berdasarkan nama atau kode Pantone langsung dari browser Anda.',
+    pantoneCatalogColorMetaDescription:
+      'Lihat Pantone {code} ({name}) lengkap dengan nilai HEX {hex} dan RGB. Salin detail swatch ini langsung dari katalog Pantone Tulkit.',
     regexMetaDescription:
       'Uji ekspresi reguler JavaScript, ubah flag, dan lihat grup tangkap secara lokal di browser Anda dengan Regex Tester Tulkit.',
     indexNowMetaDescription:

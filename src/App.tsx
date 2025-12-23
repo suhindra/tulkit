@@ -486,6 +486,7 @@ export default function App(){
   const decodeSlug = useMemo<CodecSubtool>(()=> (view === 'decode' ? getCodecSlugFromPath(relativePath) : 'default'), [view, relativePath])
   const hashSlug = useMemo<HashAlgorithmKey>(()=> (view === 'hash' ? getHashSlugFromPath(relativePath) : 'sha256'), [view, relativePath])
   const pantoneCatalogSlug = useMemo(()=> (view === 'pantone-catalog' ? getPantoneCatalogSlugFromPath(relativePath) : null), [view, relativePath])
+  const pantoneCatalogColor = useMemo(()=> (pantoneCatalogSlug ? findPantoneBySlug(pantoneCatalogSlug) : null), [pantoneCatalogSlug])
   const effectiveFormatterTab = useMemo<ActiveTab>(()=> (view === 'formatter' ? formatterTab : 'auto'), [view, formatterTab])
   const effectiveMinifyTab = useMemo<MinifyTab>(()=> (view === 'minify' ? minifierTab : 'auto'), [view, minifierTab])
   const currentFullUrl = useMemo(()=>{
@@ -686,6 +687,13 @@ export default function App(){
       return appCopy.seoTitles.pantone
     }
     if(view === 'pantone-catalog'){
+      if(pantoneCatalogColor){
+        const template = appCopy.seoTitles.pantoneCatalogColor || appCopy.seoTitles.pantoneCatalog
+        return template
+          .replace('{code}', pantoneCatalogColor.code)
+          .replace('{name}', pantoneCatalogColor.name)
+          .replace('{hex}', pantoneCatalogColor.hex)
+      }
       return appCopy.seoTitles.pantoneCatalog
     }
     if(view === 'regex'){
@@ -709,7 +717,7 @@ export default function App(){
     if(effectiveFormatterTab === 'sql') return appCopy.seoTitles.formatterSql || `${headingByTab.sql} — Tulkit`
     if(effectiveFormatterTab === 'php') return appCopy.seoTitles.formatterPhp || `${headingByTab.php} — Tulkit`
     return appCopy.seoTitles.formatterDefault
-  },[view, uuidVersion, appCopy, effectiveFormatterTab, headingByTab, encodeSlug, decodeSlug, effectiveMinifyTab])
+  },[view, uuidVersion, appCopy, effectiveFormatterTab, headingByTab, encodeSlug, decodeSlug, effectiveMinifyTab, pantoneCatalogColor])
 
   const metaDescription = useMemo(()=>{
     if(view === 'home'){
@@ -777,6 +785,13 @@ export default function App(){
       return appCopy.pantoneMetaDescription
     }
     if(view === 'pantone-catalog'){
+      if(pantoneCatalogColor){
+        const template = appCopy.pantoneCatalogColorMetaDescription || appCopy.pantoneCatalogMetaDescription
+        return template
+          .replace('{code}', pantoneCatalogColor.code)
+          .replace('{name}', pantoneCatalogColor.name)
+          .replace('{hex}', pantoneCatalogColor.hex)
+      }
       return appCopy.pantoneCatalogMetaDescription
     }
     if(view === 'regex'){
@@ -790,7 +805,31 @@ export default function App(){
     }
     const key: ActiveTab = effectiveFormatterTab || 'auto'
     return descriptionByTab[key]
-  },[view, uuidVersion, appCopy, effectiveFormatterTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, effectiveMinifyTab, hashSlug])
+  },[view, uuidVersion, appCopy, effectiveFormatterTab, descriptionByTab, uuidDescriptionByVersion, encodeSlug, decodeSlug, effectiveMinifyTab, hashSlug, pantoneCatalogColor])
+
+  const pantoneBreadcrumbJsonLd = useMemo(()=>{
+    if(typeof window === 'undefined') return null
+    if(view !== 'pantone-catalog' || !pantoneCatalogColor || !pantoneCatalogSlug) return null
+    const origin = window.location.origin.replace(/\/+$/,'')
+    const homeUrl = `${origin}${buildPathWithLanguage('/', language)}`
+    const catalogUrl = `${origin}${buildPathWithLanguage('/pantone/pantone-to-hex', language)}`
+    const colorUrl = `${origin}${buildPathWithLanguage(`/pantone/pantone-to-hex/${pantoneCatalogSlug}`, language)}`
+    const breadcrumbs = [
+      { name: language === 'id' ? 'Beranda' : 'Home', url: homeUrl },
+      { name: translations.app.navPantoneCatalog, url: catalogUrl },
+      { name: `${pantoneCatalogColor.code} — ${pantoneCatalogColor.name}`, url: colorUrl }
+    ]
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((item, index)=>({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: item.url
+      }))
+    }
+  },[view, pantoneCatalogColor, pantoneCatalogSlug, language, translations.app.navPantoneCatalog])
 
   useEffect(()=>{
     if(typeof document === 'undefined') return
@@ -1012,6 +1051,11 @@ export default function App(){
       <Helmet>
         <title>{seoHeading}</title>
         <meta name="description" content={metaDescription} />
+        {pantoneBreadcrumbJsonLd && (
+          <script type="application/ld+json">
+            {JSON.stringify(pantoneBreadcrumbJsonLd)}
+          </script>
+        )}
       </Helmet>
       <React.Suspense fallback={null}>
         <Navbar
