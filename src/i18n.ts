@@ -1473,7 +1473,7 @@ const id: Translation = {
   },
   regexTester: {
     heading: 'Regex Tester',
-    subheading: 'Uji ekspresi reguler JavaScript, flag, dan grup tangkap langsung di browser Anda.',
+    subheading: 'Uji ekspresi reguler JavaScript, flag, dan capture group langsung di browser Anda.',
     patternLabel: 'Pola',
     patternPlaceholder: 'mis. (\\w+)@(\\w+\\.\\w+)',
     sampleLabel: 'Teks uji',
@@ -1514,8 +1514,8 @@ const id: Translation = {
     matchesHeading: 'Detail kecocokan',
     matchColumn: 'Cocokan',
     indexColumn: 'Indeks',
-    groupsColumn: 'Grup tangkap',
-    noGroupsLabel: 'Tidak ada grup tangkap',
+    groupsColumn: 'capture group',
+    noGroupsLabel: 'Tidak ada capture group',
     emptyGroupValue: '—',
     numberedGroupLabel: 'Grup {index}',
     namedGroupLabel: 'Grup bernama {name}'
@@ -1863,7 +1863,7 @@ const id: Translation = {
     pantoneCatalogColorMetaDescription:
       'Lihat Pantone {code} ({name}) lengkap dengan nilai HEX {hex} dan RGB. Salin detail swatch ini langsung dari katalog Pantone Tulkit.',
     regexMetaDescription:
-      'Uji ekspresi reguler JavaScript, ubah flag, dan lihat grup tangkap secara lokal di browser Anda dengan Regex Tester Tulkit.',
+      'Uji ekspresi reguler JavaScript, ubah flag, dan lihat capture group secara lokal di browser Anda dengan Regex Tester Tulkit.',
     indexNowMetaDescription:
       'Submit URL ke IndexNow langsung dari Tulkit. Host file kunci di root situs, muat URL sitemap, lalu ping mesin pencari via POST atau GET.',
     notFoundMetaDescription:

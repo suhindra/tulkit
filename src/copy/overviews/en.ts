@@ -297,7 +297,7 @@ const overviews: OverviewCopy = {
     },
     formatter: {
       auto: {
-        heading: 'Web Formatter — Tulkit overview',
+        heading: 'Web Formatter — About',
         paragraphs: [
           'Some developers keep their code perfectly aligned, while others move fast and end up with scripts that are hard to scan. Tulkit’s web formatter is designed to quickly tidy those rough snippets so they are easier for teammates, reviewers, and your future self to read.',
           'The formatter looks at the snippet you paste or upload, figures out whether it is HTML, CSS, JavaScript, JSON, SQL, or PHP, then applies consistent indentation to each line. Once the structure is cleaned up, you can copy, download, or share the formatted version without touching a full IDE or build pipeline.',
@@ -387,7 +387,7 @@ const overviews: OverviewCopy = {
       }
     },
     epoch: {
-      heading: 'Epoch Converter — Tulkit overview',
+      heading: 'Epoch Converter — About',
       paragraphs: [
         'Epoch time, sometimes called Unix time or POSIX time, counts how many seconds have passed since 1 January 1970 at 00:00:00 UTC. Because this number is the same no matter which country or time zone you are in, it is a convenient way for systems and APIs to talk about a specific instant in time.',
         'Tulkit’s epoch converter turns those raw timestamp numbers into readable dates and times, and back again. You can paste a value like 1764298543 to see when it happens in UTC, GMT-style long form, or your preferred time zone, then copy the formatted result for documentation, debugging notes, or support replies.',
@@ -397,7 +397,7 @@ const overviews: OverviewCopy = {
     },
     encode: {
       default: {
-        heading: 'Encoder — Tulkit overview',
+        heading: 'Encoder — About',
         paragraphs: [
           'Base64 originally appeared as a MIME content-transfer encoding: a way to represent arbitrary binary data using only readable ASCII characters. In practice, it works by slicing bytes into 6-bit chunks, then mapping each chunk to one of 64 symbols made up of letters, digits, and a couple of punctuation characters.',
           'Because Base64 output uses only safe characters, it is ideal for transporting data through systems that were designed for text rather than raw bytes. Email attachments, XML or JSON documents that need to embed binary blobs, and many HTTP APIs all rely on Base64 to keep data intact even when intermediate systems are not 8-bit clean.',
@@ -434,7 +434,7 @@ const overviews: OverviewCopy = {
       }
     },
     minify: {
-      heading: 'Minifier — Tulkit overview',
+      heading: 'Minifier — About',
       paragraphs: [
         'Sometimes you just need to shrink a snippet before shipping it—maybe it is a CSS block going into a CMS, inline JavaScript for an email, or an HTML include that you hand off to another team. Tulkit’s minifier focuses on that workflow by letting you paste code, pick the matching language tab, and compress it instantly in your browser.',
         'HTML and XML minification keeps closing tags valid while trimming attributes and whitespace. CSS minification relies on csso to drop redundant characters without rewriting your selectors. JavaScript minification uses Terser’s browser build so you can squeeze inline scripts without touching Node.js tooling. JSON minification simply strips spaces while keeping your data intact.',
@@ -442,7 +442,7 @@ const overviews: OverviewCopy = {
       ]
     },
     hash: {
-      heading: 'Hash Generator — Tulkit overview',
+      heading: 'Hash Generator — About',
       paragraphs: [
         'Hash functions like SHA-1, SHA-256, and SHA-512 turn arbitrary text into fixed-length fingerprints that are easy to compare but hard to reverse. Developers rely on these digests for checksums, cache keys, and test fixtures across many tools and languages.',
         'Tulkit’s hash generator focuses on that day-to-day workflow: paste any snippet, pick an algorithm, and compute a deterministic hex digest entirely in your browser. Because everything runs on top of the Web Crypto API, inputs never leave your device and the results match what you would see from common CLIs and libraries.',
@@ -451,7 +451,7 @@ const overviews: OverviewCopy = {
     },
     decode: {
       default: {
-        heading: 'Decoder — Tulkit overview',
+        heading: 'Decoder — About',
         paragraphs: [
           'When you receive Base64, Base32, Base58, or hex from an API or log file, the first step is often to turn it back into readable text. Tulkit’s decoder focuses on that workflow, letting you quickly inspect what an encoded value really contains.',
           'Paste an encoded string, pick the matching encoding, and Tulkit will decode it to UTF-8 text or raw bytes so you can verify payloads, troubleshoot integration issues, or share clean examples in documentation — all without uploading data to any server.'
@@ -487,7 +487,7 @@ const overviews: OverviewCopy = {
       }
     },
     lorem: {
-      heading: 'Lorem Ipsum Generator — Tulkit overview',
+      heading: 'Lorem Ipsum Generator — About',
       paragraphs: [
         'Lorem ipsum is a long‑lived dummy text used by printers, designers, and front‑end developers to stand in for real copy. It grew out of classical Latin writing, was adopted by typesetters in the 1500s, and later shipped with desktop publishing tools as convenient sample content.',
         'People rely on lorem ipsum because its letters and word lengths resemble natural English, so layouts look realistic without inviting readers to focus on the wording itself. That makes it easier to judge spacing, hierarchy, and visual balance instead of getting distracted by “content here, content here” placeholders.',
@@ -496,7 +496,7 @@ const overviews: OverviewCopy = {
       ]
     },
     case: {
-      heading: 'Case Converter — Tulkit overview',
+      heading: 'Case Converter — About',
       paragraphs: [
         'Variable names, function names, and identifiers follow different naming conventions depending on the language, framework, or team style guide. camelCase is common in JavaScript and Java, snake_case is standard in Python and SQL, while PascalCase appears in class names across many languages.',
         'When you refactor code, integrate systems that use different conventions, or prepare examples for documentation, converting between these cases quickly becomes essential. Rather than manually rewriting each identifier, Tulkit\'s case converter lets you paste text and instantly see it transformed into camelCase, snake_case, PascalCase, kebab-case, and more.',
@@ -505,14 +505,14 @@ const overviews: OverviewCopy = {
       ]
     },
     regex: {
-      heading: 'Regex Tester — Tulkit overview',
+      heading: 'Regex Tester — About',
       paragraphs: [
         'Regular expressions are powerful search patterns, but crafting the right one usually takes iteration. Tulkit’s Regex Tester lets you paste sample text, tweak your pattern, and immediately see highlights for every match without touching a terminal or IDE.',
         'Toggle the global, case-insensitive, multi-line, dotall, Unicode, or sticky flags to understand how they affect the result, and inspect each capture group—numbered or named—in a structured table. Everything runs locally in your browser so you can safely test proprietary snippets, logs, or payloads.'
       ]
     },
     url: {
-      heading: 'URL Encoder — Tulkit overview',
+      heading: 'URL Encoder — About',
       paragraphs: [
         'URLs can only contain unreserved characters (alphanumeric, hyphen, underscore, period, and tilde) and reserved characters in specific contexts. When you need to include spaces, special characters, or international text in URLs or query parameters, they must be percent-encoded (URL encoded) to ensure safe transmission and correct interpretation by servers and applications.',
         'Common characters like spaces, ampersands, question marks, and hashes have special meaning in URLs. For example, spaces become %20, ampersands separate parameters with &, and question marks introduce query strings. When these characters appear in user-provided data—like search terms, form values, or message content—they must be encoded to prevent syntax conflicts and misinterpretation.',
@@ -521,14 +521,14 @@ const overviews: OverviewCopy = {
       ]
     },
     pantone: {
-      heading: 'Pantone Converter — Tulkit overview',
+      heading: 'Pantone Converter — About',
       paragraphs: [
         'Matching HEX colors to Pantone swatches normally requires separate desktop software. Tulkit compares your HEX color to a curated Pantone palette using ΔE distance (LAB color space) so you can see the nearest swatch and the exact difference between the two.',
         'It is perfect for preparing print-ready specs, aligning design tokens with ink libraries, or answering “what’s the Pantone equivalent?” without leaving the browser. Copy the Pantone code or HEX instantly and hand it to designers, marketers, or vendors with confidence.'
       ]
     },
     pantoneCatalog: {
-      heading: 'Pantone to HEX — Tulkit overview',
+      heading: 'Pantone to HEX — About',
       paragraphs: [
         'When you already have a Pantone code and simply need the digital HEX or RGB equivalent, Tulkit’s Pantone to HEX lookup keeps the entire swatch library within reach. Browse the palette by name or code, view a live swatch, and copy the HEX or RGB value without opening design suites.',
         'Each entry includes the official Pantone code, HEX, and RGB representation so brand, packaging, and marketing teams can keep print and digital assets aligned. Everything runs in your browser, so you can check colors and share links to specific swatches quickly during reviews.'

@@ -196,7 +196,7 @@ const seoBlurb: SeoBlurbCopy = {
         'Gunakan katalog ini ketika menerjemahkan spesifikasi cetak ke aset digital, membangun tema front-end dari referensi Pantone, atau berbagi tautan swatch spesifik kepada rekan tim.'
       ],
       regex: [
-        'Eksperimen dengan ekspresi reguler JavaScript menggunakan teks contoh hidup, highlight instan, dan tabel grup tangkap. Aktifkan atau matikan flag global, tidak sensitif huruf, multi-line, dotall, Unicode, maupun sticky untuk melihat bagaimana hasilnya berubah seketika.',
+        'Eksperimen dengan ekspresi reguler JavaScript menggunakan teks contoh hidup, highlight instan, dan tabel capture group. Aktifkan atau matikan flag global, tidak sensitif huruf, multi-line, dotall, Unicode, maupun sticky untuk melihat bagaimana hasilnya berubah seketika.',
         'Seluruh pengujian pola berjalan lokal di browser sehingga aman digunakan pada log, payload, atau potongan kode internal saat Anda menyempurnakan logika pencarian, validasi input, atau alur find-and-replace.'
       ]
     }

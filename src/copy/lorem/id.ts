@@ -1,7 +1,7 @@
 import type { LoremCopy } from '../../i18n'
 
 const loremCopy: LoremCopy = {
-      heading: 'Lorem Ipsum Generator — Tulkit overview',
+      heading: 'Lorem Ipsum Generator — Sekilas',
       paragraphs: [
         'Lorem ipsum is a long‑lived dummy text used by printers, designers, and front‑end developers to stand in for real copy. It grew out of classical Latin writing, was adopted by typesetters in the 1500s, and later shipped with desktop publishing tools as convenient sample content.',
         'People rely on lorem ipsum because its letters and word lengths resemble natural English, so layouts look realistic without inviting readers to focus on the wording itself. That makes it easier to judge spacing, hierarchy, and visual balance instead of getting distracted by “content here, content here” placeholders.',
