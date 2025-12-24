@@ -43,7 +43,7 @@ const Breadcrumb: React.FC = () => {
     // Find matching nav item or build breadcrumb from path
     const currentPath = '/' + segments.join('/')
     
-    // Try to match with navItems
+    // Attempt to match with navItems
     const matchedItem = navItems.find(item => item.path === currentPath)
     if (matchedItem) {
       breadcrumbs.push({
@@ -53,12 +53,12 @@ const Breadcrumb: React.FC = () => {
       return breadcrumbs
     }
 
-    // Build breadcrumb from segments if no exact match
+    // Build breadcrumb from segments if no exact match found
     let currentBuildPath = ''
     segments.forEach((segment, index) => {
       currentBuildPath += '/' + segment
       
-      // Format display name
+      // Format display name from segment
       const displayName = segment
         .replace(/-/g, ' ')
         .split(' ')

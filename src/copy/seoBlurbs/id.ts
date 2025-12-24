@@ -16,7 +16,7 @@ const seoBlurb: SeoBlurbCopy = {
         ]
       ],
       converterOverview: [
-        'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya secara instan. Tempel nilai Unix dalam detik atau milidetik untuk melihat kapan itu terjadi di UTC, GMT, dan zona waktu lokal Anda.',
+        'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya secara instan. Tempel nilai Unix dalam detik atau milidetik untuk melihat kapan itu terjadi di UTC, GMT, dan zona waktu lokal Anda.',
         'Konverter epoch Tulkit berjalan sepenuhnya di browser menggunakan API tanggal JavaScript bawaan. Tidak ada unggah data, tidak ada dependensi eksternal—hanya konversi cepat dan akurat untuk debugging log, menyinkronkan event, dan memahami kapan terjadi sesuatu di berbagai zona waktu.'
       ],
       hashOverview: [
@@ -138,7 +138,7 @@ const seoBlurb: SeoBlurbCopy = {
       hash: {
         sha1: [
           'Buat hash SHA-1 dari teks apa pun langsung di browser Anda ketika perlu kompatibilitas dengan sistem lama. Tulkit memanfaatkan Web Crypto API agar perhitungan digest berlangsung lokal dan tidak meninggalkan perangkat.',
-          'Gunakan mode SHA-1 ini hanya ketika Anda berurusan dengan API atau alat lama yang masih mengharuskannya, sambil tetap menikmati alur kerja ringan di browser.'
+          'Gunakan mode SHA-1 ini hanya ketika Anda berurusan dengan API atau alat lama yang masih mengharuskannya, sambil tetap menikmati alur kerja yang cepat dan berbasis browser.'
         ],
         sha256: [
           'Buat hash SHA-256 untuk snippet, blok konfigurasi, atau berkas kecil langsung di browser Anda. Tulkit mengandalkan Web Crypto API sehingga digest selaras dengan hasil banyak CLI dan library populer.',
@@ -176,7 +176,7 @@ const seoBlurb: SeoBlurbCopy = {
         'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
       ],
       case: [
-        'Konversikan nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
+        'Konversi nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
         'Berguna saat refaktor codebase, menyesuaikan respons API agar cocok gaya penamaan Anda, menyiapkan contoh kode, atau mengintegrasikan sistem yang pakai konvensi penamaan berbeda.'
       ],
       url: [
@@ -184,7 +184,7 @@ const seoBlurb: SeoBlurbCopy = {
         'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
       ],
       pantoneHub: [
-        'Kerjakan warna Pantone dari dua arah: konversi HEX ke swatch Pantone terdekat dengan jarak ΔE, atau telusuri palet Pantone untuk menyalin padanan HEX/RGB-nya.',
+        'Gunakan warna Pantone dari dua arah: konversi HEX ke swatch Pantone terdekat dengan jarak ΔE, atau telusuri palet Pantone untuk menyalin padanan HEX/RGB-nya.',
         'Semua berjalan lokal di browser sehingga desainer, developer, dan marketer bisa tetap sinkron tanpa harus memasang plugin desktop.'
       ],
       pantone: [

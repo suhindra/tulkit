@@ -127,11 +127,11 @@ const overviews: OverviewCopy = {
     },
     converterOverview: {
       heading: 'Tools Converter',
-      subheading: 'Konversi antara konvensi penamaan, ubah stempel Unix, dan sesuaikan zona waktu secara instan',
+      subheading: 'Konversi antara konvensi penamaan, ubah timestamp Unix, dan sesuaikan zona waktu secara instan',
       tools: [
         {
           title: 'Konverter Epoch',
-          description: 'Konversi stempel Unix ke tanggal yang mudah dibaca dan sebaliknya. Periksa waktu epoch dalam detik, milidetik, dan berbagai zona waktu.',
+          description: 'Konversi timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya. Periksa waktu epoch dalam detik, milidetik, dan berbagai zona waktu.',
           path: '/converter/epoch',
           icon: '⏱️',
           category: 'conversion'
@@ -280,56 +280,56 @@ const overviews: OverviewCopy = {
         ]
       },
       html: {
-        heading: 'Ikhtisar Pemformat HTML',
+        heading: 'Ikhtisar Pemformat HTML — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat HTML. Jelaskan jenis potongan HTML apa yang biasa dirapikan di sini dan manfaatnya.',
           'Ganti paragraf placeholder ini dengan salinan Anda sendiri; teks ini hanya muncul pada slug /formatter/html.'
         ]
       },
       css: {
-        heading: 'Ikhtisar Pemformat CSS',
+        heading: 'Ikhtisar Pemformat CSS — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat CSS. Terangkan bagaimana Tulkit dapat merapikan stylesheet, kelas utilitas, atau gaya komponen.',
           'Perbarui salinan ini agar fokus pada alur kerja CSS, SCSS, atau Tailwind yang paling penting bagi pengguna Anda.'
         ]
       },
       js: {
-        heading: 'Ikhtisar Pemformat JavaScript',
+        heading: 'Ikhtisar Pemformat JavaScript — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat JavaScript. Bahas tentang pemformatan potongan, modul, atau keluaran debug dari log.',
           'Anda juga bisa menyebutkan bagaimana alat ini cocok dengan pengembangan front-end atau Node.js.'
         ]
       },
       json: {
-        heading: 'Ikhtisar Pemformat JSON',
+        heading: 'Ikhtisar Pemformat JSON — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat JSON. Jelaskan bagaimana tim dapat mempercantik respons API, konfigurasi, atau payload event di sini.',
           'Sesuaikan teks ini untuk menonjolkan manfaat validasi, kolaborasi, atau debugging khusus untuk kasus JSON Anda.'
         ]
       },
       sql: {
-        heading: 'Ikhtisar Pemformat SQL',
+        heading: 'Ikhtisar Pemformat SQL — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat SQL. Jelaskan bagaimana Tulkit membantu membuat query panjang lebih mudah dibaca dan dibagikan.',
           'Sesuaikan salinan ini untuk menyebut database, ORM, atau alat pelaporan yang paling relevan bagi audiens Anda.'
         ]
       },
       php: {
-        heading: 'Ikhtisar Pemformat PHP',
+        heading: 'Ikhtisar Pemformat PHP — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat PHP. Terangkan bagaimana alat ini membantu proyek Laravel, WordPress, atau PHP lainnya.',
           'Perbarui placeholder ini agar sesuai dengan framework, CMS, atau library yang ingin Anda bidik untuk SEO.'
         ]
       },
       xml: {
-        heading: 'Ikhtisar Pemformat XML',
+        heading: 'Ikhtisar Pemformat XML — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat XML. Jelaskan bagaimana Tulkit membantu merapikan berkas konfigurasi, sitemap, atau payload XML lainnya.',
           'Sesuaikan teks ini agar menonjolkan tools atau platform berbasis XML yang paling relevan bagi pengguna Anda.'
         ]
       },
       yaml: {
-        heading: 'Ikhtisar Pemformat YAML',
+        heading: 'Ikhtisar Pemformat YAML — Tulkit',
         paragraphs: [
           'Konten ikhtisar untuk slug pemformat YAML. Jelaskan bagaimana Tulkit membantu merapikan konfigurasi CI, manifest infrastruktur, atau berkas YAML lain agar aman diedit.',
           'Perbarui teks ini untuk menonjolkan tool deployment, platform CI, atau stack infrastruktur yang paling relevan bagi audiens Anda.'

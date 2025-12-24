@@ -1405,7 +1405,7 @@ const id: Translation = {
     generateLabel: 'Buat UUID',
     copyAllLabel: 'Salin semua',
     placeholder: 'Klik “Buat UUID” untuk membuat pengenal.',
-    copySuccess: 'UUID berhasil disalin',
+    copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: '
   },
   epoch: {
@@ -1540,7 +1540,7 @@ const id: Translation = {
     outputPlaceholder: 'Hasil konversi akan muncul di sini',
     convertLabel: 'Konversi',
     copyLabel: 'Salin',
-    copySuccess: 'Nilai hasil konversi berhasil disalin',
+    copySuccess: 'Berhasil disalin ke clipboard',
     copyErrorPrefix: 'Gagal menyalin: ',
     inputErrorPrefix: 'Input tidak dapat didekode: ',
     presetEncodeBase64: 'Base64',
@@ -1589,7 +1589,7 @@ const id: Translation = {
     matchRankLabel: 'Kecocokan',
     pickerLabel: 'Buka pemilih warna',
     copyLabel: 'Salin',
-    copySuccess: 'Tersalin!',
+    copySuccess: 'Berhasil disalin ke clipboard',
     copyError: 'Gagal menyalin'
   },
   pantoneCatalog: {
@@ -1641,7 +1641,7 @@ const id: Translation = {
     navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
     navHash: 'Generator Hash',
-    navCase: 'Konverter Kasus',
+    navCase: 'Konverter Case',
     navUrl: 'Encoder URL',
     navPantone: 'Tools Pantone',
     navPantoneCatalog: 'Pantone ke HEX',
@@ -1680,7 +1680,7 @@ const id: Translation = {
       decodeHex: 'Decoder Hex — Tulkit',
       lorem: 'Generator Lorem Ipsum — Tulkit',
       hash: 'Generator Hash — Tulkit',
-      case: 'Konverter Kasus — Tulkit',
+      case: 'Konverter Case — Tulkit',
       url: 'Encoder URL — Tulkit',
       pantoneHub: 'Tools Pantone — Tulkit',
       pantone: 'Konverter Pantone — Tulkit',
@@ -1775,7 +1775,7 @@ const id: Translation = {
         { label: 'Tools Pantone', path: '/pantone' },
         { label: 'Konverter Epoch', path: '/converter/epoch' },
         { label: 'Konverter Case', path: '/converter/case' },
-        { label: 'Penyandi URL', path: '/converter/url' },
+        { label: 'Encoder URL', path: '/converter/url' },
         { label: 'Konverter Pantone', path: '/pantone/hex-to-pantone' },
         { label: 'Pantone ke HEX', path: '/pantone/pantone-to-hex' },
         { label: 'Regex Tester', path: '/converter/regex' }
@@ -1851,7 +1851,7 @@ const id: Translation = {
     loremMetaDescription:
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     caseMetaDescription:
-      'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan konverter kasus Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
+      'Konversi nama variabel dan fungsi antara camelCase, snake_case, PascalCase, kebab-case, dan lebih banyak lagi menggunakan Konverter Case Tulkit. Tempel pengenal apa saja dan lihat transformasi instan lintas semua konvensi penamaan langsung di browser.',
     urlMetaDescription:
       'Enkode dan dekode parameter URL serta karakter khusus langsung di browser dengan encoder URL Tulkit. Sempurna untuk men-debug permintaan API, menyiapkan data form, dan memeriksa URL terenkode tanpa meninggalkan desktop.',
     pantoneHubMetaDescription:
