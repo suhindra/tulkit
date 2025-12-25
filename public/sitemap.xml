@@ -118,6 +118,64 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/formatter/yaml"/>
   </url>
   <url>
+    <loc>https://tulkit.online/security</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/security</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/security/jwt</loc>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/security/jwt</loc>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/security/jwt/decode</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt/decode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt/decode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt/decode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/security/jwt/decode</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt/decode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt/decode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt/decode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/security/jwt/encode</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt/encode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt/encode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt/encode"/>
+  </url>
+  <url>
+    <loc>https://tulkit.online/id-ID/security/jwt/encode</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/security/jwt/encode"/>
+    <xhtml:link rel="alternate" hreflang="id-ID" href="https://tulkit.online/id-ID/security/jwt/encode"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tulkit.online/security/jwt/encode"/>
+  </url>
+  <url>
     <loc>https://tulkit.online/formatter/sql</loc>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://tulkit.online/formatter/sql"/>

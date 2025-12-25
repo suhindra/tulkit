@@ -23,6 +23,10 @@ const seoBlurb: SeoBlurbCopy = {
         'Pilih di antara tiga algoritma hash kriptografi—SHA-1, SHA-256, dan SHA-512—untuk menghasilkan checksum, sidik jari, dan digest untuk data Anda. Setiap algoritma menawarkan tingkat keamanan dan ukuran output yang berbeda untuk cocok dengan kasus penggunaan spesifik.',
         'Semua hashing terjadi di browser Anda menggunakan Web Crypto API, jadi data Anda tidak pernah meninggalkan mesin. Ideal untuk memverifikasi integritas berkas, membuat cache key, menghasilkan test fixture, atau debug bagaimana nilai muncul di log dan database.'
       ],
+      securityOverview: [
+        'Buka ruang kerja keamanan untuk menjelajahi alat JWT tanpa mengunggah token atau secret. Tulkit menjaga proses decode, verifikasi, dan penandatanganan sepenuhnya lokal sehingga payload sensitif tetap aman.',
+        'Masuk ke decoder untuk memeriksa header dan klaim, atau ke encoder untuk menandatangani token HS256/384/512 baru bagi kebutuhan uji coba dan demo.'
+      ],
       encodeOverview: [
         'Konversi teks ke empat format enkoding berbeda: Base64 untuk lampiran MIME dan API, Base32 untuk sistem tak sensitif huruf dan seed TOTP, Base58 untuk alamat Bitcoin dan ID pendek, atau heksadesimal untuk protokol dan checksum.',
         'Semua enkoding berjalan lokal di browser tanpa mengunggah data ke server apa pun. Sempurna untuk menyiapkan payload untuk API, membuat URL aman, menyematkan data biner, atau mengubah string untuk penyimpanan dan transmisi.'
@@ -195,6 +199,20 @@ const seoBlurb: SeoBlurbCopy = {
         'Jelajahi palet Pantone Tulkit saat Anda butuh nilai HEX atau RGB dari kode Pantone tertentu. Filter berdasarkan nama atau kode, lihat swatch langsung, dan salin nilainya tanpa software tambahan.',
         'Gunakan katalog ini ketika menerjemahkan spesifikasi cetak ke aset digital, membangun tema front-end dari referensi Pantone, atau berbagi tautan swatch spesifik kepada rekan tim.'
       ],
+      jwt: {
+        overview: [
+          'Dekode header dan payload JWT secara lokal tanpa mengunggah token atau secret. Tulkit menandai segmen yang rusak, menampilkan waktu kedaluwarsa, dan menormalkan Base64URL untuk debugging cepat.',
+          'Verifikasi tanda tangan HS256/384/512 dengan memasukkan secret bersama, atau buat token contoh langsung di browser agar proses debugging dan demo tetap privat.'
+        ],
+        decode: [
+          'Tempel JWT untuk melihat header dan payload seketika di browser. Tulkit menormalkan Base64URL, menandai segmen yang salah, dan menunjukkan kedaluwarsa sehingga audit token tetap aman.',
+          'Tambah secret HS256/384/512 Anda untuk memverifikasi tanda tangan secara lokal—praktis men-debug alur autentikasi atau memeriksa token pihak ketiga tanpa membocorkan secret.'
+        ],
+        encode: [
+          'Edit JSON header/payload, pilih HS256/384/512, lalu tanda tangani JWT langsung di browser. Tulkit menjaga secret tetap lokal sehingga token uji atau demo aman dipakai.',
+          'Cocok untuk membuat token percobaan, menghasilkan token berumur pendek untuk pengujian, atau berbagi contoh JWT yang mudah direproduksi dengan tim.'
+        ]
+      },
       regex: [
         'Eksperimen dengan ekspresi reguler JavaScript menggunakan teks contoh hidup, highlight instan, dan tabel capture group. Aktifkan atau matikan flag global, tidak sensitif huruf, multi-line, dotall, Unicode, maupun sticky untuk melihat bagaimana hasilnya berubah seketika.',
         'Seluruh pengujian pola berjalan lokal di browser sehingga aman digunakan pada log, payload, atau potongan kode internal saat Anda menyempurnakan logika pencarian, validasi input, atau alur find-and-replace.'

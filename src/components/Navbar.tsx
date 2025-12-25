@@ -21,13 +21,15 @@ export default function Navbar({
 
   // Get unique categories in order
   const categories = Array.from(new Set(navItems.map(item => item.category)))
-    .sort((a, b) => ['formatter', 'minify', 'generators', 'converters', 'codecs'].indexOf(a) - ['formatter', 'minify', 'generators', 'converters', 'codecs'].indexOf(b))
+    .sort((a, b) => ['formatter', 'minify', 'generators', 'converters', 'security', 'codecs'].indexOf(a) - ['formatter', 'minify', 'generators', 'converters', 'security', 'codecs'].indexOf(b))
 
   // Items that appear as direct buttons (no dropdown)
-  const directItems = navItems.filter(item => item.category === 'formatter' || item.category === 'minify')
+  const directItems = navItems.filter(item =>
+    item.category === 'formatter' || item.category === 'minify' || item.category === 'security'
+  )
 
   // Items that appear in dropdowns
-  const dropdownCategories = categories.filter(cat => cat !== 'formatter' && cat !== 'minify')
+  const dropdownCategories = categories.filter(cat => cat !== 'formatter' && cat !== 'minify' && cat !== 'security')
 
   // Get items for a category
   const getItemsForCategory = (cat: NavCategory) => {
@@ -39,11 +41,13 @@ export default function Navbar({
     const current = navItems.find(item => {
       if (currentView === 'formatter') return item.category === 'formatter'
       if (currentView === 'minify') return item.category === 'minify'
+      if (currentView === 'security-overview' || currentView === 'jwt-overview' || currentView === 'jwt-decode' || currentView === 'jwt-encode') return item.category === 'security'
       if (currentView === 'uuid' || currentView === 'uuid-overview') return item.path.includes('uuid')
       if (currentView === 'lorem') return item.path.includes('lorem')
       if (currentView === 'hash' || currentView === 'hash-overview') return item.path.includes('hash')
       if (currentView === 'case') return item.path.includes('case')
       if (currentView === 'regex') return item.path.includes('regex')
+      if (currentView === 'security-overview' || currentView === 'jwt-overview' || currentView === 'jwt-decode' || currentView === 'jwt-encode') return item.path.includes('security')
       if (currentView === 'epoch') return item.category === 'converters'
       if (currentView === 'url') return item.path.includes('url')
       if (currentView === 'pantone-hub' || currentView === 'pantone' || currentView === 'pantone-catalog') return item.path.includes('pantone')
@@ -135,6 +139,7 @@ export default function Navbar({
                           (currentView === 'hash' || currentView === 'hash-overview') && item.path.includes('hash') ||
                           (currentView === 'case' && item.path.includes('case')) ||
                           (currentView === 'regex' && item.path.includes('regex')) ||
+                          ((currentView === 'security-overview' || currentView === 'jwt-overview' || currentView === 'jwt-decode' || currentView === 'jwt-encode') && item.path.includes('security')) ||
                           (currentView === 'url' && item.path.includes('url')) ||
                           (currentView === 'pantone-hub' && item.path === '/pantone') ||
                           (currentView === 'pantone' && item.path.includes('/pantone/hex-to-pantone')) ||

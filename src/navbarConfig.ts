@@ -1,4 +1,4 @@
-export type NavCategory = 'formatter' | 'minify' | 'generators' | 'converters' | 'codecs'
+export type NavCategory = 'formatter' | 'minify' | 'generators' | 'converters' | 'security' | 'codecs'
 
 export interface NavItem {
   label: string
@@ -110,16 +110,25 @@ export const navItems: NavItem[] = [
     path: '/decode',
     category: 'codecs',
     icon: '🔓'
+  },
+  // Security
+  {
+    label: 'Security',
+    labelId: 'navJwt',
+    path: '/security',
+    category: 'security',
+    icon: '🛡️'
   }
 ]
 
-export const categoriesOrder: NavCategory[] = ['formatter', 'minify', 'generators', 'converters', 'codecs']
+export const categoriesOrder: NavCategory[] = ['formatter', 'minify', 'generators', 'converters', 'security', 'codecs']
 
 export const categoryLabels: Record<NavCategory, string> = {
   formatter: 'Formatter',
   minify: 'Minify',
   generators: 'Generators',
   converters: 'Converters',
+  security: 'Security',
   codecs: 'Codecs'
 }
 

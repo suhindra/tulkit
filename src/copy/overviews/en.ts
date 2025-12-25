@@ -55,6 +55,20 @@ const overviews: OverviewCopy = {
           category: 'security'
         },
         {
+          title: 'JWT Decoder',
+          description: 'Decode JWTs and verify HS256/384/512 signatures locally with your shared secret.',
+          path: '/security/jwt/decode',
+          icon: '🛡️',
+          category: 'security'
+        },
+        {
+          title: 'JWT Encoder',
+          description: 'Edit header/payload JSON and sign new JWTs (HS256/384/512) entirely in your browser.',
+          path: '/security/jwt/encode',
+          icon: '🛡️',
+          category: 'security'
+        },
+        {
           title: 'Lorem Ipsum Generator',
           description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
           path: '/generator/lorem',
@@ -223,6 +237,39 @@ const overviews: OverviewCopy = {
           description: 'Generate 128-character SHA-512 hashes for maximum security and collision resistance.',
           path: '/generator/hash/sha512',
           icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    securityOverview: {
+      heading: 'Security Tools',
+      subheading: 'Inspect and sign JWTs locally so secrets and tokens stay in your browser.',
+      tools: [
+        {
+          title: 'JWT Tools',
+          description: 'Open the JWT workspace to browse decoding and signing utilities in one place.',
+          path: '/security/jwt',
+          icon: '🛡️',
+          category: 'security'
+        }
+      ]
+    },
+    jwtOverview: {
+      heading: 'JWT Tools',
+      subheading: 'Decode, verify, and sign JSON Web Tokens locally in your browser',
+      tools: [
+        {
+          title: 'JWT Decoder',
+          description: 'Paste a JWT to decode header/payload and verify HS256/384/512 signatures with a shared secret.',
+          path: '/security/jwt/decode',
+          icon: '🛡️',
+          category: 'security'
+        },
+        {
+          title: 'JWT Encoder',
+          description: 'Edit header and payload JSON, choose HS256/384/512, and sign a new JWT without uploading secrets.',
+          path: '/security/jwt/encode',
+          icon: '🛡️',
           category: 'security'
         }
       ]
@@ -503,6 +550,22 @@ const overviews: OverviewCopy = {
         'The tool handles multi-word inputs intelligently, respects existing delimiters and boundaries, and produces clean output ready to paste back into your editor. All transformations happen locally in your browser, so you can safely convert identifiers from private repositories, configuration files, or internal systems without uploading anything to a server.',
         'Use it when refactoring variable names across a codebase, adapting API responses to match your naming style, preparing code examples for documentation, or simply experimenting with how a new identifier would look in different conventions.'
       ]
+    },
+    jwt: {
+      decode: {
+        heading: 'JWT Decoder — About',
+        paragraphs: [
+          'JWT segments are Base64URL strings. Tulkit decodes header and payload locally, highlights malformed tokens, surfaces expiration timestamps, and lets you verify HS256/384/512 signatures with your shared secret—all without leaving the browser.',
+          'Use it to inspect Authorization headers, debug login flows, or audit third-party tokens safely without copying secrets into external tools.'
+        ]
+      },
+      encode: {
+        heading: 'JWT Encoder — About',
+        paragraphs: [
+          'Craft test tokens quickly by editing JSON for the header and payload, then signing with HS256/384/512 using your own secret. Tulkit keeps all signing local so fixtures, demos, and debugging tokens stay private.',
+          'Great for mocking auth flows, generating short-lived tokens, or sharing reproducible examples with teammates without exposing secrets to a server.'
+        ]
+      }
     },
     regex: {
       heading: 'Regex Tester — About',

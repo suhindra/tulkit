@@ -14,6 +14,8 @@ const RegexTester = React.lazy(()=>import('./components/RegexTester'))
 const PantoneConverter = React.lazy(()=>import('./components/PantoneConverter'))
 const PantoneLanding = React.lazy(()=>import('./components/PantoneLanding'))
 const PantoneCatalog = React.lazy(()=>import('./components/PantoneCatalog'))
+const JwtDecoder = React.lazy(()=>import('./components/JwtDecoder'))
+const JwtEncoder = React.lazy(()=>import('./components/JwtEncoder'))
 import IndexNowSubmit from './components/IndexNowSubmit'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { loadOverviewContent, type OverviewCopy } from './pageOverviewContent'
@@ -25,77 +27,90 @@ import { findPantoneBySlug } from './data/pantoneColors'
 import { Helmet } from 'react-helmet-async'
 import './components/Breadcrumb.css'
 
-type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'pantone' | 'pantone-catalog' | 'regex' | 'indexnow-admin' | 'notfound'
+type View = 'home' | 'generator' | 'formatter' | 'minify' | 'uuid' | 'uuid-overview' | 'epoch' | 'converter-overview' | 'encode' | 'encode-overview' | 'decode' | 'decode-overview' | 'lorem' | 'hash' | 'hash-overview' | 'case' | 'url' | 'security-overview' | 'jwt-overview' | 'jwt-decode' | 'jwt-encode' | 'pantone' | 'pantone-hub' | 'pantone-catalog' | 'regex' | 'indexnow-admin' | 'notfound'
 
 function getViewFromPath(path: string): View{
   const normalized = path.toLowerCase()
-  if(normalized === '/' || normalized === ''){
+  const clean = normalized === '/' || normalized === '' ? '/' : normalized.replace(/\/+$/,'')
+  if(clean === '/'){
     return 'home'
   }
-  if(normalized === '/generator'){
+  if(clean === '/generator'){
     return 'generator'
   }
-  if(normalized === '/generator/uuid'){
+  if(clean === '/generator/uuid'){
     return 'uuid-overview'
   }
-  if(normalized.startsWith('/generator/uuid') || normalized.startsWith('/uuid')){
+  if(clean.startsWith('/generator/uuid') || clean.startsWith('/uuid')){
     return 'uuid'
   }
-  if(normalized === '/generator/hash'){
+  if(clean === '/generator/hash'){
     return 'hash-overview'
   }
-  if(normalized.startsWith('/generator/hash') || normalized.startsWith('/hash')){
+  if(clean.startsWith('/generator/hash') || clean.startsWith('/hash')){
     return 'hash'
   }
-  if(normalized.startsWith('/converter/case')){
+  if(clean.startsWith('/converter/case')){
     return 'case'
   }
-  if(normalized.startsWith('/generator/lorem')){
+  if(clean.startsWith('/generator/lorem')){
     return 'lorem'
   }
-  if(normalized === '/encode'){
+  if(clean === '/encode'){
     return 'encode-overview'
   }
-  if(normalized.startsWith('/encode')){
+  if(clean.startsWith('/encode')){
     return 'encode'
   }
-  if(normalized === '/decode'){
+  if(clean === '/decode'){
     return 'decode-overview'
   }
-  if(normalized.startsWith('/decode')){
+  if(clean.startsWith('/decode')){
     return 'decode'
   }
-  if(normalized === '/admin/indexnow'){
+  if(clean === '/security' || clean === '/security/'){
+    return 'security-overview'
+  }
+  if(clean === '/security/jwt' || clean === '/security/jwt/' || clean === '/jwt'){
+    return 'jwt-overview'
+  }
+  if(clean === '/security/jwt/decode' || clean === '/security/jwt/decode/' || clean === '/jwt/decode'){
+    return 'jwt-decode'
+  }
+  if(clean === '/security/jwt/encode' || clean === '/security/jwt/encode/' || clean === '/jwt/encode'){
+    return 'jwt-encode'
+  }
+  if(clean === '/admin/indexnow'){
     return 'indexnow-admin'
   }
-  if(normalized === '/converter'){
+  if(clean === '/converter'){
     return 'converter-overview'
   }
-  if(normalized.startsWith('/converter/epoch')){
+  if(clean.startsWith('/converter/epoch')){
     return 'epoch'
   }
-  if(normalized.startsWith('/converter/url')){
+  if(clean.startsWith('/converter/url')){
     return 'url'
   }
-  if(normalized.startsWith('/pantone/pantone-to-hex')){
+  if(clean.startsWith('/pantone/pantone-to-hex')){
     return 'pantone-catalog'
   }
-  if(normalized === '/pantone' || normalized === '/pantone/'){
+  if(clean === '/pantone' || clean === '/pantone/'){
     return 'pantone-hub'
   }
-  if(normalized.startsWith('/pantone/hex-to-pantone')){
+  if(clean.startsWith('/pantone/hex-to-pantone')){
     return 'pantone'
   }
-  if(normalized.startsWith('/converter/pantone')){
+  if(clean.startsWith('/converter/pantone')){
     return 'pantone'
   }
-  if(normalized.startsWith('/converter/regex') || normalized.startsWith('/regex')){
+  if(clean.startsWith('/converter/regex') || clean.startsWith('/regex')){
     return 'regex'
   }
-  if(normalized.startsWith('/minify')){
+  if(clean.startsWith('/minify')){
     return 'minify'
   }
-  if(normalized.startsWith('/formatter')){
+  if(clean.startsWith('/formatter')){
     return 'formatter'
   }
   return 'notfound'
@@ -252,6 +267,14 @@ function getBasePathForView(view: View, relativePath: string): string | null{
       return relativePath.startsWith('/hash') ? '/hash' : '/generator/hash'
     case 'url':
       return '/converter'
+    case 'security-overview':
+      return '/security'
+    case 'jwt-overview':
+      return '/security/jwt'
+    case 'jwt-decode':
+      return '/security/jwt'
+    case 'jwt-encode':
+      return '/security/jwt'
     case 'pantone-hub':
       return '/pantone'
     case 'pantone':
@@ -281,8 +304,12 @@ function getBaseLabelForView(view: View, appCopy: AppCopy): string {
     case 'decode': return appCopy.navDecode
     case 'lorem': return appCopy.navLorem
     case 'hash': return appCopy.navHash
+    case 'security-overview': return appCopy.navJwt
+    case 'jwt-overview': return appCopy.jwtOverviewLabel || appCopy.seoTitles.jwt
     case 'case': return appCopy.navConverters
     case 'url': return appCopy.navConverters
+    case 'jwt-decode': return appCopy.jwtOverviewLabel || appCopy.seoTitles.jwt
+    case 'jwt-encode': return appCopy.jwtOverviewLabel || appCopy.seoTitles.jwt
     case 'pantone-hub': return appCopy.navPantone
     case 'pantone': return appCopy.navPantone
     case 'pantone-catalog': return appCopy.navPantoneCatalog
@@ -360,6 +387,12 @@ function buildDetailBreadcrumb({
   if(view === 'decode'){
     const name = getCodecDetailName('decode', decodeSlug, appCopy)
     return name ? { name, url: currentUrl } : null
+  }
+  if(view === 'jwt-decode'){
+    return { name: appCopy.seoTitles.jwtDecode, url: currentUrl }
+  }
+  if(view === 'jwt-encode'){
+    return { name: appCopy.seoTitles.jwtEncode, url: currentUrl }
   }
   if(view === 'url'){
     return { name: appCopy.navUrl, url: currentUrl }
@@ -578,6 +611,8 @@ export default function App(){
   const uuidOverviewContent = overviews?.uuidOverview
   const converterOverviewContent = overviews?.converterOverview
   const hashOverviewContent = overviews?.hashOverview
+  const securityOverviewContent = overviews?.securityOverview
+  const jwtOverviewContent = overviews?.jwtOverview
   const encodeOverviewContent = overviews?.encodeOverview
   const decodeOverviewContent = overviews?.decodeOverview
   const formatterOverview = overviews?.formatter[effectiveFormatterTab]
@@ -593,11 +628,15 @@ export default function App(){
   const decodeOverview = overviews?.decode[decodeSlug]
   const loremOverview = overviews?.lorem
   const hashOverview = overviews?.hash
+  const jwtDecodeOverview = overviews?.jwt.decode
+  const jwtEncodeOverview = overviews?.jwt.encode
   const generatorSeoBlurb = seoBlurbs?.generator || []
   const uuidOverviewSeoBlurb = seoBlurbs?.uuidOverview || []
   const hashOverviewSeoBlurb = seoBlurbs?.hashOverview || []
   const encodeOverviewSeoBlurb = seoBlurbs?.encodeOverview || []
   const decodeOverviewSeoBlurb = seoBlurbs?.decodeOverview || []
+  const securityOverviewSeoBlurb = seoBlurbs?.securityOverview || []
+  const jwtOverviewSeoBlurb = seoBlurbs?.jwt?.overview || []
   const converterOverviewSeoBlurb = seoBlurbs?.converterOverview || []
   const encodeSeoBlurb = (seoBlurbs?.encode && seoBlurbs.encode[encodeSlug]) || []
   const decodeSeoBlurb = (seoBlurbs?.decode && seoBlurbs.decode[decodeSlug]) || []
@@ -609,6 +648,8 @@ export default function App(){
   const loremSeoBlurb = seoBlurbs?.lorem || []
   const caseSeoBlurb = seoBlurbs?.case || []
   const urlSeoBlurb = seoBlurbs?.url || []
+  const jwtDecodeSeoBlurb = seoBlurbs?.jwt?.decode || []
+  const jwtEncodeSeoBlurb = seoBlurbs?.jwt?.encode || []
   const pantoneHubSeoBlurb = seoBlurbs?.pantoneHub || []
   const pantoneSeoBlurb = seoBlurbs?.pantone || []
   const pantoneCatalogSeoBlurb = seoBlurbs?.pantoneCatalog || []
@@ -702,6 +743,18 @@ export default function App(){
       if(decodeSlug === 'hex') return appCopy.seoTitles.decodeHex
       return appCopy.seoTitles.decode
     }
+    if(view === 'security-overview'){
+      return appCopy.seoTitles.security || appCopy.navJwt
+    }
+    if(view === 'jwt-overview'){
+      return appCopy.seoTitles.jwt
+    }
+    if(view === 'jwt-decode'){
+      return appCopy.seoTitles.jwtDecode
+    }
+    if(view === 'jwt-encode'){
+      return appCopy.seoTitles.jwtEncode
+    }
     if(view === 'minify'){
       if(effectiveMinifyTab === 'html') return appCopy.seoTitles.minifyHtml || appCopy.seoTitles.minify
       if(effectiveMinifyTab === 'css') return appCopy.seoTitles.minifyCss || appCopy.seoTitles.minify
@@ -778,6 +831,18 @@ export default function App(){
     }
     if(view === 'decode-overview'){
       return 'Decode Base64, Base32, Base58, or hexadecimal back to readable text. Inspect encoded data instantly in your browser.'
+    }
+    if(view === 'security-overview'){
+      return appCopy.securityMetaDescription || appCopy.jwtMetaDescription || ''
+    }
+    if(view === 'jwt-overview'){
+      return appCopy.jwtMetaDescription || appCopy.jwtOverviewMetaDescription || appCopy.jwtDecodeMetaDescription || appCopy.jwtEncodeMetaDescription || ''
+    }
+    if(view === 'jwt-decode'){
+      return appCopy.jwtDecodeMetaDescription || appCopy.jwtMetaDescription || ''
+    }
+    if(view === 'jwt-encode'){
+      return appCopy.jwtEncodeMetaDescription || appCopy.jwtMetaDescription || ''
     }
     if(view === 'uuid'){
       return uuidDescriptionByVersion[uuidVersion as UuidVersion]
@@ -969,6 +1034,10 @@ export default function App(){
       pageName = appCopy.navHash
     }else if(view === 'hash-overview'){
       pageName = appCopy.navHash
+    }else if(view === 'security-overview'){
+      pageName = appCopy.navJwt
+    }else if(view === 'jwt-overview'){
+      pageName = appCopy.jwtOverviewLabel || appCopy.seoTitles.jwt
     }else if(view === 'lorem'){
       pageName = appCopy.navLorem
     }else if(view === 'case'){
@@ -994,6 +1063,14 @@ export default function App(){
       const generatorUrl = `${origin}${buildPathWithLanguage('/generator', language)}`
       if(generatorUrl !== homeUrl && generatorUrl !== currentUrl){
         breadcrumbs.push({ name: appCopy.navGenerator, url: generatorUrl })
+      }
+    }
+
+    // Add parent breadcrumb for security tools
+    if(view === 'jwt-overview' || view === 'jwt-decode' || view === 'jwt-encode'){
+      const securityUrl = `${origin}${buildPathWithLanguage('/security', language)}`
+      if(securityUrl !== homeUrl && securityUrl !== currentUrl){
+        breadcrumbs.push({ name: appCopy.navJwt, url: securityUrl })
       }
     }
     
@@ -1148,7 +1225,7 @@ export default function App(){
           </div>
         </div>
       </header>
-      {view !== 'notfound' && view !== 'home' && view !== 'uuid-overview' && view !== 'converter-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && view !== 'indexnow-admin' && (
+      {view !== 'notfound' && view !== 'home' && view !== 'uuid-overview' && view !== 'converter-overview' && view !== 'hash-overview' && view !== 'encode-overview' && view !== 'decode-overview' && view !== 'security-overview' && view !== 'indexnow-admin' && (
         <section className="seo-blurb">
           <div className="container">
             <h2>{seoHeading}</h2>
@@ -1197,6 +1274,27 @@ export default function App(){
             {view === 'decode' && (
               <>
                 {decodeSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'jwt-overview' && (
+              <>
+                {jwtOverviewSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'jwt-decode' && (
+              <>
+                {jwtDecodeSeoBlurb.map((text: string)=>(
+                  <p key={text}>{text}</p>
+                ))}
+              </>
+            )}
+            {view === 'jwt-encode' && (
+              <>
+                {jwtEncodeSeoBlurb.map((text: string)=>(
                   <p key={text}>{text}</p>
                 ))}
               </>
@@ -1266,6 +1364,18 @@ export default function App(){
             <h2>{seoHeading}</h2>
             <>
               {hashOverviewSeoBlurb.map((text: string)=>(
+                <p key={text}>{text}</p>
+              ))}
+            </>
+          </div>
+        </section>
+      )}
+      {view === 'security-overview' && (
+        <section className="seo-blurb">
+          <div className="container">
+            <h2>{seoHeading}</h2>
+            <>
+              {securityOverviewSeoBlurb.map((text: string)=>(
                 <p key={text}>{text}</p>
               ))}
             </>
@@ -1458,6 +1568,58 @@ export default function App(){
             )}
           </section>
         )}
+        {view === 'security-overview' && (
+          <section className="home-overview">
+            {securityOverviewContent ? (
+              <>
+                <h1>{securityOverviewContent.heading}</h1>
+                <p className="subheading">{securityOverviewContent.subheading}</p>
+                <div className={securityOverviewContent.tools.length <= 2 ? 'tools-grid centered-grid' : 'tools-grid'}>
+                  {securityOverviewContent.tools.map(tool => (
+                    <a
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
+          </section>
+        )}
+        {view === 'jwt-overview' && (
+          <section className="home-overview">
+            {jwtOverviewContent ? (
+              <>
+                <h1>{jwtOverviewContent.heading}</h1>
+                <p className="subheading">{jwtOverviewContent.subheading}</p>
+                <div className="tools-grid">
+                  {jwtOverviewContent.tools.map(tool => (
+                    <a
+                      key={tool.path}
+                      href={buildPathWithLanguage(tool.path, language)}
+                      className="tool-card"
+                    >
+                      <div className="tool-icon">{tool.icon}</div>
+                      <div className="tool-badge">{tool.category}</div>
+                      <h2>{tool.title}</h2>
+                      <p>{tool.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <ToolsGridSkeleton />
+            )}
+          </section>
+        )}
         {view === 'encode-overview' && (
           <section className="home-overview">
             {encodeOverviewContent ? (
@@ -1538,6 +1700,16 @@ export default function App(){
         {view === 'decode' && (
           <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
             <Decoder language={language} />
+          </React.Suspense>
+        )}
+        {view === 'jwt-decode' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <JwtDecoder language={language} />
+          </React.Suspense>
+        )}
+        {view === 'jwt-encode' && (
+          <React.Suspense fallback={<div className="encode-card">{'Loading…'}</div>}>
+            <JwtEncoder language={language} />
           </React.Suspense>
         )}
         {view === 'hash' && (
@@ -1661,6 +1833,26 @@ export default function App(){
                 <>
                   <h2>{hashOverview.heading}</h2>
                   {hashOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'jwt-decode' && (
+              jwtDecodeOverview ? (
+                <>
+                  <h2>{jwtDecodeOverview.heading}</h2>
+                  {jwtDecodeOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'jwt-encode' && (
+              jwtEncodeOverview ? (
+                <>
+                  <h2>{jwtEncodeOverview.heading}</h2>
+                  {jwtEncodeOverview.paragraphs.map(text=>(
                     <p key={text}>{text}</p>
                   ))}
                 </>

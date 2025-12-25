@@ -55,6 +55,13 @@ const overviews: OverviewCopy = {
           category: 'security'
         },
         {
+          title: 'Decoder & Encoder JWT',
+          description: 'Dekode JWT, verifikasi tanda tangan HS256/384/512 dengan secret bersama, dan buat token baru langsung di browser.',
+          path: '/security/jwt',
+          icon: '🛡️',
+          category: 'security'
+        },
+        {
           title: 'Generator Lorem Ipsum',
           description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
           path: '/generator/lorem',
@@ -95,6 +102,26 @@ const overviews: OverviewCopy = {
           path: '/converter/regex',
           icon: '🧪',
           category: 'conversion'
+        }
+      ]
+    },
+    jwtOverview: {
+      heading: 'Alat Keamanan & JWT',
+      subheading: 'Dekode, verifikasi, dan tanda tangani JSON Web Token secara lokal di browser Anda',
+      tools: [
+        {
+          title: 'Decoder JWT',
+          description: 'Tempel JWT untuk melihat header/payload, cek kedaluwarsa, dan verifikasi tanda tangan HS256/384/512 dengan secret bersama.',
+          path: '/security/jwt/decode',
+          icon: '🛡️',
+          category: 'security'
+        },
+        {
+          title: 'Encoder JWT',
+          description: 'Sunting JSON header/payload, pilih HS256/384/512, dan tanda tangani token langsung di browser tanpa mengunggah secret.',
+          path: '/security/jwt/encode',
+          icon: '🛡️',
+          category: 'security'
         }
       ]
     },
@@ -196,6 +223,19 @@ const overviews: OverviewCopy = {
           description: 'Buat hash SHA-512 sepanjang 128 karakter untuk tingkat keamanan tertinggi.',
           path: '/generator/hash/sha512',
           icon: '#️⃣',
+          category: 'security'
+        }
+      ]
+    },
+    securityOverview: {
+      heading: 'Alat Keamanan',
+      subheading: 'Periksa dan tanda tangani JWT langsung di browser agar token dan secret tetap lokal.',
+      tools: [
+        {
+          title: 'Alat JWT',
+          description: 'Buka ruang kerja JWT untuk melihat decoder dan encoder dalam satu tempat.',
+          path: '/security/jwt',
+          icon: '🛡️',
           category: 'security'
         }
       ]
@@ -475,6 +515,13 @@ const overviews: OverviewCopy = {
         'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, Case Converter Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
         'Alat ini menangani input multi-kata secara cerdas, menghormati delimiter dan batasan yang sudah ada, serta menghasilkan output bersih siap dipaste ulang ke editor Anda. Semua transformasi terjadi lokal di browser, sehingga aman mengkonversi identifier dari repo pribadi, file konfigurasi, atau sistem internal tanpa mengupload apa pun ke server.',
         'Gunakan saat refaktor nama variabel di seluruh codebase, menyesuaikan respons API agar cocok dengan gaya penamaan Anda, menyiapkan contoh kode untuk dokumentasi, atau sekadar bereksperimen melihat bagaimana identifier baru akan terlihat di berbagai konvensi.'
+      ]
+    },
+    jwt: {
+      heading: 'Sekilas Decoder & Encoder JWT — Tulkit',
+      paragraphs: [
+        'Setiap segmen JSON Web Token adalah string Base64URL. Tulkit mendekode header dan payload secara lokal, menandai token yang salah format, serta menampilkan waktu kedaluwarsa tanpa mengirimkan secret ke mana pun.',
+        'Masukkan secret HS256/HS384/HS512 untuk memverifikasi tanda tangan, atau edit JSON lalu tanda tangani token baru di browser agar fixture uji dan debugging tetap privat.'
       ]
     },
     regex: {

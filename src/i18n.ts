@@ -123,6 +123,55 @@ type RegexTesterCopy = {
   namedGroupLabel: string
 }
 
+type JwtCopy = {
+  heading: string
+  subheading: string
+  inputLabel: string
+  inputPlaceholder: string
+  helperText: string
+  decodedHeaderLabel: string
+  decodedPayloadLabel: string
+  copyLabel: string
+  copiedLabel: string
+  clearLabel: string
+  generateExample: string
+  secretLabel: string
+  secretPlaceholder: string
+  algorithmLabel: string
+  verificationHeading: string
+  verificationNote: string
+  statusValid: string
+  statusInvalid: string
+  statusMalformed: string
+  statusNoSignature: string
+  signatureVerified: string
+  signatureMissingSecret: string
+  signatureInvalid: string
+  signatureUnsupported: string
+  signatureErrorPrefix: string
+  expiresLabel: string
+  expiredLabel: string
+  notExpiredLabel: string
+  decodeErrorPrefix: string
+  builder: {
+    heading: string
+    description: string
+    headerLabel: string
+    payloadLabel: string
+    headerPlaceholder: string
+    payloadPlaceholder: string
+    secretLabel: string
+    secretHelper: string
+    algorithmLabel: string
+    signButton: string
+    signingLabel: string
+    outputLabel: string
+    outputPlaceholder: string
+    copyOutput: string
+    errorPrefix: string
+  }
+}
+
 type PantoneCopy = {
   title: string
   description: string
@@ -298,11 +347,13 @@ type AppCopy = {
   navDecode: string
   navLorem: string
   navHash: string
+  navJwt: string
   navCase: string
   navUrl: string
   navPantone: string
   navPantoneCatalog: string
   navRegex: string
+  jwtOverviewLabel?: string
   languageSwitcherLabel: string
   seoTitles: {
     formatterDefault: string
@@ -327,6 +378,10 @@ type AppCopy = {
     epoch: string
     encode: string
     decode: string
+    security: string
+    jwt: string
+    jwtDecode: string
+    jwtEncode: string
     encodeBase64: string
     encodeBase32: string
     encodeBase58: string
@@ -378,6 +433,10 @@ type AppCopy = {
   decodeHexMetaDescription: string
   loremMetaDescription: string
   hashMetaDescription: Record<'sha1' | 'sha256' | 'sha512',string>
+  securityMetaDescription?: string
+  jwtMetaDescription: string
+  jwtDecodeMetaDescription?: string
+  jwtEncodeMetaDescription?: string
   caseMetaDescription: string
   urlMetaDescription: string
   pantoneHubMetaDescription: string
@@ -394,6 +453,7 @@ export type SeoBlurbCopy = {
   uuidOverview: string[][]
   converterOverview: string[]
   hashOverview: string[]
+  securityOverview: string[]
   encodeOverview: string[]
   decodeOverview: string[]
   formatter: Record<ActiveTab,string[]>
@@ -406,6 +466,11 @@ export type SeoBlurbCopy = {
   hash: Record<'sha1' | 'sha256' | 'sha512',string[]>
   case: string[]
   url: string[]
+  jwt: {
+    overview: string[]
+    decode: string[]
+    encode: string[]
+  }
   pantoneHub: string[]
   pantone: string[]
   pantoneCatalog: string[]
@@ -432,6 +497,8 @@ export type OverviewCopy = {
   uuidOverview: HomeContent
   converterOverview: HomeContent
   hashOverview: HomeContent
+  securityOverview: HomeContent
+  jwtOverview: HomeContent
   encodeOverview: HomeContent
   decodeOverview: HomeContent
   formatter: Record<ActiveTab,OverviewContent>
@@ -442,6 +509,10 @@ export type OverviewCopy = {
   decode: Record<CodecSubtool,OverviewContent>
   lorem: OverviewContent
   hash: OverviewContent
+  jwt: {
+    decode: OverviewContent
+    encode: OverviewContent
+  }
   case: OverviewContent
   url: OverviewContent
   pantone: OverviewContent
@@ -459,6 +530,7 @@ type Translation = {
   epoch: EpochCopy
   urlEncoder: UrlEncoderCopy
   regexTester: RegexTesterCopy
+  jwt: JwtCopy
   encoder: EncoderCopy
   hash: HashCopy
   pantone: PantoneCopy
@@ -823,6 +895,54 @@ const en: Translation = {
     numberedGroupLabel: 'Group {index}',
     namedGroupLabel: 'Named group {name}'
   },
+  jwt: {
+    heading: 'JWT Decoder & Encoder',
+    subheading: 'Decode, verify, and sign JSON Web Tokens entirely in your browser.',
+    inputLabel: 'Encoded JWT',
+    inputPlaceholder: 'Paste a JWT in the form header.payload.signature',
+    helperText: 'Tulkit never uploads tokens or secrets; everything stays in this tab.',
+    decodedHeaderLabel: 'Decoded header',
+    decodedPayloadLabel: 'Decoded payload',
+    copyLabel: 'Copy',
+    copiedLabel: 'Copied',
+    clearLabel: 'Clear',
+    generateExample: 'Generate example',
+    secretLabel: 'Secret',
+    secretPlaceholder: 'Shared secret for HMAC verification',
+    algorithmLabel: 'Algorithm',
+    verificationHeading: 'Signature verification',
+    verificationNote: 'Supports HMAC tokens (HS256, HS384, HS512). Provide the signing secret to verify locally.',
+    statusValid: 'Valid JWT structure',
+    statusInvalid: 'Invalid JWT',
+    statusMalformed: 'Malformed token: expected three segments separated by dots.',
+    statusNoSignature: 'Token has no signature segment.',
+    signatureVerified: 'Signature verified with this secret.',
+    signatureMissingSecret: 'Add a secret to verify this signature.',
+    signatureInvalid: 'Signature does not match this secret.',
+    signatureUnsupported: 'Only HMAC (HS256/384/512) verification is supported here.',
+    signatureErrorPrefix: 'Verification failed: ',
+    expiresLabel: 'Expires',
+    expiredLabel: 'Expired',
+    notExpiredLabel: 'Not expired yet',
+    decodeErrorPrefix: 'Decode failed: ',
+    builder: {
+      heading: 'Create & sign a JWT',
+      description: 'Edit the JSON header and payload, choose an HMAC algorithm, and sign locally.',
+      headerLabel: 'Header (JSON)',
+      payloadLabel: 'Payload (JSON)',
+      headerPlaceholder: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}',
+      payloadPlaceholder: '{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "admin": true,\n  "iat": 1516239022\n}',
+      secretLabel: 'Signing secret',
+      secretHelper: 'Use a strong shared secret. Tulkit keeps it in this browser tab.',
+      algorithmLabel: 'Algorithm',
+      signButton: 'Generate JWT',
+      signingLabel: 'Signing…',
+      outputLabel: 'Encoded JWT',
+      outputPlaceholder: 'Signed token will appear here',
+      copyOutput: 'Copy JWT',
+      errorPrefix: 'Signing failed: '
+    }
+  },
   encoder: {
     inputEncodingLabel: 'Input encoding',
     inputEncodingUtf8: 'Text (UTF-8)',
@@ -944,11 +1064,13 @@ const en: Translation = {
     navDecode: 'Decoder',
     navLorem: 'Lorem Ipsum',
     navHash: 'Hash Generator',
+    navJwt: 'Security',
     navCase: 'Case Converter',
     navUrl: 'URL Encoder',
     navPantone: 'Pantone Tools',
     navPantoneCatalog: 'Pantone to HEX',
     navRegex: 'Regex Tester',
+    jwtOverviewLabel: 'JWT Tools',
     languageSwitcherLabel: 'Language',
     seoTitles: {
       formatterDefault: 'Web Formatter — Tulkit',
@@ -973,6 +1095,10 @@ const en: Translation = {
       epoch: 'Epoch Converter - Unix Timestamp Converter — Tulkit',
       encode: 'Encoder — Tulkit',
       decode: 'Decoder — Tulkit',
+      security: 'Security Tools — Tulkit',
+      jwt: 'JWT Tools — Tulkit',
+      jwtDecode: 'JWT Decoder — Tulkit',
+      jwtEncode: 'JWT Encoder — Tulkit',
       encodeBase64: 'Base64 Encoder — Tulkit',
       encodeBase32: 'Base32 Encoder — Tulkit',
       encodeBase58: 'Base58 Encoder — Tulkit',
@@ -1103,6 +1229,10 @@ const en: Translation = {
         { label: 'Lorem Ipsum', path: '/generator/lorem' }
       ],
       security: [
+        { label: 'Security Tools', path: '/security' },
+        { label: 'JWT Tools', path: '/security/jwt' },
+        { label: 'JWT Decoder', path: '/security/jwt/decode' },
+        { label: 'JWT Encoder', path: '/security/jwt/encode' },
         { label: 'Hash Generator', path: '/generator/hash' },
         { label: 'SHA-1', path: '/generator/hash/sha1' },
         { label: 'SHA-256', path: '/generator/hash/sha256' },
@@ -1143,6 +1273,14 @@ const en: Translation = {
       sha512:
         'Compute SHA-512 hashes in your browser with Tulkit, ideal for longer fingerprints used in archival or security-adjacent workflows. Digests are calculated locally using the Web Crypto API.'
     },
+    securityMetaDescription:
+      'Open the security workspace to decode, verify, or sign JWTs entirely in your browser—no token or secret leaves the page.',
+    jwtMetaDescription:
+      'Work with JWTs (HS256/384/512) entirely in your browser—decode, verify signatures with a shared secret, or sign new tokens without uploading data.',
+    jwtDecodeMetaDescription:
+      'Decode JWT headers and payloads locally, surface expiration, and verify HS256/384/512 signatures with your shared secret in the browser.',
+    jwtEncodeMetaDescription:
+      'Edit JSON and sign JWTs using HS256/384/512 directly in your browser with Tulkit. Keep secrets local while generating test or demo tokens.',
     decodeBase64MetaDescription:
       'Decode standard or URL-safe Base64 strings back into readable UTF-8 text in your browser with Tulkit’s Base64 decoder. Quickly inspect payloads, headers, or JWT segments.',
     decodeBase32MetaDescription:
@@ -1520,6 +1658,54 @@ const id: Translation = {
     numberedGroupLabel: 'Grup {index}',
     namedGroupLabel: 'Grup bernama {name}'
   },
+  jwt: {
+    heading: 'Decoder & Encoder JWT',
+    subheading: 'Dekode, verifikasi, dan tanda tangani JSON Web Token langsung di browser.',
+    inputLabel: 'JWT terenkode',
+    inputPlaceholder: 'Tempel JWT dengan format header.payload.signature',
+    helperText: 'Tulkit tidak mengunggah token atau secret; semuanya diproses di tab ini.',
+    decodedHeaderLabel: 'Header terdekode',
+    decodedPayloadLabel: 'Payload terdekode',
+    copyLabel: 'Salin',
+    copiedLabel: 'Tersalin',
+    clearLabel: 'Bersihkan',
+    generateExample: 'Buat contoh',
+    secretLabel: 'Secret',
+    secretPlaceholder: 'Secret bersama untuk verifikasi HMAC',
+    algorithmLabel: 'Algoritma',
+    verificationHeading: 'Verifikasi tanda tangan',
+    verificationNote: 'Mendukung HMAC (HS256, HS384, HS512). Masukkan secret penandatanganan untuk memverifikasi secara lokal.',
+    statusValid: 'Struktur JWT valid',
+    statusInvalid: 'JWT tidak valid',
+    statusMalformed: 'Token tidak lengkap: butuh tiga segmen yang dipisah titik.',
+    statusNoSignature: 'Token tidak memiliki segmen signature.',
+    signatureVerified: 'Tanda tangan cocok dengan secret ini.',
+    signatureMissingSecret: 'Tambahkan secret untuk memverifikasi tanda tangan.',
+    signatureInvalid: 'Tanda tangan tidak cocok untuk secret ini.',
+    signatureUnsupported: 'Verifikasi yang tersedia hanya untuk HMAC (HS256/384/512).',
+    signatureErrorPrefix: 'Verifikasi gagal: ',
+    expiresLabel: 'Kedaluwarsa',
+    expiredLabel: 'Sudah kedaluwarsa',
+    notExpiredLabel: 'Belum kedaluwarsa',
+    decodeErrorPrefix: 'Gagal mendekode: ',
+    builder: {
+      heading: 'Buat & tanda tangani JWT',
+      description: 'Ubah header dan payload JSON, pilih algoritma HMAC, lalu tanda tangani secara lokal.',
+      headerLabel: 'Header (JSON)',
+      payloadLabel: 'Payload (JSON)',
+      headerPlaceholder: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}',
+      payloadPlaceholder: '{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "admin": true,\n  "iat": 1516239022\n}',
+      secretLabel: 'Secret penandatanganan',
+      secretHelper: 'Gunakan secret kuat. Tulkit menyimpannya di tab ini.',
+      algorithmLabel: 'Algoritma',
+      signButton: 'Hasilkan JWT',
+      signingLabel: 'Menandatangani…',
+      outputLabel: 'JWT terenkode',
+      outputPlaceholder: 'Token hasil tanda tangan muncul di sini',
+      copyOutput: 'Salin JWT',
+      errorPrefix: 'Gagal menandatangani: '
+    }
+  },
   encoder: {
     inputEncodingLabel: 'Encoding input',
     inputEncodingUtf8: 'Teks (UTF-8)',
@@ -1641,11 +1827,13 @@ const id: Translation = {
     navDecode: 'Decoder',
     navLorem: 'Generator Lorem Ipsum',
     navHash: 'Generator Hash',
+    navJwt: 'Keamanan',
     navCase: 'Konverter Case',
     navUrl: 'Encoder URL',
     navPantone: 'Tools Pantone',
     navPantoneCatalog: 'Pantone ke HEX',
     navRegex: 'Tester Regex',
+    jwtOverviewLabel: 'Alat JWT',
     languageSwitcherLabel: 'Bahasa',
     seoTitles: {
       formatterDefault: 'Pemformat Web — Tulkit',
@@ -1670,6 +1858,10 @@ const id: Translation = {
       epoch: 'Konverter Epoch — Tulkit',
       encode: 'Encoder — Tulkit',
       decode: 'Decoder — Tulkit',
+      security: 'Alat Keamanan — Tulkit',
+      jwt: 'Alat JWT — Tulkit',
+      jwtDecode: 'JWT Decoder — Tulkit',
+      jwtEncode: 'JWT Encoder — Tulkit',
       encodeBase64: 'Encoder Base64 — Tulkit',
       encodeBase32: 'Encoder Base32 — Tulkit',
       encodeBase58: 'Encoder Base58 — Tulkit',
@@ -1800,6 +1992,10 @@ const id: Translation = {
         { label: 'Generator Lorem Ipsum', path: '/generator/lorem' }
       ],
       security: [
+        { label: 'Alat Keamanan', path: '/security' },
+        { label: 'Alat JWT', path: '/security/jwt' },
+        { label: 'JWT Decoder', path: '/security/jwt/decode' },
+        { label: 'JWT Encoder', path: '/security/jwt/encode' },
         { label: 'Generator Hash', path: '/generator/hash' },
         { label: 'SHA-1', path: '/generator/hash/sha1' },
         { label: 'SHA-256', path: '/generator/hash/sha256' },
@@ -1840,6 +2036,10 @@ const id: Translation = {
       sha512:
         'Hitung hash SHA-512 di browser menggunakan generator hash Tulkit, ideal untuk sidik jari panjang pada skenario arsip atau alur kerja yang bersinggungan dengan keamanan. Perhitungan digest berlangsung lokal memakai Web Crypto API.'
     },
+    securityMetaDescription:
+      'Buka ruang kerja keamanan untuk mendekode, memverifikasi, atau menandatangani JWT sepenuhnya di browser—tanpa token atau secret meninggalkan halaman.',
+    jwtMetaDescription:
+      'Dekode, verifikasi, dan tanda tangani JWT (HS256/384/512) langsung di browser dengan Tulkit. Periksa header/payload, cek tanda tangan dengan secret bersama, dan buat token baru tanpa mengunggah data.',
     decodeBase64MetaDescription:
       'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
     decodeBase32MetaDescription:

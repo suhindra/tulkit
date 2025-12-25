@@ -23,6 +23,10 @@ const seoBlurb: SeoBlurbCopy = {
         'Choose between three cryptographic hash algorithms—SHA-1, SHA-256, and SHA-512—to generate checksums, fingerprints, and digests for your data. Each algorithm offers different security levels and output sizes to match your specific use case.',
         'All hashing happens in your browser using the Web Crypto API, so your data never leaves your machine. Ideal for verifying file integrity, creating cache keys, generating test fixtures, or debugging how values appear in logs and databases.'
       ],
+      securityOverview: [
+        'Open the security workspace to explore JWT tools without uploading any token or secret. Tulkit keeps decoding, verification, and signing fully local so private payloads stay private.',
+        'Jump into the decoder to inspect headers and claims or the encoder to sign fresh HS256/384/512 tokens for tests and demos.'
+      ],
       encodeOverview: [
         'Convert text to four different encoding formats: Base64 for MIME attachments and APIs, Base32 for case-insensitive systems and TOTP seeds, Base58 for Bitcoin addresses and short IDs, or hexadecimal for protocols and checksums.',
         'All encoding runs locally in your browser without uploading data to any server. Perfect for preparing payloads for APIs, creating secure URLs, embedding binary data, or transforming strings for storage and transmission.'
@@ -195,6 +199,20 @@ const seoBlurb: SeoBlurbCopy = {
         'Browse Tulkit’s Pantone palette when you need the HEX or RGB value for a specific swatch. Filter by code or name, view a live preview, and copy the exact digital color for your guidelines.',
         'Use the catalog when translating print specs back into design tokens, prepping front-end themes from Pantone references, or sharing links to swatches with teammates.'
       ],
+      jwt: {
+        overview: [
+          'Decode JWT headers and payloads locally without uploading tokens or secrets. Tulkit surfaces malformed segments, shows expiration at a glance, and normalizes Base64URL values for quick inspection.',
+          'Verify HS256/384/512 signatures by supplying the shared secret, or craft fresh example tokens in-browser so debugging and demos stay private.'
+        ],
+        decode: [
+          'Paste any JWT to inspect the header and payload instantly in your browser. Tulkit normalizes Base64URL, flags malformed segments, and shows expiration so you can audit tokens safely.',
+          'Add your HS256/384/512 shared secret to verify the signature locally—useful for debugging auth flows or checking third-party tokens without exposing secrets.'
+        ],
+        encode: [
+          'Edit header and payload JSON, pick HS256/384/512, and sign a JWT entirely in your browser. Tulkit keeps your shared secret local so fixtures and demo tokens stay private.',
+          'Great for mocking authentication flows, generating short-lived tokens for tests, or sharing reproducible JWT examples with teammates.'
+        ]
+      },
       regex: [
         'Experiment with JavaScript regular expressions using live sample text, highlight previews, and capture-group tables. You can see how each flag—global, case-insensitive, multi-line, dotall, Unicode, or sticky—changes the matches in real time.',
         'All pattern testing runs locally in your browser so you can safely debug proprietary logs, payloads, or snippets while iterating on search-and-replace logic for editors, ETL jobs, and validation rules.'
