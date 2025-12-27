@@ -812,28 +812,28 @@ export default function App(){
 
   const metaDescription = useMemo(()=>{
     if(view === 'home'){
-      return 'Fast, privacy-first web tools for developers. Format code, generate UUIDs, convert timestamps, encode/decode, create hashes, and more - all in your browser.'
+      return appCopy.homeMetaDescription || 'Fast, privacy-first web tools for developers. Format code, generate UUIDs, convert timestamps, encode/decode, create hashes, and more - all in your browser.'
     }
     if(view === 'generator'){
-      return 'Collection of generator tools for developers: UUID, Lorem Ipsum, Hash Generator, and Case Converter - all in your browser.'
+      return appCopy.generatorMetaDescription || 'Collection of generator tools for developers: UUID, Lorem Ipsum, Hash Generator, and Case Converter - all in your browser.'
     }
     if(view === 'uuid-overview'){
-      return 'UUID Generator with v1 (time-based), v4 (random), and v7 (ordered by time) versions. Generate unique identifiers directly in your browser.'
+      return appCopy.uuidOverviewMetaDescription || 'UUID Generator with v1 (time-based), v4 (random), and v7 (ordered by time) versions. Generate unique identifiers directly in your browser.'
     }
     if(view === 'converter-overview'){
-      return 'Collection of converter tools for developers: Convert Unix timestamps to readable dates, adjust time zones, and work with epoch times instantly.'
+      return appCopy.converterOverviewMetaDescription || 'Collection of converter tools for developers: Convert Unix timestamps to readable dates, adjust time zones, and work with epoch times instantly.'
     }
     if(view === 'hash-overview'){
-      return 'Hash Generator with SHA-1, SHA-256, and SHA-512 algorithms. Create cryptographic hashes and checksums directly in your browser.'
+      return appCopy.hashOverviewMetaDescription || 'Hash Generator with SHA-1, SHA-256, and SHA-512 algorithms. Create cryptographic hashes and checksums directly in your browser.'
     }
     if(view === 'encode-overview'){
-      return 'Encode text to Base64, Base32, Base58, or hexadecimal. Perfect for data transmission, MIME attachments, and cryptographic applications.'
+      return appCopy.encodeOverviewMetaDescription || 'Encode text to Base64, Base32, Base58, or hexadecimal. Perfect for data transmission, MIME attachments, and cryptographic applications.'
     }
     if(view === 'decode-overview'){
-      return 'Decode Base64, Base32, Base58, or hexadecimal back to readable text. Inspect encoded data instantly in your browser.'
+      return appCopy.decodeOverviewMetaDescription || 'Decode Base64, Base32, Base58, or hexadecimal back to readable text. Inspect encoded data instantly in your browser.'
     }
     if(view === 'security-overview'){
-      return appCopy.securityMetaDescription || appCopy.jwtMetaDescription || ''
+      return appCopy.securityMetaDescription || appCopy.jwtMetaDescription || appCopy.jwtOverviewMetaDescription || ''
     }
     if(view === 'jwt-overview'){
       return appCopy.jwtMetaDescription || appCopy.jwtOverviewMetaDescription || appCopy.jwtDecodeMetaDescription || appCopy.jwtEncodeMetaDescription || ''

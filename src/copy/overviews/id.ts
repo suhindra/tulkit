@@ -152,6 +152,33 @@ const overviews: OverviewCopy = {
         }
       ]
     },
+    uuidOverview: {
+      heading: 'Generator UUID',
+      subheading: 'Hasilkan UUID v1 (berbasis waktu), v4 (acak), atau v7 (urut waktu) kapan saja',
+      tools: [
+        {
+          title: 'UUID v1 — Berbasis waktu',
+          description: 'Buat UUID berbasis waktu yang menyertakan stempel waktu dan petunjuk node agar mudah diurutkan berdasarkan waktu pembuatan.',
+          path: '/generator/uuid/uuid-v1',
+          icon: '🆔',
+          category: 'generator'
+        },
+        {
+          title: 'UUID v4 — Acak',
+          description: 'Hasilkan UUID acak dengan 122 bit entropi kriptografis untuk pengenal publik atau primary key.',
+          path: '/generator/uuid/uuid-v4',
+          icon: '🆔',
+          category: 'generator'
+        },
+        {
+          title: 'UUID v7 — Urut waktu',
+          description: 'Buat UUID yang bisa diurutkan karena diawali timestamp namun tetap acak—ramah untuk database dan log append-only.',
+          path: '/generator/uuid/uuid-v7',
+          icon: '🆔',
+          category: 'generator'
+        }
+      ]
+    },
     converterOverview: {
       heading: 'Tools Converter',
       subheading: 'Konversi antara konvensi penamaan, ubah timestamp Unix, dan sesuaikan zona waktu secara instan',

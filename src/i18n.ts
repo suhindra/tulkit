@@ -419,6 +419,14 @@ type AppCopy = {
     generation: Array<{ label: string; path: string }>
     security: Array<{ label: string; path: string }>
   }
+  homeMetaDescription?: string
+  generatorMetaDescription?: string
+  uuidOverviewMetaDescription?: string
+  converterOverviewMetaDescription?: string
+  hashOverviewMetaDescription?: string
+  encodeOverviewMetaDescription?: string
+  decodeOverviewMetaDescription?: string
+  jwtOverviewMetaDescription?: string
   epochMetaDescription: string
   encodeMetaDescription: string
   decodeMetaDescription: string
@@ -1228,7 +1236,7 @@ const en: Translation = {
         { label: 'UUID v7', path: '/generator/uuid/uuid-v7' },
         { label: 'Lorem Ipsum', path: '/generator/lorem' }
       ],
-      security: [
+    security: [
         { label: 'Security Tools', path: '/security' },
         { label: 'JWT Tools', path: '/security/jwt' },
         { label: 'JWT Decoder', path: '/security/jwt/decode' },
@@ -1239,6 +1247,22 @@ const en: Translation = {
         { label: 'SHA-512', path: '/generator/hash/sha512' }
       ]
     },
+    homeMetaDescription:
+      'Fast, privacy-first web tools for developers. Format code, generate UUIDs, convert timestamps, encode/decode, create hashes, and more - all in your browser.',
+    generatorMetaDescription:
+      'Collection of generator tools for developers: UUID, Lorem Ipsum, Hash Generator, and Case Converter - all in your browser.',
+    uuidOverviewMetaDescription:
+      'UUID Generator with v1 (time-based), v4 (random), and v7 (ordered by time) versions. Generate unique identifiers directly in your browser.',
+    converterOverviewMetaDescription:
+      'Collection of converter tools for developers: Convert Unix timestamps to readable dates, adjust time zones, and work with epoch times instantly.',
+    hashOverviewMetaDescription:
+      'Hash Generator with SHA-1, SHA-256, and SHA-512 algorithms. Create cryptographic hashes and checksums directly in your browser.',
+    encodeOverviewMetaDescription:
+      'Encode text to Base64, Base32, Base58, or hexadecimal. Perfect for data transmission, MIME attachments, and cryptographic applications.',
+    decodeOverviewMetaDescription:
+      'Decode Base64, Base32, Base58, or hexadecimal back to readable text. Inspect encoded data instantly in your browser.',
+    jwtOverviewMetaDescription:
+      'Work with JWTs (HS256/384/512) entirely in your browser—decode, verify signatures with a shared secret, or sign new tokens without uploading data.',
     epochMetaDescription:
       'Convert Unix epoch timestamps to readable dates and back again with Tulkit. Quickly switch between seconds, milliseconds, UTC, and local time directly in your browser.',
     encodeMetaDescription:
@@ -2002,6 +2026,22 @@ const id: Translation = {
         { label: 'SHA-512', path: '/generator/hash/sha512' }
       ]
     },
+    homeMetaDescription:
+      'Alat web cepat dan mengutamakan privasi untuk developer. Format kode, buat UUID, konversi timestamp, encode/decode, buat hash, dan lainnya langsung di browser.',
+    generatorMetaDescription:
+      'Koleksi alat generator untuk developer: UUID, Lorem Ipsum, Generator Hash, dan Konverter Case—semuanya berjalan di browser.',
+    uuidOverviewMetaDescription:
+      'Generator UUID dengan versi v1 (berbasis waktu), v4 (acak), dan v7 (urut waktu). Buat pengenal unik langsung di browser Anda.',
+    converterOverviewMetaDescription:
+      'Kumpulan alat konverter: ubah timestamp Unix ke tanggal yang mudah dibaca, atur zona waktu, dan kerjakan epoch secara instan.',
+    hashOverviewMetaDescription:
+      'Generator Hash dengan algoritma SHA-1, SHA-256, dan SHA-512. Buat checksum dan sidik jari sepenuhnya di browser.',
+    encodeOverviewMetaDescription:
+      'Encode teks ke Base64, Base32, Base58, atau heksadesimal. Cocok untuk transmisi data, lampiran MIME, dan kebutuhan kriptografi.',
+    decodeOverviewMetaDescription:
+      'Decode Base64, Base32, Base58, atau heksadesimal kembali ke teks yang terbaca. Inspeksi data terenkode seketika di browser.',
+    jwtOverviewMetaDescription:
+      'Decode, verifikasi, dan tanda tangani JWT (HS256/384/512) langsung di browser dengan Tulkit. Periksa header/payload, cek tanda tangan dengan secret bersama, dan buat token baru tanpa mengunggah data.',
     epochMetaDescription:
       'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
     encodeMetaDescription:
