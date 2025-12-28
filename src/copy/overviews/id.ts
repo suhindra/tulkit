@@ -545,11 +545,20 @@ const overviews: OverviewCopy = {
       ]
     },
     jwt: {
-      heading: 'Sekilas Tentang Decoder & Encoder JWT — Tulkit',
-      paragraphs: [
-        'Setiap segmen JSON Web Token adalah string Base64URL. Tulkit mendekode header dan payload secara lokal, menandai token yang salah format, serta menampilkan waktu kedaluwarsa tanpa mengirimkan secret ke mana pun.',
-        'Masukkan secret HS256/HS384/HS512 untuk memverifikasi tanda tangan, atau edit JSON lalu tanda tangani token baru di browser agar fixture uji dan debugging tetap privat.'
-      ]
+      decode: {
+        heading: 'Sekilas Tentang Decoder JWT — Tulkit',
+        paragraphs: [
+          'Setiap segmen JSON Web Token adalah Base64URL. Decoder Tulkit mengurai header dan payload secara lokal, menyorot token yang rusak, dan menampilkan waktu kedaluwarsa tanpa mengirim secret ke server.',
+          'Tambahkan secret HS256/HS384/HS512 untuk memverifikasi tanda tangan langsung di browser sehingga audit token, debugging login, atau inspeksi token pihak ketiga tetap aman.'
+        ]
+      },
+      encode: {
+        heading: 'Sekilas Tentang Encoder JWT — Tulkit',
+        paragraphs: [
+          'Bangun JWT di browser dengan menyunting JSON header/payload lalu menandatangani token memakai HS256/384/512 tanpa mengunggah secret. Tulkit menyiapkan output Base64URL siap pakai.',
+          'Cocok untuk membuat token uji, token berumur pendek, atau contoh dokumentasi sambil menjaga secret dan payload sensitif tetap lokal di perangkat Anda.'
+        ]
+      }
     },
     regex: {
       heading: 'Sekilas Tentang Regex Tester — Tulkit',

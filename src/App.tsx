@@ -984,21 +984,6 @@ export default function App(){
 
   useEffect(()=>{
     if(typeof window === 'undefined') return
-    const origin = window.location.origin.replace(/\/+$/,'')
-    const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
-    const currentPath = buildPathWithLanguage(ensureSlash(relativePath || '/'), language)
-    const canonicalHref = `${origin}${currentPath}`
-    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
-    if(!canonical){
-      canonical = document.createElement('link')
-      canonical.rel = 'canonical'
-      document.head.appendChild(canonical)
-    }
-    canonical.href = canonicalHref
-  },[relativePath, view, uuidVersion, language])
-
-  useEffect(()=>{
-    if(typeof window === 'undefined') return
 
     const existing = document.getElementById('tulkit-breadcrumb-schema')
     if(view === 'notfound' || view === 'home'){
