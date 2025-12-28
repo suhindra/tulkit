@@ -947,17 +947,6 @@ export default function App(){
   },[view, pantoneCatalogColor, pantoneCatalogSlug, language, translations.app.navPantoneCatalog])
 
   useEffect(()=>{
-    if(typeof document === 'undefined') return
-    let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
-    if(!meta){
-      meta = document.createElement('meta')
-      meta.name = 'description'
-      document.head.appendChild(meta)
-    }
-    meta.content = metaDescription
-  },[metaDescription])
-
-  useEffect(()=>{
     if(typeof window === 'undefined') return
     const origin = window.location.origin.replace(/\/+$/,'')
     const ensureSlash = (path:string)=>path.startsWith('/') ? path : `/${path}`
