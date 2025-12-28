@@ -337,7 +337,7 @@ const overviews: OverviewCopy = {
     },
     formatter: {
       auto: {
-        heading: 'Sekilas Pemformat Web — Tulkit',
+      heading: 'Sekilas Tentang Pemformat Web — Tulkit',
         paragraphs: [
           'Sebagian developer menjaga kode tetap rapi, sementara yang lain bergerak cepat dan meninggalkan skrip yang sulit dibaca. Pemformat web Tulkit dibuat untuk merapikan potongan kasar itu agar lebih mudah dipindai rekan kerja, reviewer, dan diri Anda di masa depan.',
           'Pemformat memeriksa potongan yang Anda tempel atau unggah, menentukan apakah itu HTML, CSS, JavaScript, JSON, SQL, atau PHP, lalu menerapkan indentasi yang konsisten pada setiap baris. Setelah struktur bersih, Anda bisa menyalin, mengunduh, atau membagikan hasil format tanpa perlu IDE lengkap atau pipeline build.',
@@ -347,87 +347,87 @@ const overviews: OverviewCopy = {
         ]
       },
       html: {
-        heading: 'Sekilas Pemformat HTML — Tulkit',
+      heading: 'Sekilas Tentang Pemformat HTML — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat HTML. Jelaskan jenis potongan HTML apa yang biasa dirapikan di sini dan manfaatnya.',
-          'Ganti paragraf placeholder ini dengan salinan Anda sendiri; teks ini hanya muncul pada slug /formatter/html.'
+          'Rapiakan markup untuk landing page, email, atau snippet CMS agar hierarki tag kembali jelas sebelum ditempel ke editor lain.',
+          'Gunakan ketika menerima HTML dari handoff desain, WordPress, atau chat supaya indentasi konsisten dan mudah diperiksa ulang.'
         ]
       },
       css: {
-        heading: 'Sekilas Pemformat CSS — Tulkit',
+      heading: 'Sekilas Tentang Pemformat CSS — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat CSS. Terangkan bagaimana Tulkit dapat merapikan stylesheet, kelas utilitas, atau gaya komponen.',
-          'Perbarui salinan ini agar fokus pada alur kerja CSS, SCSS, atau Tailwind yang paling penting bagi pengguna Anda.'
+          'Rapikan stylesheet, kelas utilitas, atau komponen SCSS sehingga selector dan deklarasi tersusun rapi sebelum commit.',
+          'Cocok untuk membersihkan blok Tailwind/inline style dari CMS dan mengecek duplikasi aturan tanpa membuka IDE berat.'
         ]
       },
       js: {
-        heading: 'Sekilas Pemformat JavaScript — Tulkit',
+      heading: 'Sekilas Tentang Pemformat JavaScript — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat JavaScript. Bahas tentang pemformatan potongan, modul, atau keluaran debug dari log.',
-          'Anda juga bisa menyebutkan bagaimana alat ini cocok dengan pengembangan front-end atau Node.js.'
+          'Format potongan JavaScript atau TypeScript, modul ES, dan fungsi async agar siap dibaca kembali atau di-review.',
+          'Berguna saat menyalin kode dari log, CodePen, atau eksperimen kecil supaya struktur blok terlihat bersih.'
         ]
       },
       json: {
-        heading: 'Sekilas Pemformat JSON — Tulkit',
+      heading: 'Sekilas Tentang Pemformat JSON — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat JSON. Jelaskan bagaimana tim dapat mempercantik respons API, konfigurasi, atau payload event di sini.',
-          'Sesuaikan teks ini untuk menonjolkan manfaat validasi, kolaborasi, atau debugging khusus untuk kasus JSON Anda.'
+          'Percantik payload API, konfigurasi layanan, atau webhook agar struktur mudah dipindai dan divalidasi sebelum dibagikan.',
+          'Tambahkan ke workflow dokumentasi, QA, atau debugging ketika perlu memastikan kunci/array JSON tersusun dan valid.'
         ]
       },
       sql: {
-        heading: 'Sekilas Pemformat SQL — Tulkit',
+      heading: 'Sekilas Tentang Pemformat SQL — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat SQL. Jelaskan bagaimana Tulkit membantu membuat query panjang lebih mudah dibaca dan dibagikan.',
-          'Sesuaikan salinan ini untuk menyebut database, ORM, atau alat pelaporan yang paling relevan bagi audiens Anda.'
+          'Buat query SELECT, JOIN, dan CTE lebih mudah dibaca dengan penataan ulang kata kunci dan indentasi konsisten.',
+          'Ideal untuk membagikan query Postgres/MySQL di review, dokumentasi, atau saat membandingkan keluaran ORM.'
         ]
       },
       php: {
-        heading: 'Sekilas Pemformat PHP — Tulkit',
+      heading: 'Sekilas Tentang Pemformat PHP — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat PHP. Terangkan bagaimana alat ini membantu proyek Laravel, WordPress, atau PHP lainnya.',
-          'Perbarui placeholder ini agar sesuai dengan framework, CMS, atau library yang ingin Anda bidik untuk SEO.'
+          'Bersihkan potongan PHP untuk Laravel, WordPress, atau proyek legacy tanpa menyalakan IDE penuh.',
+          'Cocok untuk merapikan template Blade, helper, atau shortcode sebelum dikirim ke repo atau tim konten.'
         ]
       },
       xml: {
-        heading: 'Sekilas Pemformat XML — Tulkit',
+      heading: 'Sekilas Tentang Pemformat XML — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat XML. Jelaskan bagaimana Tulkit membantu merapikan berkas konfigurasi, sitemap, atau payload XML lainnya.',
-          'Sesuaikan teks ini agar menonjolkan tools atau platform berbasis XML yang paling relevan bagi pengguna Anda.'
+          'Atur ulang sitemap, feed, atau berkas konfigurasi XML agar atribut dan elemen bertingkat sejajar rapi.',
+          'Gunakan untuk memeriksa payload integrasi atau file konfigurasi yang sering dikirim lintas tim supaya mudah dibaca.'
         ]
       },
       yaml: {
-        heading: 'Sekilas Pemformat YAML — Tulkit',
+      heading: 'Sekilas Tentang Pemformat YAML — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug pemformat YAML. Jelaskan bagaimana Tulkit membantu merapikan konfigurasi CI, manifest infrastruktur, atau berkas YAML lain agar aman diedit.',
-          'Perbarui teks ini untuk menonjolkan tool deployment, platform CI, atau stack infrastruktur yang paling relevan bagi audiens Anda.'
+          'Jaga file YAML untuk CI/CD, manifest infrastruktur, atau konfigurasi layanan tetap aman diedit dengan indentasi konsisten.',
+          'Bantu hindari kesalahan spasi saat menyalin YAML dari dokumentasi atau chat sebelum dipakai di pipeline produksi.'
         ]
       }
     },
     uuid: {
       v1: {
-        heading: 'Sekilas Generator UUID v1 — Tulkit',
+        heading: 'Sekilas Tentang Generator UUID v1 — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug generator UUID v1. Jelaskan kapan UUID berbasis waktu masuk akal di stack Anda.',
-          'Ganti salinan ini dengan contoh Anda sendiri, seperti log, job latar belakang, atau impor batch.'
+          'Buat UUID v1 berbasis waktu untuk log, job terjadwal, atau proses impor yang butuh pengurutan kronologis.',
+          'Nilai menyertakan stempel waktu sehingga mudah dikelompokkan sesuai urutan pembuatan tanpa layanan tambahan.'
         ]
       },
       v4: {
-        heading: 'Sekilas Generator UUID v4 — Tulkit',
+        heading: 'Sekilas Tentang Generator UUID v4 — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug generator UUID v4. Deskripsikan penggunaan umum pengenal acak di aplikasi Anda.',
-          'Anda bisa menyebut URL publik, primary key database, atau skenario lain ketika v4 menjadi default yang baik.'
+          'Hasilkan UUID v4 acak berkualitas tinggi memakai Web Crypto API untuk kunci publik, primary key, atau token aplikasi.',
+          'Cocok saat butuh pengenal dengan entropi kuat tanpa membocorkan informasi perangkat atau waktu.'
         ]
       },
       v7: {
-        heading: 'Sekilas Generator UUID v7 — Tulkit',
+        heading: 'Sekilas Tentang Generator UUID v7 — Tulkit',
         paragraphs: [
-          'Konten Sekilas untuk slug generator UUID v7. Jelaskan bagaimana ID berurutan waktu membantu tabel dengan banyak penulisan atau analitik.',
-          'Sesuaikan teks ini untuk fokus pada database atau pipeline event tempat UUID v7 bersinar bagi pengguna Anda.'
+          'Buat UUID v7 yang bisa diurutkan karena prefiks timestamp, tetap acak sehingga aman untuk penggunaan publik.',
+          'Pas untuk database append-only, pipeline analitik, atau log event yang diuntungkan dari ID monotonic.'
         ]
       }
     },
     epoch: {
-      heading: 'Sekilas Konverter Epoch — Tulkit',
+      heading: 'Sekilas Tentang Konverter Epoch — Tulkit',
       paragraphs: [
         'Epoch time, kadang disebut Unix time atau POSIX time, menghitung berapa detik yang berlalu sejak 1 Januari 1970 pukul 00:00:00 UTC. Karena angkanya sama di negara mana pun, ia menjadi cara praktis bagi sistem dan API untuk merujuk momen tertentu.',
         'Konverter epoch Tulkit mengubah angka timestamp mentah menjadi tanggal dan waktu yang mudah dibaca, dan sebaliknya. Anda bisa menempel nilai seperti 1764298543 untuk melihat kapan itu terjadi di UTC, format panjang ala GMT, atau zona waktu pilihan Anda, lalu menyalin hasilnya untuk dokumentasi, catatan debugging, atau balasan dukungan.',
@@ -437,7 +437,7 @@ const overviews: OverviewCopy = {
     },
     encode: {
       default: {
-        heading: 'Sekilas Encoder — Tulkit',
+        heading: 'Sekilas Tentang Encoder — Tulkit',
         paragraphs: [
           'Istilah Base64 berasal dari skema content-transfer encoding di MIME: cara mengubah data biner menjadi deretan karakter ASCII yang aman dibaca. Secara sederhana, Base64 memecah byte menjadi potongan 6 bit lalu memetakan tiap potongan ke salah satu dari 64 simbol yang terdiri dari huruf, angka, dan beberapa tanda baca.',
           'Karena keluarannya hanya berisi karakter yang "aman", Base64 cocok untuk mengirimkan data melalui sistem yang awalnya didesain untuk teks, bukan byte mentah. Lampiran email, dokumen XML atau JSON yang perlu menyisipkan blob biner, hingga banyak API HTTP mengandalkan Base64 agar data tetap utuh meskipun melewati jalur yang tidak sepenuhnya 8-bit clean.',
@@ -445,28 +445,28 @@ const overviews: OverviewCopy = {
         ]
       },
       base64: {
-        heading: 'Sekilas Encoder Base64 — Tulkit',
+        heading: 'Sekilas Tentang Encoder Base64 — Tulkit',
         paragraphs: [
           'Encoder Base64 Tulkit mengubah teks UTF-8 atau byte mentah menjadi alfabet familiar A-Z, a-z, 0-9 plus + dan /. Varian aman-URL juga tersedia sehingga string siap dipakai untuk JWT, cookie, atau URL bertanda tangan.',
           'Gunakan ketika Anda perlu menormalkan padding, membersihkan whitespace, atau memastikan apa yang akan dikirim melalui API yang mengharuskan payload Base64 untuk lampiran, sertifikat, atau header HTTP.'
         ]
       },
       base32: {
-        heading: 'Sekilas Encoder Base32 — Tulkit',
+        heading: 'Sekilas Tentang Encoder Base32 — Tulkit',
         paragraphs: [
           'Base32 merepresentasikan data dengan alfabet terbatas yang tetap mudah dibaca pada sistem yang tidak peka huruf besar kecil seperti label DNS atau kode pemulihan.',
           'Tulkit menghasilkan output huruf besar sesuai RFC 4648 sehingga Anda bisa menyiapkan seed TOTP, membuat kode pemulihan, atau menyematkan pengenal yang harus tahan terhadap OCR dan pengetikan ulang.'
         ]
       },
       base58: {
-        heading: 'Sekilas Encoder Base58 — Tulkit',
+        heading: 'Sekilas Tentang Encoder Base58 — Tulkit',
         paragraphs: [
           'Base58 menghilangkan karakter mirip sehingga nilai terenkode lebih ramah manusia namun tetap ringkas. Alfabet Bitcoin menjadi standar de facto untuk alamat dompet dan payload blockchain.',
           'Buat nilai tersebut langsung di browser untuk kode undangan, ID pendek, atau fixture integrasi blockchain tanpa repot mengatur alat desktop.'
         ]
       },
       hex: {
-        heading: 'Sekilas Encoder Hex — Tulkit',
+        heading: 'Sekilas Tentang Encoder Hex — Tulkit',
         paragraphs: [
           'Encoding hex menuliskan setiap byte sebagai dua karakter heksadesimal sehingga cocok untuk log, checksum, dan protokol yang membutuhkan ASCII deterministik.',
           'Tulkit menghasilkan string hex huruf kecil sehingga Anda bisa menyalin kunci, salt, atau payload biner ke CLI, file environment, atau dokumentasi tanpa kejutan.'
@@ -474,7 +474,7 @@ const overviews: OverviewCopy = {
       }
     },
     minify: {
-      heading: 'Sekilas Minifier — Tulkit',
+      heading: 'Sekilas Tentang Minifier — Tulkit',
       paragraphs: [
         'Kadang Anda hanya perlu mengecilkan snippet sebelum dikirim—entah itu blok CSS dalam CMS, JavaScript inline untuk email, atau include HTML yang dibagikan ke tim lain. Minifier Tulkit dibuat untuk alur tersebut dengan membiarkan Anda menempel kode, memilih tab bahasa, lalu memadatkannya seketika di browser.',
         'Minifikasi HTML dan XML menjaga struktur tag tetap valid sembari memangkas atribut serta whitespace. CSS menggunakan csso agar selector tetap aman tanpa karakter berlebih. JavaScript memanfaatkan build Terser untuk memadatkan script inline tanpa harus membuka tooling Node.js. JSON cukup diubah menjadi satu baris sehingga payload tetap valid tetapi lebih ringan.',
@@ -482,7 +482,7 @@ const overviews: OverviewCopy = {
       ]
     },
     hash: {
-      heading: 'Sekilas Generator Hash — Tulkit',
+      heading: 'Sekilas Tentang Generator Hash — Tulkit',
       paragraphs: [
         'Fungsi hash seperti SHA-1, SHA-256, dan SHA-512 mengubah teks apa pun menjadi sidik jari berdimensi tetap yang mudah dibandingkan namun sulit dibalik. Developer mengandalkan digest ini untuk checksum, kunci cache, dan fixture pengujian di berbagai alat dan bahasa.',
         'Generator hash Tulkit dibuat untuk alur sehari-hari itu: tempel potongan teks, pilih algoritma, lalu hitung digest hex deterministik sepenuhnya di browser Anda. Karena berjalan di atas Web Crypto API, input tidak pernah keluar dari perangkat dan hasilnya selaras dengan CLI atau library umum.',
@@ -491,35 +491,35 @@ const overviews: OverviewCopy = {
     },
     decode: {
       default: {
-        heading: 'Sekilas Decoder — Tulkit',
+        heading: 'Sekilas Tentang Decoder — Tulkit',
         paragraphs: [
           'Ketika Anda menerima Base64, Base32, Base58, atau hex dari API atau berkas log, langkah pertama biasanya mengembalikannya ke teks yang bisa dibaca. Decoder Tulkit berfokus pada alur kerja itu sehingga Anda bisa dengan cepat melihat isi sebenarnya dari nilai yang terenkode.',
           'Tempel string terenkode, pilih encoding yang sesuai, dan Tulkit akan mendekodekannya ke teks UTF-8 atau byte mentah sehingga Anda dapat memeriksa payload, menelusuri masalah integrasi, atau menyalin contoh yang bersih ke dokumentasi — semuanya tanpa mengunggah data ke server mana pun.'
         ]
       },
       base64: {
-        heading: 'Sekilas Decoder Base64 — Tulkit',
+        heading: 'Sekilas Tentang Decoder Base64 — Tulkit',
         paragraphs: [
           'Saat bertemu blob Base64, Tulkit langsung menunjukkan isinya. Tempel nilai tersebut dan decoder akan menangani alfabet standar serta aman-URL, memperbaiki padding, dan menampilkan byte asli sebagai teks yang bisa dibaca.',
           'Sangat pas untuk membongkar header Authorization, payload API yang samar, atau segmen JWT ketika Anda perlu mengaudit isi yang dikirim.'
         ]
       },
       base32: {
-        heading: 'Sekilas Decoder Base32 — Tulkit',
+        heading: 'Sekilas Tentang Decoder Base32 — Tulkit',
         paragraphs: [
           'Dekode Base32 berguna saat menelusuri secret TOTP, URI provisioning, atau kode pemulihan vendor yang mengandalkan huruf besar dan angka.',
           'Tulkit memberi tahu jika ada karakter tidak valid dan memperlihatkan teks hasil decode sehingga Anda bisa memverifikasi apa yang disimpan perangkat atau API sebelum digunakan pelanggan.'
         ]
       },
       base58: {
-        heading: 'Sekilas Decoder Base58 — Tulkit',
+        heading: 'Sekilas Tentang Decoder Base58 — Tulkit',
         paragraphs: [
           'Alamat dompet, content identifier, dan token bergaya blockchain sering datang sebagai Base58. Tulkit mengubahnya kembali menjadi byte mentah sehingga Anda bisa memeriksa byte versi, payload, atau checksum.',
           'Ini cara mudah memvalidasi alamat yang ditempel pengguna, menguji integrasi, atau menjelaskan arti string Base58 tertentu di dokumentasi.'
         ]
       },
       hex: {
-        heading: 'Sekilas Decoder Hex — Tulkit',
+        heading: 'Sekilas Tentang Decoder Hex — Tulkit',
         paragraphs: [
           'Dump hex mudah membuat bingung ketika dilihat di konsol atau tiket dukungan. Tulkit mengembalikan pasangan tersebut menjadi teks atau data biner secara instan.',
           'Gunakan decoder untuk memeriksa potongan log, mengecek kunci, atau memastikan payload yang Anda tangkap benar-benar sesuai dengan byte yang diharapkan.'
@@ -527,7 +527,7 @@ const overviews: OverviewCopy = {
       }
     },
     lorem: {
-      heading: 'Sekilas Generator Lorem Ipsum — Tulkit',
+      heading: 'Sekilas Tentang Generator Lorem Ipsum — Tulkit',
       paragraphs: [
         'Lorem ipsum adalah teks dummy klasik yang sudah lama dipakai di dunia percetakan, desain, dan pengembangan antarmuka untuk menggantikan tulisan asli. Teks ini berakar dari karya Latin kuno, lalu diadopsi para typesetter sejak 1500‑an dan akhirnya dibundel ke dalam software desktop publishing sebagai contoh isi bawaan.',
         'Alasan lorem ipsum populer adalah karena pola huruf dan panjang katanya mirip bahasa nyata, sehingga layout tampak realistis tanpa membuat pembaca terpaku pada kalimatnya. Ini membantu desainer menilai spasi, hirarki, dan komposisi visual tanpa terdistraksi oleh placeholder generik seperti “content here, content here”.',
@@ -536,7 +536,7 @@ const overviews: OverviewCopy = {
       ]
     },
     case: {
-      heading: 'Sekilas Case Converter — Tulkit',
+      heading: 'Sekilas Tentang Case Converter — Tulkit',
       paragraphs: [
         'Nama variabel, nama fungsi, dan identifier mengikuti konvensi penamaan yang berbeda tergantung bahasa pemrograman, framework, atau panduan gaya tim. camelCase umum dalam JavaScript dan Java, snake_case adalah standar Python dan SQL, sementara PascalCase muncul di nama kelas di banyak bahasa.',
         'Saat refaktor kode, menggabungkan sistem yang pakai konvensi berbeda, atau menyiapkan contoh dokumentasi, kebutuhan konversi antar kasus jadi mendesak. Alih-alih menulis ulang setiap identifier secara manual, Case Converter Tulkit memungkinkan Anda paste teks dan langsung melihatnya transformasi ke camelCase, snake_case, PascalCase, kebab-case, dan banyak lagi.',
@@ -545,21 +545,21 @@ const overviews: OverviewCopy = {
       ]
     },
     jwt: {
-      heading: 'Sekilas Decoder & Encoder JWT — Tulkit',
+      heading: 'Sekilas Tentang Decoder & Encoder JWT — Tulkit',
       paragraphs: [
         'Setiap segmen JSON Web Token adalah string Base64URL. Tulkit mendekode header dan payload secara lokal, menandai token yang salah format, serta menampilkan waktu kedaluwarsa tanpa mengirimkan secret ke mana pun.',
         'Masukkan secret HS256/HS384/HS512 untuk memverifikasi tanda tangan, atau edit JSON lalu tanda tangani token baru di browser agar fixture uji dan debugging tetap privat.'
       ]
     },
     regex: {
-      heading: 'Sekilas Regex Tester — Tulkit',
+      heading: 'Sekilas Tentang Regex Tester — Tulkit',
       paragraphs: [
         'Ekspresi reguler memudahkan mencari dan memodifikasi teks, tetapi menyusun pola yang tepat biasanya butuh percobaan berkali-kali. Regex Tester Tulkit mempermudah proses tersebut dengan highlight instan saat Anda menempelkan teks contoh dan menyesuaikan pola.',
         'Anda bisa menyalakan atau mematikan flag global, sensitif huruf, multi-line, dotall, Unicode, hingga sticky untuk melihat dampaknya, lalu memeriksa setiap capture group bernomor maupun bernama di tabel yang rapi. Semuanya terjadi lokal di browser sehingga aman dipakai untuk kode atau log internal.'
       ]
     },
     url: {
-      heading: 'Sekilas Encoder URL — Tulkit',
+      heading: 'Sekilas Tentang Encoder URL — Tulkit',
       paragraphs: [
         'URL hanya dapat berisi karakter tak tercadang (huruf, angka, dan tanda "-", "_", ".", "~") di sebagian besar bagiannya. Karakter lain—termasuk spasi, titik koma, dan simbol khusus—harus dikodekan menjadi representasi persen (disebut "URL encoded" atau "percent-encoded") sebelum dapat digunakan dalam URL. Misalnya, spasi menjadi %20, "?" menjadi %3F, dan "&" menjadi %26.',
         'Banyak karakter membawa makna khusus dalam URL: "&" memisahkan parameter, "?" memulai string query, "#" menandai fragment. Ketika karakter tersebut muncul sebagai data yang seharusnya dikodekan, bukan delimitator, maka harus diproduksi dalam bentuk persen-encoded agar parser URL membacanya dengan benar dan tidak salah tafsir struktur URL.',
@@ -568,14 +568,14 @@ const overviews: OverviewCopy = {
       ]
     },
     pantone: {
-      heading: 'Sekilas Konverter Pantone — Tulkit',
+      heading: 'Sekilas Tentang Konverter Pantone — Tulkit',
       paragraphs: [
         'Mencari padanan Pantone untuk warna digital biasanya membutuhkan plugin atau software khusus. Tulkit membandingkan warna HEX Anda dengan palet Pantone terkurasi memakai jarak ΔE di ruang warna LAB sehingga Anda tahu swatch mana yang paling mendekati dan seberapa besar perbedaannya.',
         'Hasilnya berguna saat menyiapkan spesifikasi cetak, menyelaraskan token desain dengan tinta Pantone, atau menjawab pertanyaan tim marketing tanpa meninggalkan browser. Salin kode Pantone atau hex-nya langsung dan kirimkan ke desainer maupun vendor dengan percaya diri.'
       ]
     },
     pantoneCatalog: {
-      heading: 'Sekilas Pantone ke HEX — Tulkit',
+      heading: 'Sekilas Tentang Pantone ke HEX — Tulkit',
       paragraphs: [
         'Jika Anda sudah memiliki kode Pantone dan tinggal membutuhkan nilai digitalnya, katalog Pantone ke HEX Tulkit menghadirkan seluruh palet di satu tempat. Filter berdasarkan nama atau kode, lihat swatch langsung, lalu salin nilai HEX atau RGB tanpa membuka software desain.',
         'Setiap entri menampilkan kode Pantone resmi beserta HEX dan RGB, sehingga tim brand, percetakan, dan marketing bisa menjaga konsistensi antara aset cetak dan digital. Semua berjalan lokal di browser sehingga aman dibagikan saat review atau saat mencocokkan warna dengan cepat.'

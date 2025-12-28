@@ -526,6 +526,18 @@ export default function App(){
     if(typeof window === 'undefined') return ''
     return window.location.href
   },[location.pathname, location.search])
+  const canonicalUrl = useMemo(()=>{
+    const ensureSlash = (path: string)=>path.startsWith('/') ? path : `/${path}`
+    const fullPath = buildPathWithLanguage(ensureSlash(relativePath || '/'), language)
+    if(typeof window === 'undefined') return fullPath
+    const origin = window.location.origin.replace(/\/+$/,'')
+    return `${origin}${fullPath}`
+  },[relativePath, language])
+  const ogImageUrl = useMemo(()=>{
+    if(typeof window === 'undefined') return ''
+    const origin = window.location.origin.replace(/\/+$/,'')
+    return `${origin}/logo-tulkit.jpg`
+  },[])
 
   useEffect(()=>{
     if(view !== 'formatter') return
@@ -694,28 +706,28 @@ export default function App(){
   },[pantoneCatalogColor, language, pantoneCatalogOverview])
   const seoHeading = useMemo(()=>{
     if(view === 'home'){
-      return 'Tulkit — Web Tools for Developers'
+      return appCopy.brandHeading
     }
     if(view === 'generator'){
-      return 'Generator Tools — Tulkit'
+      return `${appCopy.navGenerator} — Tulkit`
     }
     if(view === 'indexnow-admin'){
       return `${appCopy.indexNow.heading} — Tulkit`
     }
     if(view === 'uuid-overview'){
-      return 'UUID Generator — Tulkit'
+      return `${appCopy.navUuid} — Tulkit`
     }
     if(view === 'converter-overview'){
-      return 'Converter Tools — Tulkit'
+      return `${appCopy.navConverters} — Tulkit`
     }
     if(view === 'hash-overview'){
-      return 'Hash Generator — Tulkit'
+      return `${appCopy.navHash} — Tulkit`
     }
     if(view === 'encode-overview'){
-      return 'Encoder — Tulkit'
+      return `${appCopy.navEncode} — Tulkit`
     }
     if(view === 'decode-overview'){
-      return 'Decoder — Tulkit'
+      return `${appCopy.navDecode} — Tulkit`
     }
     if(view === 'uuid'){
       if(uuidVersion === 'v1') return appCopy.seoTitles.uuidV1 || `${appCopy.seoTitles.uuid} V1`
@@ -1166,6 +1178,16 @@ export default function App(){
       <Helmet>
         <title>{seoHeading}</title>
         <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={seoHeading} />
+        <meta property="og:description" content={metaDescription} />
+        {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+        {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoHeading} />
+        <meta name="twitter:description" content={metaDescription} />
+        {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
         {pantoneBreadcrumbJsonLd && (
           <script type="application/ld+json">
             {JSON.stringify(pantoneBreadcrumbJsonLd)}

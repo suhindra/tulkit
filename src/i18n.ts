@@ -1865,17 +1865,17 @@ const id: Translation = {
       formatterXml: 'Pemformat XML — Tulkit',
       formatterYaml: 'Pemformat YAML — Tulkit',
       formatterCss: 'Pemformat CSS — Tulkit',
-    formatterJs: 'Pemformat JavaScript — Tulkit',
-    formatterJson: 'Pemformat JSON — Tulkit',
-    formatterSql: 'Pemformat SQL — Tulkit',
-    formatterPhp: 'Pemformat PHP — Tulkit',
-    minify: 'Minifier — Tulkit',
-    minifyHtml: 'HTML Minifier — Tulkit',
-    minifyXml: 'XML Minifier — Tulkit',
-    minifyCss: 'CSS Minifier — Tulkit',
-    minifyJs: 'JavaScript Minifier — Tulkit',
-    minifyJson: 'JSON Minifier — Tulkit',
-    uuid: 'Generator UUID — Tulkit',
+      formatterJs: 'Pemformat JavaScript — Tulkit',
+      formatterJson: 'Pemformat JSON — Tulkit',
+      formatterSql: 'Pemformat SQL — Tulkit',
+      formatterPhp: 'Pemformat PHP — Tulkit',
+      minify: 'Minifier — Tulkit',
+      minifyHtml: 'HTML Minifier — Tulkit',
+      minifyXml: 'XML Minifier — Tulkit',
+      minifyCss: 'CSS Minifier — Tulkit',
+      minifyJs: 'JavaScript Minifier — Tulkit',
+      minifyJson: 'JSON Minifier — Tulkit',
+      uuid: 'Generator UUID — Tulkit',
       uuidV1: 'Generator UUID v1 — Tulkit',
       uuidV4: 'Generator UUID v4 — Tulkit',
       uuidV7: 'Generator UUID v7 — Tulkit',
@@ -2027,27 +2027,27 @@ const id: Translation = {
       ]
     },
     homeMetaDescription:
-      'Alat web cepat dan mengutamakan privasi untuk developer. Format kode, buat UUID, konversi timestamp, encode/decode, buat hash, dan lainnya langsung di browser.',
+      'Alat web gratis yang cepat dan privat untuk developer: format HTML/CSS/JS/JSON/SQL/PHP, buat UUID, konversi timestamp, encode/decode, dan generator hash langsung di browser tanpa kirim data ke server.',
     generatorMetaDescription:
-      'Koleksi alat generator untuk developer: UUID, Lorem Ipsum, Generator Hash, dan Konverter Case—semuanya berjalan di browser.',
+      'Kumpulan generator developer: UUID v1/v4/v7, Lorem Ipsum, Hash SHA-1/256/512, dan Konverter Case—semuanya berjalan lokal di browser Anda.',
     uuidOverviewMetaDescription:
-      'Generator UUID dengan versi v1 (berbasis waktu), v4 (acak), dan v7 (urut waktu). Buat pengenal unik langsung di browser Anda.',
+      'Generator UUID v1 (berbasis waktu), v4 (acak), dan v7 (urut waktu) dengan opsi huruf besar, tanda kurung, dan keluaran massal langsung di browser.',
     converterOverviewMetaDescription:
-      'Kumpulan alat konverter: ubah timestamp Unix ke tanggal yang mudah dibaca, atur zona waktu, dan kerjakan epoch secara instan.',
+      'Kumpulan alat konverter untuk developer: ubah Unix timestamp detik/milidetik ke tanggal, atur zona waktu, dan kerjakan epoch secara instan di browser.',
     hashOverviewMetaDescription:
-      'Generator Hash dengan algoritma SHA-1, SHA-256, dan SHA-512. Buat checksum dan sidik jari sepenuhnya di browser.',
+      'Generator hash SHA-1, SHA-256, dan SHA-512 berbasis Web Crypto untuk membuat checksum/sidik jari data langsung di browser Anda.',
     encodeOverviewMetaDescription:
-      'Encode teks ke Base64, Base32, Base58, atau heksadesimal. Cocok untuk transmisi data, lampiran MIME, dan kebutuhan kriptografi.',
+      'Encode teks ke Base64, Base32, Base58, atau hex di browser untuk kebutuhan API, lampiran, atau payload kriptografi tanpa alat CLI.',
     decodeOverviewMetaDescription:
-      'Decode Base64, Base32, Base58, atau heksadesimal kembali ke teks yang terbaca. Inspeksi data terenkode seketika di browser.',
+      'Decode Base64, Base32, Base58, atau hex kembali ke teks terbaca dan byte mentah untuk debugging payload langsung di browser.',
     jwtOverviewMetaDescription:
-      'Decode, verifikasi, dan tanda tangani JWT (HS256/384/512) langsung di browser dengan Tulkit. Periksa header/payload, cek tanda tangan dengan secret bersama, dan buat token baru tanpa mengunggah data.',
+      'Decode, verifikasi, dan tanda tangani JWT HS256/384/512 langsung di browser: cek header/payload, validasi signature dengan secret bersama, dan buat token baru tanpa upload data.',
     epochMetaDescription:
-      'Konversikan timestamp Unix ke tanggal yang mudah dibaca dan sebaliknya dengan Tulkit. Beralih cepat antara detik, milidetik, UTC, dan waktu lokal langsung di browser Anda.',
+      'Konversikan Unix timestamp detik/milidetik ke tanggal yang mudah dibaca dan sebaliknya, lengkap dengan opsi zona waktu UTC atau lokal langsung di browser.',
     encodeMetaDescription:
-      'Konversikan teks UTF-8, Base64, dan hex dengan encoder Tulkit di browser Anda. Bantu memeriksa dan menormalkan data biner tanpa alat tambahan.',
+      'Ubah teks UTF-8 ke Base64 atau hex dengan encoder Tulkit untuk menormalkan payload API, header, atau secret langsung di browser.',
     decodeMetaDescription:
-      'Dekode nilai Base64, Base32, Base58, dan hex dengan decoder Tulkit di browser Anda. Ubah data terenkode menjadi teks yang mudah dibaca untuk debugging dan inspeksi payload.',
+      'Dekode Base64, Base32, Base58, dan hex di browser Anda untuk mengubah data terenkripsi menjadi teks terbaca saat men-debug API atau log.',
     encodeBase64MetaDescription:
       'Konversikan teks UTF-8 ke Base64 standar atau aman-URL dengan encoder Base64 Tulkit langsung di browser Anda. Cocok untuk header, segmen JWT, atau potongan biner.',
     encodeBase32MetaDescription:
