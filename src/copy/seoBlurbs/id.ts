@@ -3,7 +3,7 @@ import type { SeoBlurbCopy } from '../../i18n'
 const seoBlurb: SeoBlurbCopy = {
       generator: [
         'Koleksi empat alat generator yang ampuh untuk memperlancar alur kerja pengembangan Anda: UUID Generator untuk membuat pengenal unik, Lorem Ipsum Generator untuk konten placeholder, Hash Generator untuk checksum dan sidik jari, serta Case Converter untuk mengubah konvensi penamaan.',
-        'Semua alat berjalan sepenuhnya di browser Anda tanpa unggah data atau bergantung server. Sempurna untuk prototipe cepat, pengujian, mockup desain, dan tugas pengembangan harian yang memerlukan pembuatan teks dan transformasi cepat.'
+        'Semua alat berjalan sepenuhnya di browser-mu tanpa unggah data atau bergantung server. Sempurna untuk prototipe cepat, pengujian, mockup desain, dan tugas pengembangan harian yang memerlukan pembuatan teks dan transformasi cepat.'
       ],
       uuidOverview: [
         [
@@ -21,7 +21,7 @@ const seoBlurb: SeoBlurbCopy = {
       ],
       hashOverview: [
         'Pilih di antara tiga algoritma hash kriptografi—SHA-1, SHA-256, dan SHA-512—untuk menghasilkan checksum, sidik jari, dan digest untuk data Anda. Setiap algoritma menawarkan tingkat keamanan dan ukuran output yang berbeda untuk cocok dengan kasus penggunaan spesifik.',
-        'Semua hashing terjadi di browser Anda menggunakan Web Crypto API, jadi data Anda tidak pernah meninggalkan mesin. Ideal untuk memverifikasi integritas berkas, membuat cache key, menghasilkan test fixture, atau debug bagaimana nilai muncul di log dan database.'
+        'Semua hashing terjadi di browser-mu menggunakan Web Crypto API, jadi data Anda tidak pernah meninggalkan mesin. Ideal untuk memverifikasi integritas berkas, membuat cache key, menghasilkan test fixture, atau debug bagaimana nilai muncul di log dan database.'
       ],
       securityOverview: [
         'Buka ruang kerja keamanan untuk menjelajahi alat JWT tanpa mengunggah token atau secret. Tulkit menjaga proses decode, verifikasi, dan penandatanganan sepenuhnya lokal sehingga payload sensitif tetap aman.',
@@ -33,7 +33,7 @@ const seoBlurb: SeoBlurbCopy = {
       ],
       decodeOverview: [
         'Balikkan proses enkoding secara instan: konversi string Base64, Base32, Base58, atau heksadesimal kembali ke teks yang mudah dibaca. Periksa respons API, debug payload terenkode, verifikasi transaksi blockchain, atau pulihkan data asli dari format terenkode apa pun.',
-        'Dekoding terjadi sepenuhnya di browser Anda untuk privasi maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya konversi cepat dan dapat diandalkan yang membantu Anda memahami dan bekerja dengan data terenkode secara langsung.'
+        'Dekoding terjadi sepenuhnya di browser-mu untuk privasi maksimal. Tidak ada unggah server, tidak ada dependensi eksternal—hanya konversi cepat dan dapat diandalkan yang membantu Anda memahami dan bekerja dengan data terenkode secara langsung.'
       ],
       formatter: {
         auto: [
@@ -75,7 +75,7 @@ const seoBlurb: SeoBlurbCopy = {
       },
       uuid: {
         v1: [
-          'Buat UUID v1 yang menyertakan stempel waktu dan petunjuk node sehingga ID cenderung mengikuti urutan pembuatan, semuanya langsung di browser Anda.',
+          'Buat UUID v1 yang menyertakan stempel waktu dan petunjuk node sehingga ID cenderung mengikuti urutan pembuatan, semuanya langsung di browser-mu.',
           'Cocok untuk log, job latar belakang, atau proses impor yang membutuhkan pengelompokan kronologis tanpa menyiapkan layanan tambahan.'
         ],
         v4: [
@@ -93,7 +93,7 @@ const seoBlurb: SeoBlurbCopy = {
       ],
       encode: {
         default: [
-          'Konversi antara teks, hex, dan Base64 langsung di browser Anda. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
+          'Konversi antara teks, hex, dan Base64 langsung di browser-mu. Tempel teks UTF-8, nilai Base64, atau string hex lalu biarkan Tulkit mengubahnya ke format yang Anda perlukan.',
           'Encoder ini berguna ketika Anda bekerja dengan header HTTP, segmen JWT, secret konfigurasi, atau blob biner dan ingin memeriksa atau menormalkan encoding tanpa membuka CLI terpisah.'
         ],
         base64: [
@@ -115,7 +115,7 @@ const seoBlurb: SeoBlurbCopy = {
       },
       minify: {
         auto: [
-          'Padatkan HTML, XML, CSS, JavaScript, atau JSON langsung di browser Anda. Tempel kode yang ingin dikirim, klik Minify, dan Tulkit akan memangkas whitespace serta atribut berlebih tanpa mengunggah apa pun.',
+          'Padatkan HTML, XML, CSS, JavaScript, atau JSON langsung di browser-mu. Tempel kode yang ingin dikirim, klik Minify, dan Tulkit akan memangkas whitespace serta atribut berlebih tanpa mengunggah apa pun.',
           'Cocok ketika Anda perlu snippet siap produksi untuk embed, template email, atau konfigurasi kecil namun tidak mau repot menyiapkan pipeline build hanya demi mengecilkan perbaikan cepat.'
         ],
         html: [
@@ -131,7 +131,7 @@ const seoBlurb: SeoBlurbCopy = {
           'Ideal untuk blok style inline di CMS, template email, atau komponen desain yang sensitif terhadap ukuran.'
         ],
         js: [
-          'Gunakan bundle Terser bawaan untuk memadatkan JavaScript inline, feature flag, atau snippet widget tanpa meninggalkan browser.',
+          'Gunakan bundle Terser bawaan untuk memadatkan JavaScript inline, feature flag, atau snippet widget langsung di browser-mu.',
           'Sangat membantu ketika mengedit skrip kecil di CMS atau balasan dukungan namun tetap ingin versi produksi yang ringkas.'
         ],
         json: [
@@ -141,21 +141,21 @@ const seoBlurb: SeoBlurbCopy = {
       },
       hash: {
         sha1: [
-          'Buat hash SHA-1 dari teks apa pun langsung di browser Anda ketika perlu kompatibilitas dengan sistem lama. Tulkit memanfaatkan Web Crypto API agar perhitungan digest berlangsung lokal dan tidak meninggalkan perangkat.',
+          'Buat hash SHA-1 dari teks apa pun langsung di browser-mu ketika perlu kompatibilitas dengan sistem lama. Tulkit memanfaatkan Web Crypto API agar perhitungan digest berlangsung lokal dan tidak meninggalkan perangkat.',
           'Gunakan mode SHA-1 ini hanya ketika Anda berurusan dengan API atau alat lama yang masih mengharuskannya, sambil tetap menikmati alur kerja yang cepat dan berbasis browser.'
         ],
         sha256: [
-          'Buat hash SHA-256 untuk snippet, blok konfigurasi, atau berkas kecil langsung di browser Anda. Tulkit mengandalkan Web Crypto API sehingga digest selaras dengan hasil banyak CLI dan library populer.',
+          'Buat hash SHA-256 untuk snippet, blok konfigurasi, atau berkas kecil langsung di browser-mu. Tulkit mengandalkan Web Crypto API sehingga digest selaras dengan hasil banyak CLI dan library populer.',
           'Mode SHA-256 cocok ketika Anda membutuhkan sidik jari modern yang luas dukungannya untuk unduhan, fixture, atau kunci cache tanpa harus membuka terminal.'
         ],
         sha512: [
           'Hitung hash SHA-512 sepenuhnya di browser untuk kasus yang membutuhkan digest lebih panjang, misalnya skenario arsip atau alur kerja yang bersinggungan dengan keamanan.',
-          'Mode ini membantu saat bereksperimen dengan skema tanda tangan, penyimpanan jangka panjang, atau sistem yang menstandarkan SHA-512 sambil tetap memanfaatkan kenyamanan Tulkit di browser.'
+          'Mode ini membantu saat bereksperimen dengan skema signature, penyimpanan jangka panjang, atau sistem yang menstandarkan SHA-512 sambil tetap memanfaatkan kenyamanan Tulkit di browser.'
         ]
       },
       decode: {
         default: [
-          'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca tanpa meninggalkan browser Anda. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
+          'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang bisa dibaca langsung di browser-mu. Tempel nilai terenkode dan biarkan Tulkit menampilkan teks UTF-8 serta byte mentahnya.',
           'Decoder ini membantu saat Anda memeriksa token, payload, atau blob biner dari API dan perlu mengembalikannya ke bentuk yang mudah dibaca untuk debugging atau dokumentasi.'
         ],
         base64: [
@@ -176,16 +176,16 @@ const seoBlurb: SeoBlurbCopy = {
         ]
       },
       lorem: [
-        'Buat teks placeholder lorem ipsum langsung di browser Anda. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
+        'Buat teks placeholder lorem ipsum langsung di browser-mu. Atur jumlah paragraf dan panjang kalimat sehingga mockup dan rancangan UI terasa lebih realistis tanpa menulis teks manual.',
         'Tulkit menjalankan generator ini sepenuhnya di sisi klien, sehingga praktis untuk wireframe, komponen antarmuka, atau layout konten tanpa mengirim data ke server.'
       ],
       case: [
-        'Konversi nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser Anda. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
+        'Konversi nama variabel dan fungsi antar camelCase, snake_case, PascalCase, kebab-case, dan konvensi penamaan lain langsung di browser-mu. Tempel identifier apa pun dan lihat transformasi instan ke berbagai format tanpa mengirim ke server.',
         'Berguna saat refaktor codebase, menyesuaikan respons API agar cocok gaya penamaan Anda, menyiapkan contoh kode, atau mengintegrasikan sistem yang pakai konvensi penamaan berbeda.'
       ],
       url: [
         'Enkode parameter URL dan karakter khusus untuk dipakai di alamat web, panggilan API, dan string query. Tempel teks biasa atau URL lengkap untuk mengenkodinya dengan aman untuk transmisi, atau tempel URL yang sudah dienkode untuk mendekodinya kembali menjadi bentuk yang bisa dibaca secara instan.',
-        'Tulkit menangani enkode dan dekode sepenuhnya di browser Anda menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
+        'Tulkit menangani enkode dan dekode sepenuhnya di browser-mu menggunakan standar URL encoding asli. Sempurna untuk men-debug permintaan API, menyiapkan parameter untuk form web, menyematkan data di URL, atau memeriksa query string dari log dan analitik.'
       ],
       pantoneHub: [
         'Gunakan warna Pantone dari dua arah: konversi HEX ke swatch Pantone terdekat dengan jarak ΔE, atau telusuri palet Pantone untuk menyalin padanan HEX/RGB-nya.',
@@ -202,14 +202,14 @@ const seoBlurb: SeoBlurbCopy = {
       jwt: {
         overview: [
           'Dekode header dan payload JWT secara lokal tanpa mengunggah token atau secret. Tulkit menandai segmen yang rusak, menampilkan waktu kedaluwarsa, dan menormalkan Base64URL untuk debugging cepat.',
-          'Verifikasi tanda tangan HS256/384/512 dengan memasukkan secret bersama, atau buat token contoh langsung di browser agar proses debugging dan demo tetap privat.'
+          'Verifikasi signature HS256/384/512 dengan memasukkan secret bersama, atau buat token contoh langsung di browser agar proses debugging dan demo tetap privat.'
         ],
         decode: [
           'Tempel JWT untuk melihat header dan payload seketika di browser. Tulkit menormalkan Base64URL, menandai segmen yang salah, dan menunjukkan kedaluwarsa sehingga audit token tetap aman.',
-          'Tambah secret HS256/384/512 Anda untuk memverifikasi tanda tangan secara lokal—praktis men-debug alur autentikasi atau memeriksa token pihak ketiga tanpa membocorkan secret.'
+          'Tambah secret HS256/384/512 Anda untuk memverifikasi signature secara lokal—praktis men-debug alur autentikasi atau memeriksa token pihak ketiga tanpa membocorkan secret.'
         ],
         encode: [
-          'Edit JSON header/payload, pilih HS256/384/512, lalu tanda tangani JWT langsung di browser. Tulkit menjaga secret tetap lokal sehingga token uji atau demo aman dipakai.',
+          'Edit JSON header/payload, pilih HS256/384/512, lalu apply signature JWT langsung di browser. Tulkit menjaga secret tetap lokal sehingga token uji atau demo aman dipakai.',
           'Cocok untuk membuat token percobaan, menghasilkan token berumur pendek untuk pengujian, atau berbagi contoh JWT yang mudah direproduksi dengan tim.'
         ]
       },

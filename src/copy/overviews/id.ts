@@ -20,109 +20,74 @@ const overviews: OverviewCopy = {
           category: 'optimization'
         },
         {
-          title: 'Generator UUID',
-          description: 'Hasilkan UUID v1, v4, atau v7 dalam jumlah banyak dengan opsi format dan huruf besar yang dapat disesuaikan.',
-          path: '/generator/uuid',
-          icon: '🎲',
+          title: 'Generator Tools',
+          description: 'Buka kumpulan generator untuk memilih UUID, Lorem Ipsum, dan hash dari satu tempat.',
+          path: '/generator',
+          icon: '🎛️',
           category: 'generation'
         },
         {
-          title: 'Konverter Epoch',
-          description: 'Konversi antara Unix timestamp dan tanggal yang mudah dibaca di zona waktu apa pun secara instan.',
-          path: '/converter/epoch',
-          icon: '⏰',
+          title: 'Converter Tools',
+          description: 'Lihat konverter epoch, case, URL, regex, dan Pantone dalam satu tampilan ringkas.',
+          path: '/converter',
+          icon: '🔁',
           category: 'conversion'
         },
         {
-          title: 'Encoder',
-          description: 'Enkode teks ke Base64, Base32, Base58, atau hex di browser Anda.',
+          title: 'Encode',
+          description: 'Encode teks ke Base64, Base32, Base58, atau hex di browser-mu.',
           path: '/encode',
           icon: '🔐',
           category: 'encoding'
         },
         {
-          title: 'Decoder',
-          description: 'Dekode Base64, Base32, Base58, atau hex kembali menjadi teks yang mudah dibaca tanpa meninggalkan browser.',
+          title: 'Decode',
+          description: 'Decode Base64, Base32, Base58, atau hex kembali menjadi teks yang mudah dibaca langsung di browser-mu.',
           path: '/decode',
           icon: '🔓',
           category: 'encoding'
         },
         {
-          title: 'Generator Hash',
-          description: 'Buat hash SHA-1, SHA-256, atau SHA-512 untuk teks apa pun menggunakan Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'Decoder & Encoder JWT',
-          description: 'Dekode JWT, verifikasi tanda tangan HS256/384/512 dengan secret bersama, dan buat token baru langsung di browser.',
-          path: '/security/jwt',
+          title: 'Security & JWT Tools',
+          description: 'Masuk ke workspace keamanan untuk memeriksa dan menandatangani JWT secara lokal.',
+          path: '/security',
           icon: '🛡️',
           category: 'security'
         },
         {
-          title: 'Generator Lorem Ipsum',
-          description: 'Buat paragraf dummy untuk mockup desain dengan jumlah paragraf dan panjang yang dapat disesuaikan.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Case Converter',
-          description: 'Konversi nama antara camelCase, snake_case, PascalCase, kebab-case, dan format lainnya.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'Encoder URL',
-          description: 'Enkode dan dekode parameter URL serta karakter khusus langsung di browser.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        },
-        {
-          title: 'Konverter Pantone',
-          description: 'Cari kecocokan Pantone terdekat untuk warna HEX dengan jarak ΔE dan pratinjau swatch.',
-          path: '/pantone/hex-to-pantone',
+          title: 'Pantone Hub',
+          description: 'Ganti antara pencocokan HEX ke Pantone dan pencarian Pantone ke HEX lengkap dengan tautan swatch.',
+          path: '/pantone',
           icon: '🎨',
-          category: 'conversion'
-        },
-        {
-          title: 'Pantone ke HEX',
-          description: 'Jelajahi daftar Pantone dan salin kode HEX atau RGB langsung dari browser.',
-          path: '/pantone/pantone-to-hex',
-          icon: '🗂️',
-          category: 'conversion'
-        },
-        {
-          title: 'Regex Tester',
-          description: 'Uji pola regex JavaScript lengkap dengan flag dan capture group langsung di browser.',
-          path: '/converter/regex',
-          icon: '🧪',
           category: 'conversion'
         }
       ]
     },
     jwtOverview: {
       heading: 'Alat Keamanan & JWT',
-      subheading: 'Dekode, verifikasi, dan tanda tangani JSON Web Token secara lokal di browser Anda',
+      subheading: 'Dekode, verifikasi, dan buat signature JSON Web Token secara lokal di browser-mu',
       tools: [
         {
           title: 'Decoder JWT',
-          description: 'Tempel JWT untuk melihat header/payload, cek kedaluwarsa, dan verifikasi tanda tangan HS256/384/512 dengan secret bersama.',
+          description: 'Tempel JWT untuk melihat header/payload, cek kedaluwarsa, dan verifikasi signature HS256/384/512 dengan secret bersama.',
           path: '/security/jwt/decode',
           icon: '🛡️',
           category: 'security'
         },
         {
           title: 'Encoder JWT',
-          description: 'Sunting JSON header/payload, pilih HS256/384/512, dan tanda tangani token langsung di browser tanpa mengunggah secret.',
+          description: 'Ubah JSON header/payload, pilih HS256/384/512, dan apply signature token langsung di browser tanpa mengunggah secret.',
           path: '/security/jwt/encode',
           icon: '🛡️',
           category: 'security'
         }
+      ]
+    },
+    jwtOverviewDetail: {
+      heading: 'Workspace JWT — Sekilas',
+      paragraphs: [
+        'Workspace JWT menggabungkan decoder dan encoder supaya kamu bisa berganti dari memeriksa token masuk ke membuat token baru hanya dalam hitungan detik. Tempel JWT untuk melihat header, payload, status kedaluwarsa, dan signature sekaligus, lalu pindah ke tab builder untuk menulis JSON sendiri dan apply signature ke token percobaan.',
+        'Gunakan saat mengaudit trafik API, men-debug sesi login, atau berbagi contoh token yang bisa direproduksi dengan tim. Semua proses decode dan signature terjadi lokal, jadi secret dan payload tetap aman di perangkatmu.'
       ]
     },
     generator: {
@@ -256,7 +221,7 @@ const overviews: OverviewCopy = {
     },
     securityOverview: {
       heading: 'Alat Keamanan',
-      subheading: 'Periksa dan tanda tangani JWT langsung di browser agar token dan secret tetap lokal.',
+      subheading: 'Periksa dan apply signature JWT langsung di browser agar token dan secret tetap lokal.',
       tools: [
         {
           title: 'Alat JWT',
@@ -265,6 +230,13 @@ const overviews: OverviewCopy = {
           icon: '🛡️',
           category: 'security'
         }
+      ]
+    },
+    securityDetail: {
+      heading: 'Ruang Kerja Keamanan — Sekilas',
+      paragraphs: [
+        'Tulkit menjaga proses cek dan signature token tetap lokal sehingga secret tidak pernah keluar dari browser-mu. Buka ruang kerja keamanan saat perlu mengintip struktur JWT, memverifikasi signature HS256/384/512 dengan secret bersama, atau menerbitkan token percobaan tanpa harus memasang tool tambahan.',
+        'Karena semuanya berjalan di sisi klien, kamu bisa aman menelusuri header produksi, bereksperimen dengan klaim peran, atau berbagi tautan dengan rekan tim untuk membahas alur autentikasi tanpa mengirim data sensitif.'
       ]
     },
     encodeOverview: {
@@ -341,7 +313,7 @@ const overviews: OverviewCopy = {
         paragraphs: [
           'Sebagian developer menjaga kode tetap rapi, sementara yang lain bergerak cepat dan meninggalkan skrip yang sulit dibaca. Pemformat web Tulkit dibuat untuk merapikan potongan kasar itu agar lebih mudah dipindai rekan kerja, reviewer, dan diri Anda di masa depan.',
           'Pemformat memeriksa potongan yang Anda tempel atau unggah, menentukan apakah itu HTML, CSS, JavaScript, JSON, SQL, atau PHP, lalu menerapkan indentasi yang konsisten pada setiap baris. Setelah struktur bersih, Anda bisa menyalin, mengunduh, atau membagikan hasil format tanpa perlu IDE lengkap atau pipeline build.',
-          'Semua pekerjaan ini berlangsung langsung di browser Anda. Tulkit tidak mengunggah kode ke server atau menyimpannya secara jarak jauh, sehingga aman untuk repositori privat, pekerjaan klien, dan potongan internal yang tidak boleh keluar dari perangkat.',
+          'Semua pekerjaan ini berlangsung langsung di browser-mu. Tulkit tidak mengunggah kode ke server atau menyimpannya secara jarak jauh, sehingga aman untuk repositori privat, pekerjaan klien, dan potongan internal yang tidak boleh keluar dari perangkat.',
           'Pemformat seperti ini sangat membantu ketika Anda membuka berkas tanpa indentasi, menempel kode dari blog, atau menerima potongan dari orang yang tidak mengikuti panduan gaya tim Anda. Beberapa klik biasanya cukup untuk membuatnya siap dibaca dan direview.',
           'Cara pakainya sederhana: seret berkas ke editor atau tempel kode Anda, biarkan Tulkit mendeteksi bahasa, lalu klik Format. Sesuaikan ukuran tab bila ingin jarak berbeda, dan setelah puas gunakan aksi Salin atau Unduh sebelum menekan Bersihkan untuk mulai lagi.'
         ]
@@ -447,7 +419,7 @@ const overviews: OverviewCopy = {
       base64: {
         heading: 'Sekilas Tentang Encoder Base64 — Tulkit',
         paragraphs: [
-          'Encoder Base64 Tulkit mengubah teks UTF-8 atau byte mentah menjadi alfabet familiar A-Z, a-z, 0-9 plus + dan /. Varian aman-URL juga tersedia sehingga string siap dipakai untuk JWT, cookie, atau URL bertanda tangan.',
+          'Encoder Base64 Tulkit mengubah teks UTF-8 atau byte mentah menjadi alfabet familiar A-Z, a-z, 0-9 plus + dan /. Varian aman-URL juga tersedia sehingga string siap dipakai untuk JWT, cookie, atau URL dengan signature.',
           'Gunakan ketika Anda perlu menormalkan padding, membersihkan whitespace, atau memastikan apa yang akan dikirim melalui API yang mengharuskan payload Base64 untuk lampiran, sertifikat, atau header HTTP.'
         ]
       },
@@ -485,8 +457,8 @@ const overviews: OverviewCopy = {
       heading: 'Sekilas Tentang Generator Hash — Tulkit',
       paragraphs: [
         'Fungsi hash seperti SHA-1, SHA-256, dan SHA-512 mengubah teks apa pun menjadi sidik jari berdimensi tetap yang mudah dibandingkan namun sulit dibalik. Developer mengandalkan digest ini untuk checksum, kunci cache, dan fixture pengujian di berbagai alat dan bahasa.',
-        'Generator hash Tulkit dibuat untuk alur sehari-hari itu: tempel potongan teks, pilih algoritma, lalu hitung digest hex deterministik sepenuhnya di browser Anda. Karena berjalan di atas Web Crypto API, input tidak pernah keluar dari perangkat dan hasilnya selaras dengan CLI atau library umum.',
-        'Gunakan alat ini untuk memverifikasi unduhan, membuat ID stabil untuk blok konfigurasi, atau sekadar melihat bagaimana sebuah nilai akan direpresentasikan di log dan kolom database tanpa meninggalkan browser.'
+        'Generator hash Tulkit dibuat untuk alur sehari-hari itu: tempel potongan teks, pilih algoritma, lalu hitung digest hex deterministik sepenuhnya di browser-mu. Karena berjalan di atas Web Crypto API, input tidak pernah keluar dari perangkat dan hasilnya selaras dengan CLI atau library umum.',
+        'Gunakan alat ini untuk memverifikasi unduhan, membuat ID stabil untuk blok konfigurasi, atau sekadar melihat bagaimana sebuah nilai akan direpresentasikan di log dan kolom database langsung di browser.'
       ]
     },
     decode: {
@@ -549,7 +521,7 @@ const overviews: OverviewCopy = {
         heading: 'Sekilas Tentang Decoder JWT — Tulkit',
         paragraphs: [
           'Setiap segmen JSON Web Token adalah Base64URL. Decoder Tulkit mengurai header dan payload secara lokal, menyorot token yang rusak, dan menampilkan waktu kedaluwarsa tanpa mengirim secret ke server.',
-          'Tambahkan secret HS256/HS384/HS512 untuk memverifikasi tanda tangan langsung di browser sehingga audit token, debugging login, atau inspeksi token pihak ketiga tetap aman.'
+          'Tambahkan secret HS256/HS384/HS512 untuk memverifikasi signature langsung di browser sehingga audit token, debugging login, atau inspeksi token pihak ketiga tetap aman.'
         ]
       },
       encode: {
@@ -572,7 +544,7 @@ const overviews: OverviewCopy = {
       paragraphs: [
         'URL hanya dapat berisi karakter tak tercadang (huruf, angka, dan tanda "-", "_", ".", "~") di sebagian besar bagiannya. Karakter lain—termasuk spasi, titik koma, dan simbol khusus—harus dikodekan menjadi representasi persen (disebut "URL encoded" atau "percent-encoded") sebelum dapat digunakan dalam URL. Misalnya, spasi menjadi %20, "?" menjadi %3F, dan "&" menjadi %26.',
         'Banyak karakter membawa makna khusus dalam URL: "&" memisahkan parameter, "?" memulai string query, "#" menandai fragment. Ketika karakter tersebut muncul sebagai data yang seharusnya dikodekan, bukan delimitator, maka harus diproduksi dalam bentuk persen-encoded agar parser URL membacanya dengan benar dan tidak salah tafsir struktur URL.',
-        'Encoder URL Tulkit memungkinkan Anda mengkonversi teks biasa ke bentuk URL-encoded dengan cepat, dan sebaliknya mendekodekan URL yang sudah dikodekan kembali ke teks yang dapat dibaca—tanpa perlu mengunggah data apa pun ke server eksternal. Semua pengolahan terjadi secara lokal di browser Anda.',
+        'Encoder URL Tulkit memungkinkan Anda mengkonversi teks biasa ke bentuk URL-encoded dengan cepat, dan sebaliknya mendekodekan URL yang sudah dikodekan kembali ke teks yang dapat dibaca—tanpa perlu mengunggah data apa pun ke server eksternal. Semua pengolahan terjadi secara lokal di browser-mu.',
         'Gunakan untuk mengkodekan parameter dalam query string, mendekodekan URL dari log atau database, membangun URL secara terprogram, atau menyiapkan contoh dokumentasi API. Encoder ini mendukung seluruh rentang karakter UTF-8 dan sesuai dengan standar RFC 3986 untuk pengkodean URL.'
       ]
     },
@@ -580,7 +552,7 @@ const overviews: OverviewCopy = {
       heading: 'Sekilas Tentang Konverter Pantone — Tulkit',
       paragraphs: [
         'Mencari padanan Pantone untuk warna digital biasanya membutuhkan plugin atau software khusus. Tulkit membandingkan warna HEX Anda dengan palet Pantone terkurasi memakai jarak ΔE di ruang warna LAB sehingga Anda tahu swatch mana yang paling mendekati dan seberapa besar perbedaannya.',
-        'Hasilnya berguna saat menyiapkan spesifikasi cetak, menyelaraskan token desain dengan tinta Pantone, atau menjawab pertanyaan tim marketing tanpa meninggalkan browser. Salin kode Pantone atau hex-nya langsung dan kirimkan ke desainer maupun vendor dengan percaya diri.'
+        'Hasilnya berguna saat menyiapkan spesifikasi cetak, menyelaraskan token desain dengan tinta Pantone, atau menjawab pertanyaan tim marketing langsung di browser. Salin kode Pantone atau hex-nya langsung dan kirimkan ke desainer maupun vendor dengan percaya diri.'
       ]
     },
     pantoneCatalog: {

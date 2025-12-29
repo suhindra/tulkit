@@ -507,6 +507,8 @@ export type OverviewCopy = {
   hashOverview: HomeContent
   securityOverview: HomeContent
   jwtOverview: HomeContent
+  securityDetail: OverviewContent
+  jwtOverviewDetail: OverviewContent
   encodeOverview: HomeContent
   decodeOverview: HomeContent
   formatter: Record<ActiveTab,OverviewContent>
@@ -1350,7 +1352,7 @@ const id: Translation = {
   },
   descriptionByTab: {
     auto:
-      'Format HTML, XML, YAML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser Anda.',
+      'Format HTML, XML, YAML, CSS, JavaScript, JSON, SQL, atau PHP di satu tempat. Tulkit mendeteksi bahasa secara otomatis dan merapikan potongan kode langsung di browser-mu.',
     html:
       'Gunakan Tulkit untuk merapikan HTML untuk landing page, email, dan potongan CMS sehingga tag bertingkat tetap mudah dibaca di editor dan saat code review.',
     xml:
@@ -1362,7 +1364,7 @@ const id: Translation = {
     js:
       'Format potongan JavaScript, modul ES, dan kode async dengan Tulkit untuk merapikan eksperimen, contoh kode, atau output log dengan cepat.',
     json:
-      'Cetak cantik dan validasi payload JSON, konfigurasi, dan respons API menggunakan Tulkit langsung di browser Anda.',
+      'Cetak cantik dan validasi payload JSON, konfigurasi, dan respons API menggunakan Tulkit langsung di browser-mu.',
     sql:
       'Susun ulang query SQL panjang dengan Tulkit agar pernyataan SELECT, JOIN, dan CTE lebih mudah dibaca dan dibagikan.',
     php:
@@ -1372,7 +1374,7 @@ const id: Translation = {
     v1:
       'Hasilkan UUID v1 berbasis waktu dengan Tulkit saat Anda membutuhkan pengenal yang mengikuti urutan pembuatan untuk log, job, atau proses impor.',
     v4:
-      'Hasilkan pengenal acak UUID v4 secara massal dengan Tulkit langsung di browser Anda menggunakan Web Crypto API untuk ID yang aman dan berkualitas tinggi.',
+      'Hasilkan pengenal acak UUID v4 secara massal dengan Tulkit langsung di browser-mu menggunakan Web Crypto API untuk ID yang aman dan berkualitas tinggi.',
     v7:
       'Hasilkan UUID v7 berurutan waktu dengan Tulkit agar ID tetap mudah diurutkan sambil tetap menyertakan keacakan yang kuat.'
   },
@@ -1455,7 +1457,7 @@ const id: Translation = {
           'Didukung Prettier PHP, cocok untuk Laravel, WordPress, atau potongan kode legacy. Tulkit memuat pemformat sesuai kebutuhan agar UI tetap cepat.',
         tips: [
           'Lebar tab dan lebar cetak mengikuti opsi Prettier secara langsung.',
-          'Pemformatan berjalan sepenuhnya di browser Anda sehingga kode tetap privat.'
+          'Pemformatan berjalan sepenuhnya di browser-mu sehingga kode tetap privat.'
         ]
       },
       xml: {
@@ -1628,14 +1630,14 @@ const id: Translation = {
       benefits: [
         'Mencegah konflik sintaks URL dengan mengenkode karakter yang dicadangkan',
         'Mendukung karakter internasional dan simbol khusus di URL',
-        'Bekerja sepenuhnya di browser Anda tanpa mengunggah data',
+        'Bekerja sepenuhnya di browser-mu tanpa mengunggah data',
         'Enkoding sesuai standar menggunakan spesifikasi RFC 3986'
       ]
     }
   },
   regexTester: {
     heading: 'Regex Tester',
-    subheading: 'Uji ekspresi reguler JavaScript, flag, dan capture group langsung di browser Anda.',
+    subheading: 'Uji ekspresi reguler JavaScript, flag, dan capture group langsung di browser-mu.',
     patternLabel: 'Pola',
     patternPlaceholder: 'mis. (\\w+)@(\\w+\\.\\w+)',
     sampleLabel: 'Teks uji',
@@ -1684,7 +1686,7 @@ const id: Translation = {
   },
   jwt: {
     heading: 'Decoder & Encoder JWT',
-    subheading: 'Dekode, verifikasi, dan tanda tangani JSON Web Token langsung di browser.',
+    subheading: 'Dekode, verifikasi, dan buat signature JSON Web Token langsung di browser.',
     inputLabel: 'JWT terenkode',
     inputPlaceholder: 'Tempel JWT dengan format header.payload.signature',
     helperText: 'Tulkit tidak mengunggah token atau secret; semuanya diproses di tab ini.',
@@ -1697,14 +1699,14 @@ const id: Translation = {
     secretLabel: 'Secret',
     secretPlaceholder: 'Secret bersama untuk verifikasi HMAC',
     algorithmLabel: 'Algoritma',
-    verificationHeading: 'Verifikasi tanda tangan',
+    verificationHeading: 'Verifikasi signature',
     verificationNote: 'Mendukung HMAC (HS256, HS384, HS512). Masukkan secret penandatanganan untuk memverifikasi secara lokal.',
     statusValid: 'Struktur JWT valid',
     statusInvalid: 'JWT tidak valid',
     statusMalformed: 'Token tidak lengkap: butuh tiga segmen yang dipisah titik.',
     statusNoSignature: 'Token tidak memiliki segmen signature.',
     signatureVerified: 'Tanda tangan cocok dengan secret ini.',
-    signatureMissingSecret: 'Tambahkan secret untuk memverifikasi tanda tangan.',
+    signatureMissingSecret: 'Tambahkan secret untuk memverifikasi signature.',
     signatureInvalid: 'Tanda tangan tidak cocok untuk secret ini.',
     signatureUnsupported: 'Verifikasi yang tersedia hanya untuk HMAC (HS256/384/512).',
     signatureErrorPrefix: 'Verifikasi gagal: ',
@@ -1713,8 +1715,8 @@ const id: Translation = {
     notExpiredLabel: 'Belum kedaluwarsa',
     decodeErrorPrefix: 'Gagal mendekode: ',
     builder: {
-      heading: 'Buat & tanda tangani JWT',
-      description: 'Ubah header dan payload JSON, pilih algoritma HMAC, lalu tanda tangani secara lokal.',
+      heading: 'Buat & apply signature JWT',
+      description: 'Ubah header dan payload JSON, pilih algoritma HMAC, lalu apply signature secara lokal.',
       headerLabel: 'Header (JSON)',
       payloadLabel: 'Payload (JSON)',
       headerPlaceholder: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}',
@@ -1725,7 +1727,7 @@ const id: Translation = {
       signButton: 'Hasilkan JWT',
       signingLabel: 'Menandatangani…',
       outputLabel: 'JWT terenkode',
-      outputPlaceholder: 'Token hasil tanda tangan muncul di sini',
+      outputPlaceholder: 'Token dengan signature muncul di sini',
       copyOutput: 'Salin JWT',
       errorPrefix: 'Gagal menandatangani: '
     }
@@ -1840,7 +1842,7 @@ const id: Translation = {
     logoAlt: 'Logo Tulkit Online',
     brandHeading: 'Peralatan Web — Tulkit',
     brandSubheading: 'Kumpulan alat web ringan untuk kebutuhan developer sehari-hari',
-    brandNote: 'Semua pemformatan dan pembuatan berjalan di browser Anda saja; kode tidak pernah keluar dari perangkat.',
+    brandNote: 'Semua pemformatan dan pembuatan berjalan di browser-mu saja; kode tidak pernah keluar dari perangkat.',
     navGenerator: 'Generator',
     navConverters: 'Konverter',
     navFormatter: 'Pemformat',
@@ -2029,36 +2031,36 @@ const id: Translation = {
     homeMetaDescription:
       'Alat web gratis yang cepat dan privat untuk developer: format HTML/CSS/JS/JSON/SQL/PHP, buat UUID, konversi timestamp, encode/decode, dan generator hash langsung di browser tanpa kirim data ke server.',
     generatorMetaDescription:
-      'Kumpulan generator developer: UUID v1/v4/v7, Lorem Ipsum, Hash SHA-1/256/512, dan Konverter Case—semuanya berjalan lokal di browser Anda.',
+      'Kumpulan generator developer: UUID v1/v4/v7, Lorem Ipsum, Hash SHA-1/256/512, dan Konverter Case—semuanya berjalan lokal di browser-mu.',
     uuidOverviewMetaDescription:
       'Generator UUID v1 (berbasis waktu), v4 (acak), dan v7 (urut waktu) dengan opsi huruf besar, tanda kurung, dan keluaran massal langsung di browser.',
     converterOverviewMetaDescription:
       'Kumpulan alat konverter untuk developer: ubah Unix timestamp detik/milidetik ke tanggal, atur zona waktu, dan kerjakan epoch secara instan di browser.',
     hashOverviewMetaDescription:
-      'Generator hash SHA-1, SHA-256, dan SHA-512 berbasis Web Crypto untuk membuat checksum/sidik jari data langsung di browser Anda.',
+      'Generator hash SHA-1, SHA-256, dan SHA-512 berbasis Web Crypto untuk membuat checksum/sidik jari data langsung di browser-mu.',
     encodeOverviewMetaDescription:
       'Encode teks ke Base64, Base32, Base58, atau hex di browser untuk kebutuhan API, lampiran, atau payload kriptografi tanpa alat CLI.',
     decodeOverviewMetaDescription:
       'Decode Base64, Base32, Base58, atau hex kembali ke teks terbaca dan byte mentah untuk debugging payload langsung di browser.',
     jwtOverviewMetaDescription:
-      'Decode, verifikasi, dan tanda tangani JWT HS256/384/512 langsung di browser: cek header/payload, validasi signature dengan secret bersama, dan buat token baru tanpa upload data.',
+      'Decode, verifikasi, dan buat signature JWT HS256/384/512 langsung di browser: cek header/payload, validasi signature dengan secret bersama, dan buat token baru tanpa upload data.',
     epochMetaDescription:
       'Konversikan Unix timestamp detik/milidetik ke tanggal yang mudah dibaca dan sebaliknya, lengkap dengan opsi zona waktu UTC atau lokal langsung di browser.',
     encodeMetaDescription:
       'Ubah teks UTF-8 ke Base64 atau hex dengan encoder Tulkit untuk menormalkan payload API, header, atau secret langsung di browser.',
     decodeMetaDescription:
-      'Dekode Base64, Base32, Base58, dan hex di browser Anda untuk mengubah data terenkripsi menjadi teks terbaca saat men-debug API atau log.',
+      'Dekode Base64, Base32, Base58, dan hex di browser-mu untuk mengubah data terenkripsi menjadi teks terbaca saat men-debug API atau log.',
     encodeBase64MetaDescription:
-      'Konversikan teks UTF-8 ke Base64 standar atau aman-URL dengan encoder Base64 Tulkit langsung di browser Anda. Cocok untuk header, segmen JWT, atau potongan biner.',
+      'Konversikan teks UTF-8 ke Base64 standar atau aman-URL dengan encoder Base64 Tulkit langsung di browser-mu. Cocok untuk header, segmen JWT, atau potongan biner.',
     encodeBase32MetaDescription:
       'Ubah teks UTF-8 menjadi Base32 menggunakan encoder Tulkit. Berguna untuk sistem dan protokol yang mengandalkan Base32 untuk pengenal teks yang ringkas.',
     encodeBase58MetaDescription:
       'Encode teks menjadi Base58 dengan encoder Tulkit menggunakan alfabet Bitcoin. Ideal untuk membuat pengenal yang ramah dibaca dan payload bergaya blockchain.',
     encodeHexMetaDescription:
-      'Ubah teks UTF-8 menjadi string hex huruf kecil di browser Anda dengan encoder Tulkit. Tepat untuk memeriksa data biner, kunci, atau payload protokol tanpa CLI eksternal.',
+      'Ubah teks UTF-8 menjadi string hex huruf kecil di browser-mu dengan encoder Tulkit. Tepat untuk memeriksa data biner, kunci, atau payload protokol tanpa CLI eksternal.',
     minifyMetaDescription: {
       auto:
-        'Padatkan HTML, CSS, JavaScript, atau JSON langsung di browser Anda dengan minifier Tulkit. Tempel snippet, pilih tab, dan kirimkan payload lebih ringan tanpa ribet setup build.',
+        'Padatkan HTML, CSS, JavaScript, atau JSON langsung di browser-mu dengan minifier Tulkit. Tempel snippet, pilih tab, dan kirimkan payload lebih ringan tanpa ribet setup build.',
       html:
         'Hapus whitespace, komentar, dan atribut berlebih dari landing page atau embed memakai minifier HTML Tulkit sehingga markup siap dibagikan dalam hitungan detik.',
       css:
@@ -2070,16 +2072,16 @@ const id: Translation = {
     },
     hashMetaDescription: {
       sha1:
-        'Buat hash SHA-1 langsung di browser Anda dengan generator hash Tulkit ketika masih perlu kompatibilitas dengan sistem lama. Tempel teks untuk menghitung digest hex yang konsisten memakai Web Crypto API.',
+        'Buat hash SHA-1 langsung di browser-mu dengan generator hash Tulkit ketika masih perlu kompatibilitas dengan sistem lama. Tempel teks untuk menghitung digest hex yang konsisten memakai Web Crypto API.',
       sha256:
-        'Buat hash SHA-256 langsung di browser Anda dengan generator hash Tulkit. Tempel teks untuk menghitung digest hex deterministik yang cocok dengan banyak CLI dan library populer.',
+        'Buat hash SHA-256 langsung di browser-mu dengan generator hash Tulkit. Tempel teks untuk menghitung digest hex deterministik yang cocok dengan banyak CLI dan library populer.',
       sha512:
         'Hitung hash SHA-512 di browser menggunakan generator hash Tulkit, ideal untuk sidik jari panjang pada skenario arsip atau alur kerja yang bersinggungan dengan keamanan. Perhitungan digest berlangsung lokal memakai Web Crypto API.'
     },
     securityMetaDescription:
       'Buka ruang kerja keamanan untuk mendekode, memverifikasi, atau menandatangani JWT sepenuhnya di browser—tanpa token atau secret meninggalkan halaman.',
     jwtMetaDescription:
-      'Dekode, verifikasi, dan tanda tangani JWT (HS256/384/512) langsung di browser dengan Tulkit. Periksa header/payload, cek tanda tangan dengan secret bersama, dan buat token baru tanpa mengunggah data.',
+      'Dekode, verifikasi, dan buat signature JWT (HS256/384/512) langsung di browser dengan Tulkit. Periksa header/payload, cek signature dengan secret bersama, dan buat token baru tanpa mengunggah data.',
     decodeBase64MetaDescription:
       'Dekode string Base64 standar atau aman-URL kembali menjadi teks UTF-8 yang mudah dibaca memakai decoder Base64 Tulkit. Cepat untuk memeriksa payload, header, atau segmen JWT.',
     decodeBase32MetaDescription:
@@ -2087,7 +2089,7 @@ const id: Translation = {
     decodeBase58MetaDescription:
       'Dekode string Base58 ber-alfabet Bitcoin kembali menjadi byte dan teks UTF-8 dengan decoder Tulkit. Periksa pengenal bergaya blockchain atau token ringkas langsung di browser.',
     decodeHexMetaDescription:
-      'Ubah string hex kembali menjadi teks dan byte mentah dengan decoder hex Tulkit. Cocok untuk menelusuri kunci, blob biner, atau pesan protokol tanpa meninggalkan browser.',
+      'Ubah string hex kembali menjadi teks dan byte mentah dengan decoder hex Tulkit. Cocok untuk menelusuri kunci, blob biner, atau pesan protokol langsung di browser-mu.',
     loremMetaDescription:
       'Buat paragraf lorem ipsum sebagai teks dummy di browser dengan Tulkit. Atur jumlah paragraf dan panjang kalimat untuk kebutuhan desain dan layout konten.',
     caseMetaDescription:
@@ -2099,11 +2101,11 @@ const id: Translation = {
     pantoneMetaDescription:
       'Konversikan warna HEX ke swatch Pantone terdekat di browser dengan Tulkit. Lihat jarak ΔE, bandingkan swatch, dan salin kode Pantone secara instan.',
     pantoneCatalogMetaDescription:
-      'Lihat daftar warna Pantone dan salin kode HEX atau RGB secara instan. Filter berdasarkan nama atau kode Pantone langsung dari browser Anda.',
+      'Lihat daftar warna Pantone dan salin kode HEX atau RGB secara instan. Filter berdasarkan nama atau kode Pantone langsung dari browser-mu.',
     pantoneCatalogColorMetaDescription:
       'Lihat Pantone {code} ({name}) lengkap dengan nilai HEX {hex} dan RGB. Salin detail swatch ini langsung dari katalog Pantone Tulkit.',
     regexMetaDescription:
-      'Uji ekspresi reguler JavaScript, ubah flag, dan lihat capture group secara lokal di browser Anda dengan Regex Tester Tulkit.',
+      'Uji ekspresi reguler JavaScript, ubah flag, dan lihat capture group secara lokal di browser-mu dengan Regex Tester Tulkit.',
     indexNowMetaDescription:
       'Submit URL ke IndexNow langsung dari Tulkit. Host file kunci di root situs, muat URL sitemap, lalu ping mesin pencari via POST atau GET.',
     notFoundMetaDescription:

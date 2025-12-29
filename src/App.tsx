@@ -625,6 +625,8 @@ export default function App(){
   const hashOverviewContent = overviews?.hashOverview
   const securityOverviewContent = overviews?.securityOverview
   const jwtOverviewContent = overviews?.jwtOverview
+  const securityDetailOverview = overviews?.securityDetail
+  const jwtWorkspaceOverview = overviews?.jwtOverviewDetail
   const encodeOverviewContent = overviews?.encodeOverview
   const decodeOverviewContent = overviews?.decodeOverview
   const formatterOverview = overviews?.formatter[effectiveFormatterTab]
@@ -1829,6 +1831,26 @@ export default function App(){
                 <>
                   <h2>{hashOverview.heading}</h2>
                   {hashOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'security-overview' && (
+              securityDetailOverview ? (
+                <>
+                  <h2>{securityDetailOverview.heading}</h2>
+                  {securityDetailOverview.paragraphs.map(text=>(
+                    <p key={text}>{text}</p>
+                  ))}
+                </>
+              ) : <ParagraphSkeleton lines={4} />
+            )}
+            {view === 'jwt-overview' && (
+              jwtWorkspaceOverview ? (
+                <>
+                  <h2>{jwtWorkspaceOverview.heading}</h2>
+                  {jwtWorkspaceOverview.paragraphs.map(text=>(
                     <p key={text}>{text}</p>
                   ))}
                 </>

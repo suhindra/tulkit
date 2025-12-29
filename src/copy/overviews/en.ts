@@ -20,94 +20,45 @@ const overviews: OverviewCopy = {
           category: 'optimization'
         },
         {
-          title: 'UUID Generator',
-          description: 'Generate v1, v4, or v7 UUIDs in bulk with customizable formatting and casing options.',
-          path: '/generator/uuid',
-          icon: '🎲',
+          title: 'Generator Tools',
+          description: 'Open the generator hub to jump into UUID, Lorem Ipsum, and hash utilities from one place.',
+          path: '/generator',
+          icon: '🎛️',
           category: 'generation'
         },
         {
-          title: 'Epoch Converter',
-          description: 'Convert between Unix timestamps and readable dates in any timezone instantly.',
-          path: '/converter/epoch',
-          icon: '⏰',
+          title: 'Converter Tools',
+          description: 'Browse converters for epochs, casing, URLs, regex, and Pantone matching through a single overview.',
+          path: '/converter',
+          icon: '🔁',
           category: 'conversion'
         },
         {
-          title: 'Encoder',
+          title: 'Encode',
           description: 'Encode text to Base64, Base32, Base58, or hex in your browser.',
           path: '/encode',
           icon: '🔐',
           category: 'encoding'
         },
         {
-          title: 'Decoder',
+          title: 'Decode',
           description: 'Decode Base64, Base32, Base58, or hex back into readable text without leaving your browser.',
           path: '/decode',
           icon: '🔓',
           category: 'encoding'
         },
         {
-          title: 'Hash Generator',
-          description: 'Generate SHA-1, SHA-256, or SHA-512 hashes for any text using the Web Crypto API.',
-          path: '/generator/hash',
-          icon: '#️⃣',
-          category: 'security'
-        },
-        {
-          title: 'JWT Decoder',
-          description: 'Decode JWTs and verify HS256/384/512 signatures locally with your shared secret.',
-          path: '/security/jwt/decode',
+          title: 'Security & JWT Tools',
+          description: 'Inspect and sign JWTs locally, verify HS signatures, and keep secrets in your browser.',
+          path: '/security',
           icon: '🛡️',
           category: 'security'
         },
         {
-          title: 'JWT Encoder',
-          description: 'Edit header/payload JSON and sign new JWTs (HS256/384/512) entirely in your browser.',
-          path: '/security/jwt/encode',
-          icon: '🛡️',
-          category: 'security'
-        },
-        {
-          title: 'Lorem Ipsum Generator',
-          description: 'Create placeholder paragraphs for design mockups with customizable paragraph count and length.',
-          path: '/generator/lorem',
-          icon: '📝',
-          category: 'generation'
-        },
-        {
-          title: 'Case Converter',
-          description: 'Convert names between camelCase, snake_case, PascalCase, kebab-case, and more formats.',
-          path: '/converter/case',
-          icon: '🔤',
-          category: 'conversion'
-        },
-        {
-          title: 'URL Encoder',
-          description: 'Encode and decode URL parameters, handling special characters and percent-encoding.',
-          path: '/converter/url',
-          icon: '🔗',
-          category: 'conversion'
-        },
-        {
-          title: 'Pantone Converter',
-          description: 'Find the closest Pantone color for any HEX value using ΔE distance and copy-ready codes.',
-          path: '/pantone/hex-to-pantone',
+          title: 'Pantone Hub',
+          description: 'Switch between HEX→Pantone matching and Pantone swatch lookup with shareable links.',
+          path: '/pantone',
           icon: '🎨',
-          category: 'conversion'
-        },
-        {
-          title: 'Pantone to HEX',
-          description: 'Browse Pantone swatches and copy their HEX or RGB values directly from your browser.',
-          path: '/pantone/pantone-to-hex',
-          icon: '🗂️',
-          category: 'conversion'
-        },
-        {
-          title: 'Regex Tester',
-          description: 'Test JavaScript regular expressions, flags, and capture groups entirely in your browser.',
-          path: '/converter/regex',
-          icon: '🧪',
           category: 'conversion'
         }
       ]
@@ -254,6 +205,13 @@ const overviews: OverviewCopy = {
         }
       ]
     },
+    securityDetail: {
+      heading: 'Security Workspace — About',
+      paragraphs: [
+        'Tulkit keeps token inspection and signing local so sensitive data never leaves your browser. Open the security workspace when you need to review JWT structure, verify HS256/384/512 signatures with a shared secret, or mint short-lived tokens for testing without installing CLI tools.',
+        'Because everything runs client-side, you can safely debug production headers, experiment with role claims, or collaborate with teammates on auth flows by sharing links instead of exporting secrets.'
+      ]
+    },
     jwtOverview: {
       heading: 'JWT Tools',
       subheading: 'Decode, verify, and sign JSON Web Tokens locally in your browser',
@@ -272,6 +230,13 @@ const overviews: OverviewCopy = {
           icon: '🛡️',
           category: 'security'
         }
+      ]
+    },
+    jwtOverviewDetail: {
+      heading: 'JWT Workspace — About',
+      paragraphs: [
+        'The JWT workspace combines the decoder and encoder so you can hop between inspecting incoming tokens and generating fresh ones in seconds. Paste a JWT to see the header, payload, expiration state, and signature status side by side, then switch to the builder tab to craft fixtures or replacement tokens with your own JSON.',
+        'Use it when auditing API traffic, troubleshooting login sessions, or sharing reproducible token examples with your team. Every decode and signature happens locally, so secrets and payloads stay on your machine.'
       ]
     },
     encodeOverview: {
