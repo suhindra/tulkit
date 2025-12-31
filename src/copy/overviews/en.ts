@@ -356,8 +356,8 @@ const overviews: OverviewCopy = {
       php: {
         heading: 'PHP Formatter overview',
         paragraphs: [
-          'Overview content for the PHP formatter slug. Describe how this helps with Laravel, WordPress, or other PHP projects.',
-          'Update these placeholders to match the frameworks, CMSs, or libraries that you want to target for SEO.'
+          'Tulkit’s PHP formatter keeps PSR-friendly code, Blade templates, and mixed PHP/HTML snippets readable so you can focus on debugging controllers, components, or plugin files instead of cleaning up whitespace.',
+          'It spotlights the ecosystems people search for most—Laravel apps, WordPress themes, Magento extensions, Symfony services, and other Composer-driven projects—so the overview speaks directly to everyday PHP workflows.'
         ]
       },
       xml: {
